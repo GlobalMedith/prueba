@@ -1525,71 +1525,71 @@
             
             currentY = currentY + logoHeight + 15; // Mover Y debajo del logo y su texto
 
-            // --- Título "Cotización - GlobalMediTH" y Mensaje Persuasivo (Centrado) ---
+            // --- Título "Cotización - GlobalMediTH" y Mensaje Persuasivo (Alineado a la Izquierda, como en la imagen) ---
             doc.setFontSize(16); 
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Cotización - GlobalMediTH", pageWidth / 2, currentY, { align: "center" });
+            doc.text("Cotización - GlobalMediTH", marginX, currentY); // Alineado a la izquierda
             currentY += 8; 
 
             doc.setFontSize(7.5);
             doc.setTextColor(50, 150, 70);
             doc.setFont(undefined, 'normal');
-            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, currentY, { align: "center" });
+            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", marginX, currentY); // Alineado a la izquierda
             currentY += 12; 
 
-            // --- SECCIÓN DE DATOS (2 columnas con posicionamiento manual) ---
-            const col1X = marginX; // Inicio de la primera columna (izquierda)
-            const col2X = pageWidth / 2 + 5; // Inicio de la segunda columna (derecha), ajustado
-            
-            let yCol1 = currentY; // Y para la columna izquierda
-            let yCol2 = currentY; // Y para la columna derecha
+            // --- SECCIÓN DE DATOS (Dos Columnas Manualmente Posicionadas) ---
+            const col1X = marginX; // Columna izquierda de datos
+            const col2X = pageWidth / 2 + 5; // Columna derecha de datos, ajustada para alineación
+
+            let yLeftDataCol = currentY; // Y inicial para la columna izquierda de datos
+            let yRightDataCol = currentY; // Y inicial para la columna derecha de datos
 
             // Datos de Contacto de Ventas (Columna Izquierda)
             doc.setFontSize(8); 
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas", col1X, yCol1);
-            yCol1 += 4;
+            doc.text("Datos de Contacto de Ventas:", col1X, yLeftDataCol);
+            yLeftDataCol += 4;
             doc.setFont(undefined, 'normal');
             doc.setFontSize(6.5);
-            doc.text(`Celular: 2381646718`, col1X, yCol1);
-            yCol1 += 3.5;
-            doc.text(`Correo: globalmedith@gmail.com`, col1X, yCol1);
-            yCol1 += 3.5;
-            doc.text(`Ubicación: Tehuacán, Puebla`, col1X, yCol1);
-            yCol1 += 3.5; 
+            doc.text(`Celular: 2381646718`, col1X, yLeftDataCol);
+            yLeftDataCol += 3.5;
+            doc.text(`Correo: globalmedith@gmail.com`, col1X, yLeftDataCol);
+            yLeftDataCol += 3.5;
+            doc.text(`Ubicación: Tehuacán, Puebla`, col1X, yLeftDataCol);
+            yLeftDataCol += 3.5; 
 
             // Datos del Cliente y Folio (Columna Derecha)
             doc.setFontSize(8);
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente", col2X, yCol2);
-            yCol2 += 4;
+            doc.text("Datos del Cliente:", col2X, yRightDataCol);
+            yRightDataCol += 4;
 
             doc.setFontSize(7.5); // Nombre del Cliente más grande y en negrita
             doc.setFont(undefined, 'bold');
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, col2X, yCol2);
-            yCol2 += 4.5;
+            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, col2X, yRightDataCol);
+            yRightDataCol += 4.5;
 
             doc.setFont(undefined, 'normal');
             doc.setFontSize(6.5);
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, col2X, yCol2);
-            yCol2 += 3.5;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, col2X, yCol2);
-            yCol2 += 3.5;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, col2X, yCol2);
-            yCol2 += 3.5;
+            doc.text(`Celular: ${clientData.celular || 'N/A'}`, col2X, yRightDataCol);
+            yRightDataCol += 3.5;
+            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, col2X, yRightDataCol);
+            yRightDataCol += 3.5;
+            doc.text(`Correo: ${clientData.correo || 'N/A'}`, col2X, yRightDataCol);
+            yRightDataCol += 3.5;
 
             // Folio de Cotización (debajo de Datos del Cliente)
             doc.setFontSize(8);
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, 'bold');
-            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, col2X, yCol2 + 2); // Espacio después del correo
-            yCol2 += 10; // Final de la sección de datos del cliente
+            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, col2X, yRightDataCol + 2); // Espacio después del correo
+            yRightDataCol += 10; // Final de la sección de datos del cliente
 
             // Determinar la posición Y para la tabla de productos (debajo de la columna de datos más baja)
-            let startYForTable = Math.max(yCol1, yCol2) + 8; 
+            let startYForTable = Math.max(yLeftDataCol, yRightDataCol) + 8; 
 
             // Título "Productos Seleccionados"
             doc.setFontSize(9);
@@ -1627,10 +1627,10 @@
                 alternateFillColor: [255, 255, 255]
               },
               columnStyles: {
-                0: { cellWidth: 20 }, // Ancho para Código de Barras (reducido)
-                1: { cellWidth: 80 }, // CLAVE: Aumentado significativamente para Descripción
-                2: { cellWidth: 25 }, // Ancho para Laboratorio (ajustado)
-                3: { cellWidth: 10, halign: 'center' } // Ancho para Cantidad (reducido)
+                0: { cellWidth: 20 }, // Ancho para Código de Barras
+                1: { cellWidth: 80 }, // CLAVE: Aumentado SIGNIFICATIVAMENTE para Descripción (80mm)
+                2: { cellWidth: 25 }, // Ancho para Laboratorio (25mm)
+                3: { cellWidth: 10, halign: 'center' } // Cantidad (10mm)
               },
               margin: { left: marginX, right: marginX },
               didDrawPage: function(data) {
