@@ -1315,7 +1315,7 @@
         }
         productsGrid.innerHTML = htmlContent;
         productsGrid.classList.add('empty-message');
-        updateCart(); // Asegurarse de que el carrito se actualice si no hay productos
+        updateCart();
         return;
       }
 
@@ -1340,7 +1340,7 @@
           </div>
         `;
       });
-      productsGrid.innerHTML = htmlContent; // Asignar todo el HTML de una vez
+      productsGrid.innerHTML = htmlContent;
 
       updateCart();
     }
@@ -1350,16 +1350,14 @@
         const inputElement = cardElement ? cardElement.querySelector('.quantity-input') : null;
         
         if (selectedProducts.has(product.codigoBarras)) {
-            // Producto ya seleccionado, se deselecciona y se elimina del carrito
             selectedProducts.delete(product.codigoBarras);
             if (cardElement) cardElement.classList.remove('selected');
             if (inputElement) inputElement.value = 0;
         } else {
-            // Producto no seleccionado, se selecciona y se añade al carrito con cantidad 1 o la que ya tenga el input
             const quantityToAdd = (inputElement && parseInt(inputElement.value) > 0) ? parseInt(inputElement.value) : 1;
             selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
             if (cardElement) cardElement.classList.add('selected');
-            if (inputElement) inputElement.value = quantityToAdd; // Asegura que el input refleje la cantidad
+            if (inputElement) inputElement.value = quantityToAdd;
         }
         updateCart();
     }
@@ -1367,16 +1365,14 @@
     function updateQuantity(codigo, cantidad) {
         const qty = parseInt(cantidad) || 0;
         const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
-        const productData = medicamentos.find(p => p.codigoBarras === codigo); // Buscar el producto original
+        const productData = medicamentos.find(p => p.codigoBarras === codigo);
 
-        if (!productData) return; // Si el producto no se encuentra, salir
+        if (!productData) return;
 
         if (qty > 0) {
-            // Si la cantidad es mayor a 0, asegurar que esté en selectedProducts
             selectedProducts.set(codigo, { ...productData, cantidad: qty });
             if (cardElement) cardElement.classList.add('selected');
         } else {
-            // Si la cantidad es 0, eliminar de selectedProducts
             selectedProducts.delete(codigo);
             if (cardElement) cardElement.classList.remove('selected');
         }
@@ -1431,18 +1427,18 @@
     }
 
     document.getElementById('busqueda').addEventListener('keyup', function() {
-        clearTimeout(searchTimeout); // Limpiar el temporizador anterior
+        clearTimeout(searchTimeout);
         const searchTerm = this.value.toLowerCase().trim();
-        searchTimeout = setTimeout(() => { // Establecer un nuevo temporizador
+        searchTimeout = setTimeout(() => {
             if (searchTerm.length > 0) {
                 const filteredProducts = medicamentos.filter(product => {
                     return filterProduct(product, searchTerm);
                 });
                 renderProducts(filteredProducts);
             } else {
-                renderProducts([]); // Si el buscador está vacío, muestra el mensaje inicial
+                renderProducts([]);
             }
-        }, 300); // Debounce de 300ms
+        }, 300);
     });
 
 
@@ -1468,7 +1464,6 @@
     }
 
     function populateSummary() {
-      const clientForm = document.getElementById('clientForm');
       const clientSummaryDiv = document.getElementById('clientSummary');
       clientSummaryDiv.innerHTML = `
         <div class="contact-item">
@@ -1511,58 +1506,65 @@
 
         getBase64Image('logo.png', function(logoBase64) {
             const pageWidth = doc.internal.pageSize.getWidth();
-            const imgWidth = 50;
-            const imgHeight = (imgWidth * 420) / 1488;
+            // Ajustar el tamaño del logo para que sea más pequeño
+            const imgWidth = 40; // Reducido de 50 a 40
+            const imgHeight = (imgWidth * 420) / 1488; // Mantener la proporción
             const imgX = (pageWidth - imgWidth) / 2;
 
             if (logoBase64) {
                 doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
             } else {
-                const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
+                const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
                 doc.addImage(fallbackSvg, 'PNG', imgX, 10, imgWidth, imgHeight);
             }
 
-            let y = 10 + imgHeight + 10;
+            let y = 10 + imgHeight + 8; // Reducido el espacio después del logo
 
-            doc.setFontSize(22);
+            doc.setFontSize(20); // Título de cotización un poco más pequeño
             doc.setTextColor(44, 62, 80);
             doc.text("Cotización GlobalMediTH", pageWidth / 2, y, { align: "center" });
-            y += 10;
-            doc.setFontSize(10);
+            y += 8; // Espacio reducido
+            doc.setFontSize(9); // Mensaje persuasivo más pequeño
             doc.setTextColor(50, 150, 70);
             doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, y, { align: "center" });
-            y += 20;
+            y += 18; // Espacio reducido
 
-            doc.setFontSize(12);
+            // Datos de Contacto de Ventas
+            doc.setFontSize(10); // Tamaño de fuente para títulos de sección
             doc.setTextColor(0, 0, 0);
-
             doc.setFont(undefined, 'bold');
             doc.text("Datos de Contacto de Ventas:", 10, y);
-            y += 7;
+            y += 6; // Espacio reducido
             doc.setFont(undefined, 'normal');
+            doc.setFontSize(8); // Tamaño de fuente para detalles de contacto
             doc.text(`Celular: 2381646718`, 10, y);
-            y += 7;
+            y += 5; // Espacio reducido
             doc.text(`Correo: globalmedith@gmail.com`, 10, y);
-            y += 7;
+            y += 5; // Espacio reducido
             doc.text(`Ubicación: Tehuacán, Puebla`, 10, y);
-            y += 15;
+            y += 12; // Espacio reducido antes de la siguiente sección
 
+            // Datos del Cliente (en una columna derecha imaginaria o debajo si no hay espacio)
+            // Para mantener el diseño compacto, se seguirá el flujo vertical
+            doc.setFontSize(10); // Tamaño de fuente para títulos de sección
             doc.setFont(undefined, 'bold');
             doc.text("Datos del Cliente:", 10, y);
-            y += 7;
+            y += 6; // Espacio reducido
             doc.setFont(undefined, 'normal');
+            doc.setFontSize(8); // Tamaño de fuente para detalles del cliente
             doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, 10, y);
-            y += 7;
+            y += 5; // Espacio reducido
             doc.text(`Celular: ${clientData.celular || 'N/A'}`, 10, y);
-            y += 7;
+            y += 5; // Espacio reducido
             doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, 10, y);
-            y += 7;
+            y += 5; // Espacio reducido
             doc.text(`Correo: ${clientData.correo || 'N/A'}`, 10, y);
-            y += 15;
+            y += 12; // Espacio antes de la tabla de productos
 
+            doc.setFontSize(10); // Título de Productos Seleccionados
             doc.setFont(undefined, 'bold');
             doc.text("Productos Seleccionados:", 10, y);
-            y += 10;
+            y += 8; // Espacio reducido
             doc.setFont(undefined, 'normal');
 
             const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
@@ -1579,8 +1581,8 @@
               body: data,
               theme: 'striped',
               styles: {
-                fontSize: 8,
-                cellPadding: 2,
+                fontSize: 7, // CLAVE: Tamaño de fuente más pequeño para la tabla de productos
+                cellPadding: 1.5, // CLAVE: Menor padding en celdas
                 overflow: 'linebreak',
                 textColor: [51, 51, 51]
               },
@@ -1595,10 +1597,10 @@
                 alternateFillColor: [255, 255, 255]
               },
               columnStyles: {
-                0: { cellWidth: 30 },
-                1: { cellWidth: 'auto' },
-                2: { cellWidth: 30 },
-                3: { cellWidth: 15, halign: 'center' }
+                0: { cellWidth: 25 }, // Ancho reducido para Código de Barras
+                1: { cellWidth: 'auto' }, // Dejar que la descripción ocupe el resto del espacio
+                2: { cellWidth: 25 }, // Ancho reducido para Laboratorio
+                3: { cellWidth: 15, halign: 'center' } // Ancho reducido para Cantidad
               },
               margin: { left: 10, right: 10 },
               didDrawPage: function(data) {
@@ -1716,7 +1718,8 @@
         document.getElementById('celular').value = '';
         document.getElementById('ciudad').value = '';
         document.getElementById('correo').value = '';
-        document.getElementById('clientForm').reset(); // Por si hay otros campos
+        const clientForm = document.getElementById('clientForm');
+        if (clientForm) clientForm.reset(); // Por si hay otros campos
 
         // 2. Limpiar productos seleccionados
         selectedProducts.clear();
@@ -1725,12 +1728,12 @@
         const busquedaInput = document.getElementById('busqueda');
         if (busquedaInput) {
             busquedaInput.value = '';
+            renderProducts([]); // Esto mostrará el mensaje "usa el buscador..."
         }
-        renderProducts([]); // Esto mostrará el mensaje "usa el buscador..."
-
+        
         // 4. Actualizar el carrito
         updateCart(); // Esto lo dejará en "No hay productos seleccionados"
-
+        
         // 5. Regresar a la pantalla de registro
         goToScreen(1);
     }
