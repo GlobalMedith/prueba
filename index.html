@@ -47,7 +47,7 @@
       top: 0;
       left: 0;
       overflow-y: auto; /* IMPORTANTE: Cada pantalla maneja su propio scroll si el contenido desborda */
-      -webkit-overflow-scrolling: touch;
+      -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iOS */
       padding-bottom: 20px; /* Espacio para scroll al final en móvil */
       flex-direction: column;
       align-items: center;
@@ -392,8 +392,8 @@
       border-radius: 15px;
       padding: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      height: auto; /* Permite que la altura se ajuste al contenido del carrito */
-      width: 100%; /* Ocupa todo el ancho en móvil */
+      height: auto;
+      width: 100%;
       max-height: 35vh; /* CLAVE: Reduce la altura máxima del carrito en móvil */
       overflow-y: auto; /* Permite scroll interno del carrito si hay muchos items */
       margin-top: 15px;
@@ -1116,6 +1116,7 @@
     let selectedProducts = new Map();
     let currentScreen = 1;
     let clientData = {};
+    let searchTimeout; // Variable para el debouncing
 
     function generateTrackingId() {
         const date = new Date();
@@ -1193,9 +1194,12 @@
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         medicamentos = await res.json();
+        // Eliminar la primera fila si es el encabezado
         if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
           medicamentos.shift();
         }
+        // Llamar a renderProducts sin filtro al cargar para mostrar mensaje inicial
+        renderProducts([]); // Mostrar mensaje "usa el buscador" al inicio
       } catch (error) {
         console.error("Error al cargar los medicamentos:", error);
         document.getElementById('productsGrid').innerHTML =
@@ -1206,89 +1210,114 @@
 
     function renderProducts(productsToRender) {
       const productsGrid = document.getElementById('productsGrid');
-      productsGrid.innerHTML = '';
-      productsGrid.classList.remove('empty-message');
+      let htmlContent = '';
 
       if (productsToRender.length === 0) {
-        productsGrid.innerHTML = "<p class='empty-message'>No se encontraron resultados para tu búsqueda.</p>";
+        // Si no hay productos para renderizar, muestra el mensaje apropiado
+        const searchTerm = document.getElementById('busqueda').value.toLowerCase().trim();
+        if (searchTerm.length === 0) {
+            htmlContent = "<p class='empty-message'>Por favor, usa el buscador para encontrar productos.</p>";
+        } else {
+            htmlContent = "<p class='empty-message'>No se encontraron resultados para tu búsqueda.</p>";
+        }
+        productsGrid.innerHTML = htmlContent;
         productsGrid.classList.add('empty-message');
         return;
       }
 
+      productsGrid.classList.remove('empty-message');
+      
       productsToRender.forEach((product) => {
         const isSelected = selectedProducts.has(product.codigoBarras);
         const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0;
-        
-        const card = document.createElement('div');
-        card.className = `product-card ${isSelected ? 'selected' : ''}`;
-        card.onclick = () => toggleProduct(product);
-        
         const displayCodigoBarras = product.codigoBarras || 'No disponible';
 
-        card.innerHTML = `
-          <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
-          <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
-          <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
-          <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
-          <div class="quantity-selector" onclick="event.stopPropagation()">
-            <label>Cantidad:</label>
-            <input type="number" class="quantity-input" min="0" value="${quantity}" 
-                   onchange="updateQuantity('${product.codigoBarras}', this.value)" />
+        htmlContent += `
+          <div class="product-card ${isSelected ? 'selected' : ''}" data-codigo="${product.codigoBarras}">
+            <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
+            <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
+            <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
+            <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
+            <div class="quantity-selector">
+              <label>Cantidad:</label>
+              <input type="number" class="quantity-input" min="0" value="${quantity}" 
+                     data-codigo="${product.codigoBarras}" />
+            </div>
           </div>
         `;
-        productsGrid.appendChild(card);
       });
+      productsGrid.innerHTML = htmlContent;
+
+      // Adjuntar event listeners DESPUÉS de que los elementos estén en el DOM
+      productsGrid.querySelectorAll('.product-card').forEach(card => {
+          card.onclick = (event) => {
+              const codigo = card.dataset.codigo;
+              const product = medicamentos.find(p => p.codigoBarras === codigo);
+              if (product) toggleProduct(product);
+          };
+      });
+
+      productsGrid.querySelectorAll('.quantity-input').forEach(input => {
+          input.onchange = (event) => {
+              const codigo = input.dataset.codigo;
+              updateQuantity(codigo, event.target.value);
+          };
+      });
+
       updateCart();
     }
 
     function toggleProduct(product) {
-      if (selectedProducts.has(product.codigoBarras)) {
-        selectedProducts.delete(product.codigoBarras);
-      } else {
-        const inputElement = document.querySelector(`.product-card[onclick*="${product.codigoBarras}"] .quantity-input`);
-        const currentInputValue = parseInt(inputElement ? inputElement.value : '0');
-        const quantityToAdd = currentInputValue > 0 ? currentInputValue : 1;
-        selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
-      }
-      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
-      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
-      renderProducts(filtered);
-      updateCart();
+        const cardElement = document.querySelector(`.product-card[data-codigo="${product.codigoBarras}"]`);
+        const inputElement = cardElement ? cardElement.querySelector('.quantity-input') : null;
+        
+        if (selectedProducts.has(product.codigoBarras)) {
+            selectedProducts.delete(product.codigoBarras);
+            if (cardElement) cardElement.classList.remove('selected');
+            if (inputElement) inputElement.value = 0;
+        } else {
+            const quantityToAdd = (inputElement && parseInt(inputElement.value) > 0) ? parseInt(inputElement.value) : 1;
+            selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
+            if (cardElement) cardElement.classList.add('selected');
+            if (inputElement) inputElement.value = quantityToAdd; // Asegura que el input refleje la cantidad
+        }
+        updateCart();
     }
 
-
     function updateQuantity(codigo, cantidad) {
-      const qty = parseInt(cantidad) || 0;
-      
-      if (selectedProducts.has(codigo)) {
-        if (qty > 0) {
-          const product = selectedProducts.get(codigo);
-          product.cantidad = qty;
-          selectedProducts.set(codigo, product);
-        } else {
-          selectedProducts.delete(codigo);
+        const qty = parseInt(cantidad) || 0;
+        const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
+        
+        if (selectedProducts.has(codigo)) {
+            if (qty > 0) {
+                const product = selectedProducts.get(codigo);
+                product.cantidad = qty;
+                selectedProducts.set(codigo, product);
+                if (cardElement) cardElement.classList.add('selected'); // Asegurar que esté seleccionado
+            } else {
+                selectedProducts.delete(codigo);
+                if (cardElement) cardElement.classList.remove('selected');
+            }
+        } else if (qty > 0) {
+            const product = medicamentos.find(p => p.codigoBarras === codigo);
+            if (product) {
+                selectedProducts.set(codigo, { ...product, cantidad: qty });
+                if (cardElement) cardElement.classList.add('selected');
+            }
         }
-      } else if (qty > 0) {
-        const product = medicamentos.find(p => p.codigoBarras === codigo);
-        if (product) {
-          selectedProducts.set(codigo, { ...product, cantidad: qty });
-        }
-      }
-      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
-      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
-      renderProducts(filtered);
-      updateCart();
+        updateCart();
     }
 
     function removeItemFromCart(codigo) {
       selectedProducts.delete(codigo);
-      const inputElement = document.querySelector(`.product-card[onclick*="${codigo}"] .quantity-input`);
-      if (inputElement) {
-        inputElement.value = 0;
+      const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
+      if (cardElement) {
+        cardElement.classList.remove('selected');
+        const inputElement = cardElement.querySelector('.quantity-input');
+        if (inputElement) {
+          inputElement.value = 0;
+        }
       }
-      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
-      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
-      renderProducts(filtered);
       updateCart();
     }
 
@@ -1327,18 +1356,20 @@
     }
 
     document.getElementById('busqueda').addEventListener('keyup', function() {
-      const searchTerm = this.value.toLowerCase().trim();
-      if (searchTerm.length > 0) {
-        const filteredProducts = medicamentos.filter(product => {
-          return filterProduct(product, searchTerm);
-        });
-        renderProducts(filteredProducts);
-      } else {
-        const productsGrid = document.getElementById('productsGrid');
-        productsGrid.innerHTML = '<p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>';
-        productsGrid.classList.add('empty-message');
-      }
+        clearTimeout(searchTimeout); // Limpiar el temporizador anterior
+        const searchTerm = this.value.toLowerCase().trim();
+        searchTimeout = setTimeout(() => { // Establecer un nuevo temporizador
+            if (searchTerm.length > 0) {
+                const filteredProducts = medicamentos.filter(product => {
+                    return filterProduct(product, searchTerm);
+                });
+                renderProducts(filteredProducts);
+            } else {
+                renderProducts([]); // Si el buscador está vacío, muestra el mensaje inicial
+            }
+        }, 300); // Debounce de 300ms
     });
+
 
     function filterProduct(product, searchTerm) {
       const desc = (product.descripcion || '').toLowerCase();
