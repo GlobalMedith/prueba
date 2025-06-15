@@ -1304,7 +1304,6 @@
 
     function renderProducts(productsToRender) {
       const productsGrid = document.getElementById('productsGrid');
-      const fragment = document.createDocumentFragment(); // Usar DocumentFragment para rendimiento
       let htmlContent = '';
 
       if (productsToRender.length === 0) {
@@ -1469,6 +1468,7 @@
     }
 
     function populateSummary() {
+      const clientForm = document.getElementById('clientForm');
       const clientSummaryDiv = document.getElementById('clientSummary');
       clientSummaryDiv.innerHTML = `
         <div class="contact-item">
@@ -1705,6 +1705,34 @@
 
     function closeCustomAlert() {
         document.getElementById('customAlertModal').classList.remove('visible');
+        resetApplication(); // Llama a la función de reset al cerrar el modal
+    }
+
+    // Nueva función para resetear la aplicación
+    function resetApplication() {
+        // 1. Resetear datos del cliente y formulario
+        clientData = {};
+        document.getElementById('nombre').value = '';
+        document.getElementById('celular').value = '';
+        document.getElementById('ciudad').value = '';
+        document.getElementById('correo').value = '';
+        document.getElementById('clientForm').reset(); // Por si hay otros campos
+
+        // 2. Limpiar productos seleccionados
+        selectedProducts.clear();
+
+        // 3. Limpiar campo de búsqueda y renderizar estado inicial del catálogo
+        const busquedaInput = document.getElementById('busqueda');
+        if (busquedaInput) {
+            busquedaInput.value = '';
+        }
+        renderProducts([]); // Esto mostrará el mensaje "usa el buscador..."
+
+        // 4. Actualizar el carrito
+        updateCart(); // Esto lo dejará en "No hay productos seleccionados"
+
+        // 5. Regresar a la pantalla de registro
+        goToScreen(1);
     }
   </script>
 </body>
