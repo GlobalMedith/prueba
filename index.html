@@ -1508,83 +1508,90 @@
         getBase64Image('logo.png', function(logoBase64) {
             const pageWidth = doc.internal.pageSize.getWidth();
             const marginX = 15; // Margen izquierdo y derecho para el contenido
-            const colMargin = 5; // Margen entre las dos columnas de datos
+            const topY = 15; // Posición Y inicial
+            let currentY = topY;
 
-            let currentY = 15; // Posición Y inicial
+            // --- Columna Izquierda (Logo, Título Empresa, Mensaje Persuasivo) ---
+            const leftColX = marginX;
+            const rightColX = pageWidth / 2 + 5; // Inicio de la columna derecha
 
-            // --- Parte superior: Logo y Global MediTH (texto del logo) ---
-            const logoWidth = 25; // Tamaño del logo más pequeño
-            const logoHeight = (logoWidth * 420) / 1488; // Mantener proporción
-            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', marginX, currentY, logoWidth, logoHeight);
+            // Logo y texto "Global MediTH"
+            const logoWidth = 25; 
+            const logoHeight = (logoWidth * 420) / 1488; 
+            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', leftColX, currentY, logoWidth, logoHeight);
             
-            doc.setFontSize(10); // Tamaño del texto del logo
+            doc.setFontSize(10); 
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Global MediTH", marginX + logoWidth + 3, currentY + logoHeight / 2 + 2); // A la derecha del logo, centrado verticalmente
+            doc.text("Global MediTH", leftColX + logoWidth + 3, currentY + logoHeight / 2 + 2); 
+            currentY += logoHeight + 8; 
 
-            currentY += logoHeight + 8; // Mover Y debajo del logo y su texto
-
-            // --- Título principal "Cotización - GlobalMediTH" y mensaje persuasivo ---
-            doc.setFontSize(16); // Título de la Cotización
+            // "Cotización - GlobalMediTH"
+            doc.setFontSize(16); 
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Cotización - GlobalMediTH", marginX, currentY);
-            currentY += 8; // Espacio
+            doc.text("Cotización - GlobalMediTH", leftColX, currentY);
+            currentY += 8; 
 
-            doc.setFontSize(8); // Mensaje persuasivo
+            // Mensaje persuasivo
+            doc.setFontSize(8);
             doc.setTextColor(50, 150, 70);
             doc.setFont(undefined, 'normal');
-            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", marginX, currentY);
-            currentY += 10; // Espacio
+            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", leftColX, currentY);
+            currentY += 10; 
 
-            // --- Folio de Cotización (Agregado) ---
+            // --- "Datos de Contacto de Ventas" (columna izquierda, debajo del bloque superior) ---
+            let yLeftColData = currentY; // Altura donde empiezan los datos de contacto
             doc.setFontSize(9);
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, 'bold');
-            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, marginX, currentY);
-            currentY += 10; // Espacio después del folio
+            doc.text("Datos de Contacto de Ventas:", leftColX, yLeftColData);
+            yLeftColData += 5;
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(7);
+            doc.text(`Celular: 2381646718`, leftColX, yLeftColData);
+            yLeftColData += 3.5;
+            doc.text(`Correo: globalmedith@gmail.com`, leftColX, yLeftColData);
+            yLeftColData += 3.5;
+            doc.text(`Ubicación: Tehuacán, Puebla`, leftColX, yLeftColData);
+            yLeftColData += 3.5; 
 
-            // --- Sección de Datos (dos columnas) ---
-            const colWidth = (pageWidth - (marginX * 2) - colMargin) / 2; // Ancho para cada columna de datos
+            // --- "Datos del Cliente" (columna derecha, al lado de la izquierda) ---
+            let yRightColData = topY; // Alineado con el top del logo en la columna izquierda
 
-            let yColData = currentY; // Y inicial para las secciones de datos
-
-            // Columna Izquierda: Datos de Contacto de Ventas
+            // Titulo "Datos del Cliente"
             doc.setFontSize(9);
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas:", marginX, yColData);
-            yColData += 5;
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(7);
-            doc.text(`Celular: 2381646718`, marginX, yColData);
-            yColData += 4;
-            doc.text(`Correo: globalmedith@gmail.com`, marginX, yColData);
-            yColData += 4;
-            doc.text(`Ubicación: Tehuacán, Puebla`, marginX, yColData);
-            let yCol1End = yColData; // Altura final de la columna 1
+            doc.text("Datos del Cliente:", rightColX, yRightColData);
+            yRightColData += 5;
 
-            // Columna Derecha: Datos del Cliente
-            let xCol2 = marginX + colWidth + colMargin;
-            let yCol2 = currentY; // Alineado verticalmente con la columna 1
-
-            doc.setFontSize(9);
+            // Nombre del Cliente (simulando título)
+            doc.setFontSize(8); // Tamaño un poco más grande para el nombre
             doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente:", xCol2, yCol2);
-            yCol2 += 5;
+            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, rightColX, yRightColData);
+            yRightColData += 5; // Más espacio para el nombre
+
+            // Otros datos del cliente
             doc.setFont(undefined, 'normal');
             doc.setFontSize(7);
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, xCol2, yCol2);
-            yCol2 += 4;
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, xCol2, yCol2);
-            yCol2 += 4;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, xCol2, yCol2);
-            yCol2 += 4;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, xCol2, yCol2);
-            let yCol2End = yCol2; // Altura final de la columna 2
+            doc.text(`Celular: ${clientData.celular || 'N/A'}`, rightColX, yRightColData);
+            yRightColData += 3.5;
+            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, rightColX, yRightColData);
+            yRightColData += 3.5;
+            doc.text(`Correo: ${clientData.correo || 'N/A'}`, rightColX, yRightColData);
+            yRightColData += 3.5;
 
-            // Determinar la posición Y para la tabla de productos (debajo de la columna más larga)
-            let startYForTable = Math.max(yCol1End, yCol2End) + 8; // Espacio antes de la tabla
+            // --- Folio de Cotización (debajo de los datos del cliente) ---
+            doc.setFontSize(8);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, rightColX, yRightColData + 2); // Un poco de espacio
+            yRightColData += 10; // Mover Y para el final de la columna derecha
+
+            // Determinar la posición Y para la tabla de productos
+            // Debe comenzar justo debajo del final de la columna más larga (izquierda o derecha).
+            let startYForTable = Math.max(yLeftColData, yRightColData) + 8; 
 
             // Título de Productos Seleccionados
             doc.setFontSize(9);
@@ -1606,8 +1613,8 @@
               body: data,
               theme: 'striped',
               styles: {
-                fontSize: 6.5, // Tamaño de fuente para la tabla de productos
-                cellPadding: 1.2, // Menor padding en celdas para maximizar espacio
+                fontSize: 6.5, 
+                cellPadding: 1.2, 
                 overflow: 'linebreak',
                 textColor: [51, 51, 51]
               },
@@ -1622,10 +1629,10 @@
                 alternateFillColor: [255, 255, 255]
               },
               columnStyles: {
-                0: { cellWidth: 20 }, // Ancho ajustado para Código de Barras
-                1: { cellWidth: 'auto' }, // La descripción toma el espacio restante
-                2: { cellWidth: 20 }, // Ancho ajustado para Laboratorio
-                3: { cellWidth: 10, halign: 'center' } // Ancho ajustado para Cantidad
+                0: { cellWidth: 20 }, 
+                1: { cellWidth: 'auto' }, 
+                2: { cellWidth: 20 }, 
+                3: { cellWidth: 10, halign: 'center' } 
               },
               margin: { left: marginX, right: marginX },
               didDrawPage: function(data) {
