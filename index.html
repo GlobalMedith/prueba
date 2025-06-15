@@ -242,8 +242,8 @@
 
     /* PANTALLA 2 - CATÁLOGO */
     .catalog-screen {
-      display: flex;
-      flex-direction: column; /* Apila los elementos verticalmente en móvil */
+      display: flex; /* En móvil, flexbox para apilar elementos */
+      flex-direction: column; /* Apila el catálogo y el carrito verticalmente */
       gap: 15px;
       width: 100%;
       height: 100%; /* Ocupa la altura de su padre (.screen) */
@@ -262,6 +262,7 @@
       display: flex;
       flex-direction: column;
       min-height: 45vh; /* Altura mínima para asegurar visibilidad del grid */
+      /* Removido height: auto; que podría causar problemas de altura en ciertas configs */
     }
 
     .fixed-header-content {
@@ -313,7 +314,7 @@
     .products-grid {
       display: grid;
       /* CLAVE: auto-fit para ajustar columnas, minmax para el tamaño de las tarjetas */
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Min-width ajustado para móviles */
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Min-width ajustado para móviles */
       gap: 12px; /* Reducido el espacio entre tarjetas */
       overflow-y: auto; /* Permite scroll solo en la cuadrícula de productos */
       flex-grow: 1; /* Permite que la rejilla crezca y ocupe el espacio */
@@ -367,7 +368,7 @@
       color: #6c757d;
       margin-bottom: 4px;
       line-height: 1.3;
-      word-break: break-all; /* Asegura que el código de barras largo se rompa */
+      word-break: break-all; /* CLAVE: Asegura que el código de barras largo se rompa y no desborde */
     }
 
     .quantity-selector {
@@ -706,7 +707,7 @@
         overflow-y: hidden; /* El scroll lo maneja products-grid */
       }
       .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Ajuste para tablets */
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Ajuste para tablets */
         gap: 15px;
         padding-right: 10px;
       }
@@ -976,7 +977,7 @@
               <input type="text" id="ciudad" required />
             </div>
             <div class="form-group">
-              <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+              <label for="correo"><i class="fas fa-envelope"></i> Correo Electulario</label>
               <input type="email" id="correo" required />
             </div>
 
@@ -1051,7 +1052,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1200,7 +1201,8 @@
       } catch (error) {
         console.error("Error al cargar los medicamentos:", error);
         document.getElementById('productsGrid').innerHTML =
-          "<p style='text-align: center; color: #dc3545;'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
+          "<p class='empty-message'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
+        document.getElementById('productsGrid').classList.add('empty-message');
       }
     };
 
@@ -1412,7 +1414,7 @@
                 doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
             } else {
                 // Fallback a un SVG base64 si la imagen no carga, para evitar errores
-                const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
+                const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
                 doc.addImage(fallbackSvg, 'PNG', imgX, 10, imgWidth, imgHeight);
             }
 
