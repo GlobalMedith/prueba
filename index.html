@@ -1145,6 +1145,7 @@
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
             const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
+            doc.addImage(fallbackSvg, 'PNG', imgX, 10, imgWidth, imgHeight); // Línea corregida en tu código para usar fallbackSvg
             callback(fallbackSvg);
         };
     }
@@ -1202,18 +1203,41 @@
         renderProducts([]); // Mostrar mensaje "usa el buscador" al inicio
       } catch (error) {
         console.error("Error al cargar los medicamentos:", error);
-        document.getElementById('productsGrid').innerHTML =
-          "<p class='empty-message'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
-        document.getElementById('productsGrid').classList.add('empty-message');
+        const productsGrid = document.getElementById('productsGrid');
+        productsGrid.innerHTML = "<p class='empty-message'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
+        productsGrid.classList.add('empty-message');
       }
+
+      // Delegación de eventos para productsGrid
+      const productsGrid = document.getElementById('productsGrid');
+      productsGrid.addEventListener('click', function(event) {
+          const cardElement = event.target.closest('.product-card');
+          if (cardElement) {
+              const codigo = cardElement.dataset.codigo;
+              const product = medicamentos.find(p => p.codigoBarras === codigo);
+              if (product) {
+                // Si el clic no fue directamente en el input, o fue en la tarjeta, toggle product
+                if (!event.target.classList.contains('quantity-input')) {
+                    toggleProduct(product);
+                }
+              }
+          }
+      });
+      // Delegación de eventos para los inputs de cantidad
+      productsGrid.addEventListener('change', function(event) {
+          if (event.target.classList.contains('quantity-input')) {
+              const codigo = event.target.dataset.codigo;
+              updateQuantity(codigo, event.target.value);
+          }
+      });
     };
 
     function renderProducts(productsToRender) {
       const productsGrid = document.getElementById('productsGrid');
+      const fragment = document.createDocumentFragment(); // Usar DocumentFragment para rendimiento
       let htmlContent = '';
 
       if (productsToRender.length === 0) {
-        // Si no hay productos para renderizar, muestra el mensaje apropiado
         const searchTerm = document.getElementById('busqueda').value.toLowerCase().trim();
         if (searchTerm.length === 0) {
             htmlContent = "<p class='empty-message'>Por favor, usa el buscador para encontrar productos.</p>";
@@ -1222,6 +1246,7 @@
         }
         productsGrid.innerHTML = htmlContent;
         productsGrid.classList.add('empty-message');
+        updateCart(); // Asegurarse de que el carrito se actualice si no hay productos
         return;
       }
 
@@ -1246,23 +1271,7 @@
           </div>
         `;
       });
-      productsGrid.innerHTML = htmlContent;
-
-      // Adjuntar event listeners DESPUÉS de que los elementos estén en el DOM
-      productsGrid.querySelectorAll('.product-card').forEach(card => {
-          card.onclick = (event) => {
-              const codigo = card.dataset.codigo;
-              const product = medicamentos.find(p => p.codigoBarras === codigo);
-              if (product) toggleProduct(product);
-          };
-      });
-
-      productsGrid.querySelectorAll('.quantity-input').forEach(input => {
-          input.onchange = (event) => {
-              const codigo = input.dataset.codigo;
-              updateQuantity(codigo, event.target.value);
-          };
-      });
+      productsGrid.innerHTML = htmlContent; // Asignar todo el HTML de una vez
 
       updateCart();
     }
@@ -1272,10 +1281,12 @@
         const inputElement = cardElement ? cardElement.querySelector('.quantity-input') : null;
         
         if (selectedProducts.has(product.codigoBarras)) {
+            // Producto ya seleccionado, se deselecciona y se elimina del carrito
             selectedProducts.delete(product.codigoBarras);
             if (cardElement) cardElement.classList.remove('selected');
             if (inputElement) inputElement.value = 0;
         } else {
+            // Producto no seleccionado, se selecciona y se añade al carrito con cantidad 1 o la que ya tenga el input
             const quantityToAdd = (inputElement && parseInt(inputElement.value) > 0) ? parseInt(inputElement.value) : 1;
             selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
             if (cardElement) cardElement.classList.add('selected');
@@ -1287,23 +1298,18 @@
     function updateQuantity(codigo, cantidad) {
         const qty = parseInt(cantidad) || 0;
         const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
-        
-        if (selectedProducts.has(codigo)) {
-            if (qty > 0) {
-                const product = selectedProducts.get(codigo);
-                product.cantidad = qty;
-                selectedProducts.set(codigo, product);
-                if (cardElement) cardElement.classList.add('selected'); // Asegurar que esté seleccionado
-            } else {
-                selectedProducts.delete(codigo);
-                if (cardElement) cardElement.classList.remove('selected');
-            }
-        } else if (qty > 0) {
-            const product = medicamentos.find(p => p.codigoBarras === codigo);
-            if (product) {
-                selectedProducts.set(codigo, { ...product, cantidad: qty });
-                if (cardElement) cardElement.classList.add('selected');
-            }
+        const productData = medicamentos.find(p => p.codigoBarras === codigo); // Buscar el producto original
+
+        if (!productData) return; // Si el producto no se encuentra, salir
+
+        if (qty > 0) {
+            // Si la cantidad es mayor a 0, asegurar que esté en selectedProducts
+            selectedProducts.set(codigo, { ...productData, cantidad: qty });
+            if (cardElement) cardElement.classList.add('selected');
+        } else {
+            // Si la cantidad es 0, eliminar de selectedProducts
+            selectedProducts.delete(codigo);
+            if (cardElement) cardElement.classList.remove('selected');
         }
         updateCart();
     }
