@@ -25,83 +25,82 @@
     }
 
     /* Contenedor principal de la aplicación */
-    /* En móvil, el container es transparente y ocupa todo el viewport */
     .container {
       width: 100%;
       min-height: 100vh; /* Ocupa el 100% de la altura del viewport */
-      position: relative; /* Para que las .screen se posicionen absolutamente dentro */
+      position: relative;
       overflow-y: hidden; /* El scroll lo manejarán las pantallas internas */
       padding: 15px; /* Padding general para móvil */
       background: transparent;
       box-shadow: none;
-      display: flex; /* Añadido para que las pantallas internas puedan centrarse */
-      justify-content: center; /* Centra las pantallas horizontalmente */
-      align-items: flex-start; /* Alinea las pantallas arriba por defecto */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
     }
 
     /* Manejo de Pantallas Individuales */
     .screen {
-      display: none; /* Oculta todas las pantallas por defecto */
+      display: none;
       width: 100%;
       height: 100%; /* Ocupa el 100% de la altura de su padre (.container) */
-      position: absolute; /* Posicionamiento absoluto para que se superpongan */
+      position: absolute;
       top: 0;
       left: 0;
       overflow-y: auto; /* IMPORTANTE: Cada pantalla maneja su propio scroll si el contenido desborda */
-      -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iOS */
+      -webkit-overflow-scrolling: touch;
       padding-bottom: 20px; /* Espacio para scroll al final en móvil */
-      flex-direction: column; /* Contenido apilado verticalmente */
-      align-items: center; /* Centrar horizontalmente el contenido de la pantalla */
-      justify-content: flex-start; /* Alinear arriba, el scroll manejará el resto */
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
     }
     
     .screen.active {
-      display: flex; /* Hace visible la pantalla activa */
+      display: flex;
     }
 
     /* PANTALLA 1 - REGISTRO (Welcome Screen) */
     .welcome-screen {
-      width: 100%; /* Asegura que ocupe todo el ancho disponible */
-      height: 100%; /* Ocupa la altura de su padre (.screen) */
-      display: flex; /* Para centrar la tarjeta de bienvenida */
-      justify-content: center; /* Centrar welcome-card horizontalmente */
-      align-items: center; /* Centrar welcome-card verticalmente */
-      padding: 10px; /* Un poco de padding interior */
-      flex-grow: 1; /* Permite que el welcome-screen se expanda si es necesario */
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      flex-grow: 1;
     }
 
     .welcome-card {
       background: white;
       border-radius: 20px;
-      padding: 20px; /* Padding inicial para móvil */
+      padding: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       text-align: center;
-      width: 90%; /* Ocupa 90% del ancho del padre */
-      max-width: 380px; /* CLAVE: Limita el ancho máximo para móvil */
+      width: 90%;
+      max-width: 380px; /* Tamaño clave para móviles */
       display: flex;
       flex-direction: column;
-      gap: 12px; /* Espacio entre elementos */
-      height: auto; /* Permite que la altura se ajuste al contenido */
-      flex-shrink: 0; /* Evitar que se encoja */
-      margin: auto; /* Asegura el centrado si el `max-width` es menor que el `width` del padre */
+      gap: 12px;
+      height: auto;
+      flex-shrink: 0;
+      margin: auto;
     }
 
     .logo img {
-      height: 55px; /* Tamaño más compacto para móvil */
+      height: 55px;
       max-width: 100%;
       border-radius: 10px;
-      object-fit: contain; /* Asegura que la imagen se ajuste sin distorsionarse */
+      object-fit: contain;
     }
 
     .welcome-title {
-      font-size: 1.5em; /* Reducido para móvil */
+      font-size: 1.5em;
       color: #2c3e50;
       font-weight: 700;
       margin-bottom: 5px;
     }
 
     .welcome-subtitle {
-      font-size: 0.9em; /* Reducido para móvil */
+      font-size: 0.9em;
       color: #7f8c8d;
       margin-bottom: 10px;
     }
@@ -109,9 +108,9 @@
     .persuasive-message {
       background: linear-gradient(135deg, #28a745, #20c997);
       color: white;
-      padding: 8px; /* Reducido */
-      border-radius: 12px; /* Reducido */
-      font-size: 0.85em; /* Reducido */
+      padding: 8px;
+      border-radius: 12px;
+      font-size: 0.85em;
       font-weight: 600;
       line-height: 1.3;
       flex-shrink: 0;
@@ -134,24 +133,24 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 6px; /* Reducido */
+      gap: 6px;
       margin-bottom: 15px;
-      font-size: 0.8em; /* Reducido */
+      font-size: 0.8em;
       color: #555;
       flex-shrink: 0;
     }
     .category-item {
-      padding: 5px 8px; /* Reducido */
+      padding: 5px 8px;
       background: #e3f2fd;
       border: 1px solid #90caf9;
-      border-radius: 8px; /* Reducido */
+      border-radius: 8px;
       font-weight: 600;
       color: #1976d2;
       cursor: pointer;
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
-      gap: 4px; /* Reducido */
+      gap: 4px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .category-item:hover {
@@ -161,27 +160,27 @@
         box-shadow: 0 3px 8px rgba(0,0,0,0.15);
     }
     .category-item i {
-        font-size: 0.9em; /* Ajustado */
+        font-size: 0.9em;
         color: #1976d2;
     }
 
     .medicine-types {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-around; /* Distribución equitativa */
+      justify-content: space-around;
       margin-bottom: 15px;
-      gap: 8px; /* Reducido */
+      gap: 8px;
     }
 
     .medicine-type {
       text-align: center;
-      flex: 1 1 90px; /* Base más pequeña para que quepan 3 en fila en móvil */
-      max-width: 120px; /* Máximo más pequeño */
-      padding: 3px; /* Reducido */
+      flex: 1 1 90px;
+      max-width: 120px;
+      padding: 3px;
     }
 
     .medicine-type i {
-      font-size: 1.3em; /* Reducido */
+      font-size: 1.3em;
       margin-bottom: 6px;
       display: block;
     }
@@ -191,7 +190,7 @@
     .medicine-type.curacion i { color: #f39c12; }
 
     .form-group {
-      margin-bottom: 8px; /* Reducido */
+      margin-bottom: 8px;
       text-align: left;
     }
 
@@ -200,15 +199,15 @@
       margin-bottom: 5px;
       font-weight: 600;
       color: #2c3e50;
-      font-size: 0.8em; /* Reducido */
+      font-size: 0.8em;
     }
 
     .form-group input {
       width: 100%;
-      padding: 8px; /* Reducido */
+      padding: 8px;
       border: 2px solid #e0e0e0;
-      border-radius: 8px; /* Reducido */
-      font-size: 0.8em; /* Reducido */
+      border-radius: 8px;
+      font-size: 0.8em;
       transition: border-color 0.3s;
     }
 
@@ -220,17 +219,17 @@
     .btn {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      padding: 9px 18px; /* Reducido */
+      padding: 9px 18px;
       border: none;
-      border-radius: 40px; /* Ajustado */
-      font-size: 0.9em; /* Reducido */
+      border-radius: 40px;
+      font-size: 0.9em;
       font-weight: 600;
       cursor: pointer;
       transition: transform 0.3s, box-shadow 0.3s;
       display: inline-flex;
       align-items: center;
-      gap: 8px; /* Reducido */
-      margin-top: 8px; /* Reducido */
+      gap: 8px;
+      margin-top: 8px;
       width: 100%;
       justify-content: center;
     }
@@ -242,11 +241,11 @@
 
     /* PANTALLA 2 - CATÁLOGO */
     .catalog-screen {
-      display: flex; /* En móvil, flexbox para apilar elementos */
-      flex-direction: column; /* Apila el catálogo y el carrito verticalmente */
+      display: flex;
+      flex-direction: column; /* SIEMPRE columna en móvil */
       gap: 15px;
       width: 100%;
-      height: 100%; /* Ocupa la altura de su padre (.screen) */
+      height: 100%;
       align-items: center;
       padding: 10px;
     }
@@ -256,17 +255,17 @@
       border-radius: 15px;
       padding: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      flex-grow: 1; /* Permite que crezca para ocupar espacio */
+      flex-grow: 1; /* Permite que crezca, empujando el carrito hacia abajo si hay mucho contenido */
       width: 100%;
       max-width: 100%;
       display: flex;
       flex-direction: column;
-      min-height: 45vh; /* Altura mínima para asegurar visibilidad del grid */
-      /* Removido height: auto; que podría causar problemas de altura en ciertas configs */
+      min-height: auto; /* CLAVE: Permitir que su altura se adapte a su contenido en móvil */
+      flex-shrink: 0; /* Asegura que no se encoja para dar espacio al carrito */
     }
 
     .fixed-header-content {
-      flex-shrink: 0; /* Asegura que esta sección no se encoja */
+      flex-shrink: 0;
       margin-bottom: 15px;
       text-align: center;
     }
@@ -280,7 +279,7 @@
     }
 
     .catalog-title {
-      font-size: 1.4em; /* Ajustado para móvil */
+      font-size: 1.4em;
       color: #2c3e50;
       font-weight: 700;
       margin-bottom: 8px;
@@ -288,39 +287,39 @@
 
     .search-box {
       position: relative;
-      max-width: 400px; /* Reducido el ancho máximo del buscador para móvil */
+      max-width: 400px;
       width: 100%;
       margin: 0 auto;
     }
 
     .search-box input {
       width: 100%;
-      padding: 9px 35px 9px 12px; /* Ajustado el padding */
+      padding: 9px 35px 9px 12px;
       border: 2px solid #e0e0e0;
       border-radius: 50px;
-      font-size: 0.8em; /* Reducido */
+      font-size: 0.8em;
       text-transform: uppercase;
     }
 
     .search-box i {
       position: absolute;
-      right: 12px; /* Ajustado */
+      right: 12px;
       top: 50%;
       transform: translateY(-50%);
       color: #7f8c8d;
-      font-size: 0.8em; /* Reducido */
+      font-size: 0.8em;
     }
 
     .products-grid {
       display: grid;
-      /* CLAVE: auto-fit para ajustar columnas, minmax para el tamaño de las tarjetas */
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Min-width ajustado para móviles */
-      gap: 12px; /* Reducido el espacio entre tarjetas */
-      overflow-y: auto; /* Permite scroll solo en la cuadrícula de productos */
-      flex-grow: 1; /* Permite que la rejilla crezca y ocupe el espacio */
-      padding-right: 5px; /* Para evitar que la barra de scroll se superponga al contenido */
-      min-height: 150px; /* Altura mínima para asegurar que el grid sea visible */
-      align-content: start; /* Alinea el contenido del grid al inicio */
+      /* CLAVE: Auto-fit para que siempre haya al menos 1 columna y hasta el máximo posible */
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* 140px mínimo para 2 columnas en muchos móviles */
+      gap: 12px;
+      overflow-y: auto; /* Scroll individual para los productos */
+      flex-grow: 1; /* Ocupa el espacio restante en catalog-main */
+      padding-right: 0px; /* Eliminado padding-right para evitar scroll horizontal innecesario */
+      min-height: 180px; /* Aumentado un poco para asegurar visibilidad de al menos 1-2 productos */
+      align-content: start;
     }
 
     .products-grid.empty-message {
@@ -331,15 +330,15 @@
         text-align: center;
         color: #6c757d;
         font-style: italic;
-        min-height: 150px; /* Mantiene la altura mínima para el mensaje */
+        min-height: 180px;
         padding: 0 20px;
     }
 
     .product-card {
       background: #f8f9fa;
       border: 2px solid #e9ecef;
-      border-radius: 12px; /* Reducido */
-      padding: 10px; /* Reducido */
+      border-radius: 12px;
+      padding: 10px;
       transition: all 0.1s ease-out;
       cursor: pointer;
     }
@@ -355,36 +354,36 @@
     }
 
     .product-title {
-      font-size: 0.9em; /* Reducido */
+      font-size: 0.9em;
       font-weight: 600;
       color: #2c3e50;
       margin-bottom: 4px;
       line-height: 1.3;
-      overflow-wrap: break-word; /* Asegura que el texto largo se rompa */
+      overflow-wrap: break-word;
     }
 
     .product-info {
-      font-size: 0.75em; /* Reducido */
+      font-size: 0.75em;
       color: #6c757d;
       margin-bottom: 4px;
       line-height: 1.3;
-      word-break: break-all; /* CLAVE: Asegura que el código de barras largo se rompa y no desborde */
+      word-break: break-all; /* CLAVE: Rompe palabras largas (códigos de barra) */
     }
 
     .quantity-selector {
       display: flex;
       align-items: center;
-      gap: 4px; /* Reducido */
+      gap: 4px;
       margin-top: 6px;
     }
 
     .quantity-input {
-      width: 40px; /* Reducido */
-      padding: 3px; /* Reducido */
+      width: 40px;
+      padding: 3px;
       border: 1px solid #ddd;
       border-radius: 5px;
       text-align: center;
-      font-size: 0.75em; /* Reducido */
+      font-size: 0.75em;
     }
 
     /* CARRITO LATERAL (Cart Sidebar) */
@@ -393,47 +392,47 @@
       border-radius: 15px;
       padding: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      height: auto; /* Se ajusta al contenido en móvil */
+      height: auto; /* Permite que la altura se ajuste al contenido del carrito */
       width: 100%; /* Ocupa todo el ancho en móvil */
-      max-height: 40vh; /* Altura máxima para el carrito en móvil */
-      overflow-y: auto; /* Permite scroll interno del carrito */
-      margin-top: 15px; /* Espacio entre catálogo y carrito en móvil */
-      flex-shrink: 0; /* Asegura que el carrito no se encoja para dar espacio a la grilla */
+      max-height: 35vh; /* CLAVE: Reduce la altura máxima del carrito en móvil */
+      overflow-y: auto; /* Permite scroll interno del carrito si hay muchos items */
+      margin-top: 15px;
+      flex-shrink: 0;
     }
 
     .cart-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 12px; /* Reducido */
-      font-size: 1em; /* Ajustado */
+      margin-bottom: 12px;
+      font-size: 1em;
       font-weight: 700;
       color: #2c3e50;
     }
 
     .cart-items {
-      max-height: 150px; /* Altura máxima del carrito en móvil */
+      max-height: 120px; /* CLAVE: Reduce la altura máxima de la lista de items en el carrito */
       overflow-y: auto;
-      margin-bottom: 12px; /* Reducido */
+      margin-bottom: 12px;
     }
 
     .cart-item {
       background: #f8f9fa;
-      padding: 10px; /* Reducido */
-      border-radius: 8px; /* Reducido */
+      padding: 10px;
+      border-radius: 8px;
       margin-bottom: 6px;
       position: relative;
     }
 
     .cart-item-title {
       font-weight: 600;
-      font-size: 0.8em; /* Reducido */
+      font-size: 0.8em;
       margin-bottom: 4px;
       line-height: 1.2;
     }
 
     .cart-item-info {
-      font-size: 0.7em; /* Reducido */
+      font-size: 0.7em;
       color: #6c757d;
     }
 
@@ -441,10 +440,10 @@
       position: absolute;
       top: 8px;
       right: 30px;
-      width: 20px; /* Reducido */
-      height: 20px; /* Reducido */
-      line-height: 20px; /* Centra verticalmente el texto */
-      font-size: 0.7em; /* Reducido */
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      font-size: 0.7em;
       text-align: center;
       background-color: #e9ecef;
       border-radius: 50%;
@@ -454,8 +453,8 @@
       position: absolute;
       top: 8px;
       right: 8px;
-      width: 16px; /* Reducido */
-      height: 16px; /* Reducido */
+      width: 16px;
+      height: 16px;
       background: #dc3545;
       color: white;
       border: none;
@@ -464,21 +463,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.55em; /* Reducido */
+      font-size: 0.55em;
       padding: 0;
     }
 
     .cart-summary {
       border-top: 2px solid #e9ecef;
-      padding-top: 12px; /* Reducido */
+      padding-top: 12px;
       text-align: center;
     }
 
     .cart-total {
-      font-size: 1em; /* Ajustado */
+      font-size: 1em;
       font-weight: 700;
       color: #2c3e50;
-      margin-bottom: 12px; /* Reducido */
+      margin-bottom: 12px;
     }
 
     /* PANTALLA 3 - RESUMEN */
@@ -488,47 +487,47 @@
       padding: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       max-width: 100%;
-      margin: auto; /* Centrar en móvil */
-      height: 100%; /* Ocupa toda la altura disponible de su padre (.screen) */
+      margin: auto;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      overflow-y: auto; /* Permite scroll si el contenido es largo */
+      overflow-y: auto;
     }
 
     .summary-fixed-header {
       flex-shrink: 0;
-      margin-bottom: 8px; /* Reducido */
-      padding-bottom: 8px; /* Reducido */
+      margin-bottom: 8px;
+      padding-bottom: 8px;
       border-bottom: 1px solid #eee;
       text-align: center;
       display: grid;
-      grid-template-columns: 1fr; /* Una columna en móvil */
-      gap: 8px; /* Reducido */
+      grid-template-columns: 1fr;
+      gap: 8px;
     }
 
     .summary-logo img {
-      height: 35px; /* Reducido para móvil */
+      height: 35px;
       width: auto;
       max-width: 100%;
       object-fit: contain;
     }
 
     .summary-title {
-      font-size: 1.1em; /* Reducido para móvil */
+      font-size: 1.1em;
       color: #2c3e50;
       margin-bottom: 2px;
       font-weight: 700;
     }
 
     .summary-screen .persuasive-message {
-        font-size: 0.7em; /* Reducido */
+        font-size: 0.7em;
         padding: 4px 6px;
         margin-bottom: 6px;
     }
 
     .contact-info, .client-info {
       background: #f8f9fa;
-      padding: 7px; /* Reducido */
+      padding: 7px;
       border-radius: 5px;
       height: fit-content;
       display: flex;
@@ -542,16 +541,16 @@
     .contact-info h3, .client-info h3 {
       color: #2c3e50;
       margin-bottom: 2px;
-      font-size: 0.7em; /* Reducido */
+      font-size: 0.7em;
     }
 
     .contact-item {
       display: flex;
       align-items: center;
-      gap: 1px; /* Reducido */
+      gap: 1px;
       margin-bottom: 1px;
       color: #495057;
-      font-size: 0.55em; /* Reducido */
+      font-size: 0.55em;
     }
     .contact-item i {
         font-size: 0.7em;
@@ -559,15 +558,15 @@
 
     .products-summary {
       background: #f1f8e9;
-      padding: 8px; /* Reducido */
+      padding: 8px;
       border-radius: 8px;
       flex-grow: 1;
-      overflow-y: auto; /* Permite scroll de la tabla de productos */
-      margin-top: 8px; /* Reducido */
+      overflow-y: auto;
+      margin-top: 8px;
     }
 
     .products-summary h3 {
-        font-size: 0.9em; /* Reducido */
+        font-size: 0.9em;
         margin-bottom: 6px;
     }
 
@@ -579,10 +578,10 @@
 
     .summary-table th,
     .summary-table td {
-      padding: 3px; /* Reducido */
+      padding: 3px;
       text-align: left;
       border-bottom: 1px solid #ddd;
-      font-size: 0.6em; /* Reducido */
+      font-size: 0.6em;
     }
 
     .summary-table th {
@@ -594,8 +593,8 @@
     .summary-actions {
       display: flex;
       flex-direction: column;
-      gap: 8px; /* Reducido */
-      margin-top: 12px; /* Reducido */
+      gap: 8px;
+      margin-top: 12px;
       flex-shrink: 0;
     }
 
@@ -613,23 +612,23 @@
 
     /* Navegación */
     .navigation {
-      position: fixed; /* Mantiene la posición fija en el viewport */
-      top: 10px; /* A 10px del borde superior */
-      left: 10px; /* A 10px del borde izquierdo */
-      z-index: 9999; /* Asegura que esté por encima de casi todo lo demás */
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 9999;
     }
 
     .nav-btn {
       background: rgba(255,255,255,0.9);
       border: none;
       border-radius: 50%;
-      width: 38px; /* Reducido */
+      width: 38px;
       height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 0.9em; /* Reducido */
+      font-size: 0.9em;
       color: #2c3e50;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       transition: all 0.3s;
@@ -647,8 +646,8 @@
         padding: 20px;
       }
       .screen {
-          padding-bottom: 0; /* No es necesario en tablet/desktop */
-          justify-content: flex-start; /* Mantener alineación superior */
+          padding-bottom: 0;
+          justify-content: flex-start;
       }
 
       /* PANTALLA 1 - REGISTRO */
@@ -657,14 +656,14 @@
       }
       .welcome-card {
         padding: 30px;
-        max-width: 500px; /* Tamaño más común para tablets */
+        max-width: 500px;
         gap: 15px;
       }
       .logo img {
-        height: 70px; /* Aumentado para tablets */
+        height: 70px;
       }
       .welcome-title {
-        font-size: 2em; /* Aumentado */
+        font-size: 2em;
       }
       .welcome-subtitle {
         font-size: 1em;
@@ -674,7 +673,7 @@
         font-size: 0.95em;
       }
       .medicine-types {
-        flex-direction: row; /* Vuelve a layout de fila */
+        flex-direction: row;
         justify-content: space-around;
         gap: 10px;
       }
@@ -688,17 +687,17 @@
       .btn {
         padding: 10px 25px;
         font-size: 0.95em;
-        width: auto; /* Permite que el botón no ocupe todo el ancho si no es necesario */
+        width: auto;
       }
 
       /* PANTALLA 2 - CATÁLOGO */
       .catalog-screen {
-        display: grid; /* Vuelve a layout de grid para catálogo y carrito */
-        grid-template-columns: 1fr 280px; /* Ajuste del ancho del carrito */
+        display: grid; /* Vuelve a layout de grid para tablet/desktop */
+        grid-template-columns: 1fr 280px; /* Catálogo a la izquierda, carrito a la derecha */
         gap: 20px;
         padding: 20px;
         height: 100%;
-        align-items: flex-start; /* Alinea los items grid al inicio */
+        align-items: flex-start;
       }
       .catalog-main {
         padding: 20px;
@@ -712,11 +711,11 @@
         padding-right: 10px;
       }
       .cart-sidebar {
-        position: sticky; /* Se vuelve sticky en tablet */
-        top: 20px; /* Distancia desde arriba */
-        max-height: calc(100vh - 40px); /* Altura máxima para el sticky */
+        position: sticky;
+        top: 20px;
+        max-height: calc(100vh - 40px);
         padding: 20px;
-        margin-top: 0; /* Elimina el margen superior en tablet */
+        margin-top: 0;
       }
       .catalog-title {
         font-size: 1.6em;
@@ -753,11 +752,11 @@
 
       /* PANTALLA 3 - RESUMEN */
       .summary-screen {
-        max-width: 700px; /* Ajustado */
+        max-width: 700px;
         padding: 20px;
       }
       .summary-fixed-header {
-          grid-template-columns: 1fr 1fr; /* Dos columnas en tablet */
+          grid-template-columns: 1fr 1fr;
           gap: 15px;
       }
       .summary-logo img {
@@ -783,7 +782,7 @@
         padding: 5px;
       }
       .summary-actions {
-        flex-direction: row; /* Botones en fila */
+        flex-direction: row;
         justify-content: center;
       }
       .nav-btn {
@@ -798,31 +797,30 @@
     /* ------------------------------------------- */
     @media (min-width: 1024px) {
       body {
-        overflow: hidden; /* Oculta el scroll global del body */
+        overflow: hidden;
       }
       .container {
-        max-width: 1000px; /* Ancho más controlado para contenido principal */
-        height: calc(100vh - 60px); /* Altura de la "ventana de aplicación" en desktop */
+        max-width: 1000px;
+        height: calc(100vh - 60px);
         min-height: calc(100vh - 60px);
-        margin: 30px auto; /* Centra y da espacio alrededor */
-        background: white; /* Fondo blanco visible para el contenedor principal */
-        box-shadow: 0 0 40px rgba(0,0,0,0.3); /* Sombra más pronunciada */
-        border-radius: 25px; /* Bordes más redondeados */
-        padding: 30px; /* Padding general más amplio para desktop */
-        overflow-y: hidden; /* El contenedor principal en desktop NO SCROLLEA */
-        align-items: center; /* Centra las pantallas dentro del container verticalmente */
+        margin: 30px auto;
+        background: white;
+        box-shadow: 0 0 40px rgba(0,0,0,0.3);
+        border-radius: 25px;
+        padding: 30px;
+        overflow-y: hidden;
+        align-items: center;
       }
 
-      /* Asegurarse que las pantallas internas se adapten bien al .container */
       .screen {
-          position: relative; /* Ya no absoluto al body, sino relativo al .container */
+          position: relative;
           top: unset;
           left: unset;
           width: 100%;
-          height: 100%; /* Ocupa toda la altura de su padre (.container) */
+          height: 100%;
           min-height: 100%;
           padding-bottom: 0;
-          overflow-y: auto; /* Las pantallas SÍ manejan su propio scroll en desktop */
+          overflow-y: auto;
           flex-shrink: 0;
           flex-grow: 1;
       }
@@ -839,15 +837,15 @@
         padding: 0;
       }
       .welcome-card {
-        padding: 35px; /* Ajustado */
-        max-width: 450px; /* Tamaño óptimo para desktop, para que se vea como una "tarjeta" centrada */
+        padding: 35px;
+        max-width: 450px;
         gap: 20px;
       }
       .logo img {
-        height: 90px; /* Aumentado */
+        height: 90px;
       }
       .welcome-title {
-        font-size: 2.4em; /* Aumentado */
+        font-size: 2.4em;
       }
       .welcome-subtitle {
         font-size: 1.2em;
@@ -870,7 +868,7 @@
 
       /* PANTALLA 2 - CATÁLOGO */
       .catalog-screen {
-        grid-template-columns: 1fr 320px; /* Ajuste del ancho del carrito */
+        grid-template-columns: 1fr 320px;
         gap: 25px;
         padding: 0;
         height: 100%;
@@ -882,20 +880,20 @@
         max-height: unset;
       }
       .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Ajustado para desktop */
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Mantengo 180px para una buena densidad */
         gap: 20px;
         padding-right: 15px;
       }
       .cart-sidebar {
-        top: 30px; /* Distancia desde arriba */
+        top: 30px;
         padding: 25px;
-        height: fit-content; /* Se ajusta al contenido */
-        max-height: calc(100vh - 60px - 60px); /* Ajustado para desktop (container height - margin total) */
+        height: fit-content;
+        max-height: calc(100vh - 60px - 60px);
       }
 
       /* PANTALLA 3 - RESUMEN */
       .summary-screen {
-        max-width: 800px; /* Ajustado */
+        max-width: 800px;
         padding: 25px;
         height: 100%;
       }
@@ -937,7 +935,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -977,7 +975,7 @@
               <input type="text" id="ciudad" required />
             </div>
             <div class="form-group">
-              <label for="correo"><i class="fas fa-envelope"></i> Correo Electulario</label>
+              <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
               <input type="email" id="correo" required />
             </div>
 
@@ -1413,7 +1411,6 @@
             if (logoBase64) {
                 doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
             } else {
-                // Fallback a un SVG base64 si la imagen no carga, para evitar errores
                 const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
                 doc.addImage(fallbackSvg, 'PNG', imgX, 10, imgWidth, imgHeight);
             }
@@ -1568,10 +1565,10 @@
 
             setTimeout(() => {
                 alert(
-                    "¡Listo! ✅ Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\n\n" +
-                    "Ahora, se abrirá WhatsApp. Por favor, realiza estos 2 pasos:\n" +
-                    "1️⃣ Busca y adjunta el archivo PDF que acabas de descargar.\n" +
-                    "2️⃣ Envía el mensaje (el texto de la cotización ya está listo).\n\n" +
+                    "¡Listo! ✅ Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\\n\\n" +
+                    "Ahora, se abrirá WhatsApp. Por favor, realiza estos 2 pasos:\\n" +
+                    "1️⃣ Busca y adjunta el archivo PDF que acabas de descargar.\\n" +
+                    "2️⃣ Envía el mensaje (el texto de la cotización ya está listo).\\n\\n" +
                     "¡Gracias por tu paciencia! 😉"
                 );
 
