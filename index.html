@@ -367,6 +367,7 @@
       color: #6c757d;
       margin-bottom: 4px;
       line-height: 1.3;
+      word-break: break-all; /* Asegura que el código de barras largo se rompa */
     }
 
     .quantity-selector {
@@ -611,10 +612,10 @@
 
     /* Navegación */
     .navigation {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
+      position: fixed; /* Mantiene la posición fija en el viewport */
+      top: 10px; /* A 10px del borde superior */
+      left: 10px; /* A 10px del borde izquierdo */
+      z-index: 9999; /* Asegura que esté por encima de casi todo lo demás */
     }
 
     .nav-btn {
@@ -935,7 +936,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -1050,7 +1051,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1126,7 +1127,7 @@
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const seconds = date.getSeconds().toString().padStart(2, '0');
         const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        return `COT-<span class="math-inline">\{year\}</span>{month}<span class="math-inline">\{day\}\-</span>{hours}<span class="math-inline">\{minutes\}\-</span>{random}`;
+        return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
     }
 
     function getBase64Image(imgUrl, callback) {
@@ -1143,7 +1144,7 @@
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
             callback(fallbackSvg);
         };
     }
@@ -1156,6 +1157,12 @@
       currentScreen = screenNumber;
       const backBtn = document.getElementById('backBtn');
       backBtn.style.display = (screenNumber > 1) ? 'block' : 'none';
+      
+      // Asegurar que la pantalla activa se desplace al principio si tiene overflow
+      const activeScreen = document.getElementById(`screen${screenNumber}`);
+      if (activeScreen) {
+        activeScreen.scrollTop = 0;
+      }
     }
 
     function goBack() {
@@ -1210,24 +1217,22 @@
 
       productsToRender.forEach((product) => {
         const isSelected = selectedProducts.has(product.codigoBarras);
-        // Cantidad inicial 0 si no está seleccionado, sino la cantidad actual
-        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0; // Cambiado a 0
+        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0;
         
         const card = document.createElement('div');
         card.className = `product-card ${isSelected ? 'selected' : ''}`;
-        card.onclick = () => toggleProduct(product); // El click en la tarjeta lo selecciona
+        card.onclick = () => toggleProduct(product);
         
-        // CORRECCIÓN: Asegurar que product.codigoBarras se lea correctamente.
         const displayCodigoBarras = product.codigoBarras || 'No disponible';
 
         card.innerHTML = `
           <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
           <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
           <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
-          <div class="product-info"><strong>Código:</strong> <span class="math-inline">\{displayCodigoBarras\}</div\>
-<div class\="quantity\-selector" onclick\="event\.stopPropagation\(\)"\>
-<label\>Cantidad\:</label\>
-<input type\="number" class\="quantity\-input" min\="0" value\="</span>{quantity}" 
+          <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
+          <div class="quantity-selector" onclick="event.stopPropagation()">
+            <label>Cantidad:</label>
+            <input type="number" class="quantity-input" min="0" value="${quantity}" 
                    onchange="updateQuantity('${product.codigoBarras}', this.value)" />
           </div>
         `;
@@ -1236,17 +1241,13 @@
       updateCart();
     }
 
-    // Modificado para cambiar cantidad a 1 al seleccionar, o eliminar si ya estaba y cantidad es 0
     function toggleProduct(product) {
       if (selectedProducts.has(product.codigoBarras)) {
-        // Si ya está seleccionado y se hace clic, lo deselecciona/elimina
         selectedProducts.delete(product.codigoBarras);
       } else {
-        // Si no está seleccionado, lo agrega con cantidad 1 (o la cantidad que el input ya tenga, si no está en 0)
-        // Ojo: Si el input está en 0 y se selecciona, lo agregará con 1 para que tenga sentido.
         const inputElement = document.querySelector(`.product-card[onclick*="${product.codigoBarras}"] .quantity-input`);
         const currentInputValue = parseInt(inputElement ? inputElement.value : '0');
-        const quantityToAdd = currentInputValue > 0 ? currentInputValue : 1; // Si el usuario ya puso algo, se mantiene. Si no, 1.
+        const quantityToAdd = currentInputValue > 0 ? currentInputValue : 1;
         selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
       }
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
@@ -1257,7 +1258,7 @@
 
 
     function updateQuantity(codigo, cantidad) {
-      const qty = parseInt(cantidad) || 0; // Cantidad puede ser 0
+      const qty = parseInt(cantidad) || 0;
       
       if (selectedProducts.has(codigo)) {
         if (qty > 0) {
@@ -1265,17 +1266,14 @@
           product.cantidad = qty;
           selectedProducts.set(codigo, product);
         } else {
-          // Si la cantidad es 0, lo eliminamos de la selección
           selectedProducts.delete(codigo);
         }
       } else if (qty > 0) {
-        // Si no estaba seleccionado y el usuario pone > 0, lo agrega
         const product = medicamentos.find(p => p.codigoBarras === codigo);
         if (product) {
           selectedProducts.set(codigo, { ...product, cantidad: qty });
         }
       }
-      // Re-renderiza para actualizar el estado visual de la tarjeta (selected/not selected)
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
       const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
       renderProducts(filtered);
@@ -1284,7 +1282,6 @@
 
     function removeItemFromCart(codigo) {
       selectedProducts.delete(codigo);
-      // Actualiza el input de cantidad en la tarjeta del catálogo a 0 si existe
       const inputElement = document.querySelector(`.product-card[onclick*="${codigo}"] .quantity-input`);
       if (inputElement) {
         inputElement.value = 0;
@@ -1315,8 +1312,8 @@
         html += `
           <div class="cart-item">
             <div class="cart-item-title">${product.descripcion || 'Producto sin descripción'}</div>
-            <div class="cart-item-info">Código: <span class="math-inline">\{product\.codigoBarras \|\| 'N/A'\}</div\>
-<div class\="cart\-item\-quantity"\></span>{product.cantidad}</div>
+            <div class="cart-item-info">Código: ${product.codigoBarras || 'N/A'}</div>
+            <div class="cart-item-quantity">${product.cantidad}</div>
             <button class="remove-item" onclick="removeItemFromCart('${product.codigoBarras}')">
               <i class="fas fa-times"></i>
             </button>
@@ -1400,7 +1397,6 @@
       }
     }
 
-    // Generar PDF (misma función, ahora envuelve en una promesa para esperar su resolución)
     async function generarPDF() {
       return new Promise((resolve) => {
         const { jsPDF } = window.jspdf;
@@ -1415,7 +1411,9 @@
             if (logoBase64) {
                 doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
             } else {
-                doc.addImage(document.querySelector('.summary-logo img').src, 'JPEG', imgX, 10, imgWidth, imgHeight);
+                // Fallback a un SVG base64 si la imagen no carga, para evitar errores
+                const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
+                doc.addImage(fallbackSvg, 'PNG', imgX, 10, imgWidth, imgHeight);
             }
 
             let y = 10 + imgHeight + 10;
@@ -1461,7 +1459,6 @@
             y += 10;
             doc.setFont(undefined, 'normal');
 
-            // Preparar datos para autoTable
             const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
             const data = Array.from(selectedProducts.values()).map(p => [
               p.codigoBarras || 'N/A',
@@ -1470,33 +1467,32 @@
               p.cantidad
             ]);
 
-            // ESTILOS DE LA TABLA PDF para coincidir con la pantalla de resumen
             doc.autoTable({
               startY: y,
               head: headers,
               body: data,
-              theme: 'striped', // Un tema rayado similar al de tu pantalla
+              theme: 'striped',
               styles: {
                 fontSize: 8,
                 cellPadding: 2,
                 overflow: 'linebreak',
-                textColor: [51, 51, 51] // Color de texto general
+                textColor: [51, 51, 51]
               },
               headStyles: {
-                fillColor: [248, 249, 250], // Fondo blanco grisáceo para encabezado
-                textColor: [44, 62, 80], // Color de texto oscuro
+                fillColor: [248, 249, 250],
+                textColor: [44, 62, 80],
                 fontStyle: 'bold',
-                halign: 'left' // Alineación de texto en encabezados
+                halign: 'left'
               },
               bodyStyles: {
-                fillColor: [241, 248, 233], // Color de fondo para filas impares (similar al #f1f8e9)
-                alternateFillColor: [255, 255, 255] // Color de fondo para filas pares (blanco)
+                fillColor: [241, 248, 233],
+                alternateFillColor: [255, 255, 255]
               },
               columnStyles: {
-                0: { cellWidth: 30 }, // Código de Barras
-                1: { cellWidth: 'auto' }, // Descripción
-                2: { cellWidth: 30 }, // Laboratorio
-                3: { cellWidth: 15, halign: 'center' } // Cantidad
+                0: { cellWidth: 30 },
+                1: { cellWidth: 'auto' },
+                2: { cellWidth: 30 },
+                3: { cellWidth: 15, halign: 'center' }
               },
               margin: { left: 10, right: 10 },
               didDrawPage: function(data) {
@@ -1532,7 +1528,7 @@
         } else {
             selectedProducts.forEach(product => {
                 const codigo = product.codigoBarras || 'N/A';
-                message += `  • <span class="math-inline">\{product\.descripcion \|\| 'Sin descripción'\} \(</span>{codigo})\n`;
+                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
                 message += `    Cantidad: ${product.cantidad}\n\n`;
             });
         }
@@ -1593,5 +1589,3 @@
   </script>
 </body>
 </html>
-}
-Hola, muchas gracias, me agrada mucho el tamaño de la tarjeta de bienvenida y el caralogo se aprecia mucho mejor, ahora solo tengo un pequeno problema, la navegacion de las flechas para regresar o avanzar, se mueve con el scroll, de favor verifica para que se quede fija en la parte superior, gracias por tu ayuda confio en ti.
