@@ -1215,7 +1215,7 @@
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
             callback(fallbackSvg);
         };
     }
@@ -1508,80 +1508,77 @@
         getBase64Image('logo.png', function(logoBase64) {
             const pageWidth = doc.internal.pageSize.getWidth();
             const marginX = 15; // Margen izquierdo y derecho para el contenido
-            const halfPageWidth = pageWidth / 2;
-            let currentY = 10; // Posición Y inicial
+            let currentY = 15; // Posición Y inicial
 
-            // --- TÍTULO PRINCIPAL Y LOGO (parte superior, alineado con el diseño de la imagen) ---
-            const mainTitleY = currentY;
-            doc.setFontSize(22); // Título grande
-            doc.setTextColor(44, 62, 80);
-            doc.text("Cotización", marginX, mainTitleY);
-            doc.text("GlobalMediTH", marginX + 28, mainTitleY); // Ajuste manual para alinear "GlobalMediTH"
+            // --- Columna Izquierda: Logo y Título/Mensaje de Empresa ---
+            const col1X = marginX;
+            let col1Y = currentY;
 
-            // Mensaje persuasivo debajo del título principal
-            doc.setFontSize(9);
-            doc.setTextColor(50, 150, 70);
-            doc.text("¡Medicamentos de calidad con atención personalizada", marginX, mainTitleY + 8);
-            doc.text("para tu tranquilidad!", marginX, mainTitleY + 13);
-            
-            // Logo de la empresa
-            const logoWidth = 45; // Tamaño ajustado del logo
+            // Logo de la empresa (arriba a la izquierda)
+            const logoWidth = 40; // Tamaño ajustado del logo
             const logoHeight = (logoWidth * 420) / 1488; // Proporción original
-            const logoX = pageWidth - marginX - logoWidth; // Posición a la derecha
-            const logoY = currentY; // Misma altura que el título principal
+            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', col1X, col1Y, logoWidth, logoHeight);
+            col1Y += logoHeight + 5;
 
-            if (logoBase64) {
-                doc.addImage(logoBase64, 'PNG', logoX, logoY, logoWidth, logoHeight);
-            } else {
-                const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
-                doc.addImage(fallbackSvg, 'PNG', logoX, logoY, logoWidth, logoHeight);
-            }
+            // Título principal de la cotización
+            doc.setFontSize(16); // Tamaño más grande para el título principal
+            doc.setTextColor(44, 62, 80);
+            doc.setFont(undefined, 'bold');
+            doc.text("Cotización", col1X, col1Y);
+            doc.text("GlobalMediTH", col1X, col1Y + 6); // Ajuste vertical para la segunda línea del título
+            col1Y += 12;
 
-            currentY = Math.max(mainTitleY + 18, logoY + logoHeight + 5); // Establecer el Y debajo del elemento más bajo del bloque superior
+            // Mensaje persuasivo
+            doc.setFontSize(8);
+            doc.setTextColor(50, 150, 70);
+            doc.setFont(undefined, 'normal');
+            doc.text("¡Medicamentos de calidad con atención personalizada", col1X, col1Y);
+            doc.text("para tu tranquilidad!", col1X, col1Y + 4);
+            col1Y += 10; // Espacio después del mensaje persuasivo
 
-            // --- SECCIÓN DE DOS COLUMNAS PARA DATOS ---
-            const colSpacing = 10; // Espacio entre columnas
-            const colWidth = (pageWidth - (marginX * 2) - colSpacing) / 2; // Ancho para cada columna
-
-            // Columna Izquierda: Datos de Contacto de Ventas
-            let yCol1 = currentY + 5; // Un poco de espacio antes de la primera columna
-            doc.setFontSize(9); // Títulos de sección más pequeños
+            // Datos de Contacto de Ventas (en columna izquierda)
+            doc.setFontSize(8); // Títulos de sección más pequeños
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas:", marginX, yCol1);
-            yCol1 += 5; // Espacio reducido
+            doc.text("Datos de Contacto de Ventas:", col1X, col1Y);
+            col1Y += 4; // Espacio reducido
             doc.setFont(undefined, 'normal');
             doc.setFontSize(7); // Detalles de contacto más pequeños
-            doc.text(`Celular: 2381646718`, marginX, yCol1);
-            yCol1 += 4;
-            doc.text(`Correo: globalmedith@gmail.com`, marginX, yCol1);
-            yCol1 += 4;
-            doc.text(`Ubicación: Tehuacán, Puebla`, marginX, yCol1);
-            
-            // Columna Derecha: Datos del Cliente
-            let xCol2 = marginX + colWidth + colSpacing;
-            let yCol2 = currentY + 5; // Alinear con el inicio de la columna 1
+            doc.text(`Celular: 2381646718`, col1X, col1Y);
+            col1Y += 3.5; // Espacio reducido
+            doc.text(`Correo: globalmedith@gmail.com`, col1X, col1Y);
+            col1Y += 3.5;
+            doc.text(`Ubicación: Tehuacán, Puebla`, col1X, col1Y);
+            col1Y += 3.5; // Final de la columna 1
+
+            // --- Columna Derecha: Datos del Cliente ---
+            const col2X = pageWidth / 2 + 5; // Posición de la columna 2 (aproximadamente la mitad de la página + un margen)
+            let col2Y = currentY; // Iniciar al mismo nivel que el logo o el título principal
+
+            doc.setFontSize(8); // Títulos de sección más pequeños
+            doc.setFont(undefined, 'bold');
+            doc.text("Datos del Cliente:", col2X, col2Y);
+            col2Y += 4;
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(7); // Detalles del cliente más pequeños
+            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, col2X, col2Y);
+            col2Y += 3.5;
+            doc.text(`Celular: ${clientData.celular || 'N/A'}`, col2X, col2Y);
+            col2Y += 3.5;
+            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, col2X, col2Y);
+            col2Y += 3.5;
+            doc.text(`Correo: ${clientData.correo || 'N/A'}`, col2X, col2Y);
+            col2Y += 3.5; // Final de la columna 2
+
+            // Determinar la posición Y para la tabla de productos
+            // Debe comenzar justo debajo del final de la columna más larga de las dos.
+            let startYForTable = Math.max(col1Y, col2Y) + 8; // Espacio antes de la tabla
+
+            // Título de Productos Seleccionados
             doc.setFontSize(9);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente:", xCol2, yCol2);
-            yCol2 += 5;
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(7);
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, xCol2, yCol2);
-            yCol2 += 4;
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, xCol2, yCol2);
-            yCol2 += 4;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, xCol2, yCol2);
-            yCol2 += 4;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, xCol2, yCol2);
-
-            // Determinar la posición Y para la tabla de productos (debajo de la columna más larga)
-            let startYForTable = Math.max(yCol1, yCol2) + 8; // Asegurar espacio suficiente
-
-            doc.setFontSize(9); // Título de Productos Seleccionados
-            doc.setFont(undefined, 'bold');
             doc.text("Productos Seleccionados:", marginX, startYForTable);
-            startYForTable += 6; // Espacio reducido
+            startYForTable += 5; // Espacio reducido después del título de la tabla
 
             const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
             const data = Array.from(selectedProducts.values()).map(p => [
@@ -1598,7 +1595,7 @@
               theme: 'striped',
               styles: {
                 fontSize: 6.5, // Tamaño de fuente para la tabla de productos
-                cellPadding: 1.2, // Menor padding en celdas
+                cellPadding: 1.2, // Menor padding en celdas para maximizar espacio
                 overflow: 'linebreak',
                 textColor: [51, 51, 51]
               },
@@ -1613,10 +1610,10 @@
                 alternateFillColor: [255, 255, 255]
               },
               columnStyles: {
-                0: { cellWidth: 22 }, // Ancho reducido para Código de Barras
-                1: { cellWidth: 'auto' }, // Dejar que la descripción ocupe el resto del espacio
-                2: { cellWidth: 22 }, // Ancho reducido para Laboratorio
-                3: { cellWidth: 12, halign: 'center' } // Ancho reducido para Cantidad
+                0: { cellWidth: 20 }, // Ancho ajustado para Código de Barras
+                1: { cellWidth: 'auto' }, // La descripción toma el espacio restante
+                2: { cellWidth: 20 }, // Ancho ajustado para Laboratorio
+                3: { cellWidth: 10, halign: 'center' } // Ancho ajustado para Cantidad
               },
               margin: { left: marginX, right: marginX },
               didDrawPage: function(data) {
@@ -1668,11 +1665,11 @@
             return;
         }
 
-        try {
-            const whatsappBtn = document.querySelector('.btn-whatsapp');
-            whatsappBtn.disabled = true;
-            whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
+        const whatsappBtn = document.querySelector('.btn-whatsapp');
+        whatsappBtn.disabled = true;
+        whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
 
+        try {
             const pdfBlob = await generarPDF();
             const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
 
@@ -1685,9 +1682,6 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
-            whatsappBtn.disabled = false;
-
             // Usar el modal personalizado en lugar de alert
             showCustomAlert(
                 '¡Cotización Lista! ✅',
@@ -1698,16 +1692,16 @@
                 "¡Gracias por tu paciencia! 😉"
             );
 
-            // Abrir WhatsApp de inmediato sin setTimeout para evitar bloqueos
+            // Abrir WhatsApp de inmediato
             const whatsappMessage = generateWhatsAppMessage();
             const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
             window.open(whatsappUrl, '_blank');
             
-
         } catch (error) {
             console.error("Error al generar PDF o enviar WhatsApp:", error);
             showCustomAlert('Error', 'Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.');
-            const whatsappBtn = document.querySelector('.btn-whatsapp');
+        } finally {
+            // Asegurar que el botón siempre se habilite y el spinner se quite
             whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
             whatsappBtn.disabled = false;
         }
