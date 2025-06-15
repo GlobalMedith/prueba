@@ -1507,93 +1507,132 @@
         // Obtener logo en Base64
         getBase64Image('logo.png', function(logoBase64) {
             const pageWidth = doc.internal.pageSize.getWidth();
-            const marginX = 15; // Margen izquierdo y derecho para el contenido
-            const colGap = 10; // Espacio entre las dos columnas de datos
-
-            let currentY = 15; // Posición Y inicial de la página
-
-            // --- SECCIÓN SUPERIOR IZQUIERDA (Logo y Global MediTH) ---
-            const logoWidth = 30; // Aumentar tamaño del logo
+            const marginX = 15; 
+            const logoAreaTopY = 15; // Y para el logo y texto del logo
+            
+            // --- Encabezado Superior (Logo y Texto de la Empresa, Centrado) ---
+            const logoWidth = 35; 
             const logoHeight = (logoWidth * 420) / 1488; 
-            const logoXCentered = (pageWidth / 2) - (logoWidth / 2); // Centrar el logo
+            const logoXCentered = (pageWidth / 2) - (logoWidth / 2); 
 
-            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', logoXCentered, currentY, logoWidth, logoHeight);
+            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQxeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', logoXCentered, logoAreaTopY, logoWidth, logoHeight);
             
-            doc.setFontSize(11); // Tamaño de fuente para "Global MediTH"
+            doc.setFontSize(12); 
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Global MediTH", pageWidth / 2, currentY + logoHeight + 5, { align: "center" }); // Centrado debajo del logo
+            doc.text("Global MediTH", pageWidth / 2, logoAreaTopY + logoHeight + 6, { align: "center" });
             
-            currentY = currentY + logoHeight + 10; // Mover Y debajo del logo y su texto, con un poco más de espacio
+            let currentY = logoAreaTopY + logoHeight + 15; // Inicia debajo del logo/texto de empresa
 
-            // Título "Cotización - GlobalMediTH" (alinado a la izquierda)
-            doc.setFontSize(16);
+            // --- Título y Mensaje Persuasivo (izquierda) ---
+            doc.setFontSize(16); 
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Cotización - GlobalMediTH", marginX, currentY);
-            currentY += 8; // Espacio
+            doc.text("Cotización", marginX, currentY);
+            doc.text("GlobalMediTH", marginX + 28, currentY); // Para que se vea "Cotización GlobalMediTH" en la misma línea o con un pequeño offset
+            currentY += 8; 
 
-            // Mensaje persuasivo (alineado a la izquierda)
-            doc.setFontSize(7); // Tamaño más pequeño para el mensaje
+            doc.setFontSize(7.5);
             doc.setTextColor(50, 150, 70);
             doc.setFont(undefined, 'normal');
             doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", marginX, currentY);
-            currentY += 10; // Espacio
+            currentY += 10; 
 
-            // --- SECCIÓN DE DOS COLUMNAS DE DATOS ---
-            const dataColWidth = (pageWidth / 2) - marginX - (colGap / 2); // Ancho para cada columna de datos (ajustado para que quepan bien)
+            // --- Contenido de las dos columnas de datos con autoTable ---
+            const dataColWidth = (pageWidth / 2) - marginX; // Ancho para cada columna de datos
+            const rightColStartX = pageWidth / 2; // Punto de inicio de la segunda columna
+
+            let dataTableRows = [];
+
+            // Datos de Contacto de Ventas
+            let contactInfoText = [
+                { content: "Datos de Contacto de Ventas:", styles: { fontSize: 8, fontStyle: 'bold', textColor: [0, 0, 0] } },
+                { content: `Celular: 2381646718`, styles: { fontSize: 6.5, textColor: [0, 0, 0] } },
+                { content: `Correo: globalmedith@gmail.com`, styles: { fontSize: 6.5, textColor: [0, 0, 0] } },
+                { content: `Ubicación: Tehuacán, Puebla`, styles: { fontSize: 6.5, textColor: [0, 0, 0] } }
+            ];
             
-            // Posición inicial Y para las dos columnas de datos (alineadas verticalmente con el título de la cotización)
-            let startDataColY = topY; // Alineado arriba para optimizar espacio
+            // Datos del Cliente y Folio de Cotización
+            let clientInfoText = [
+                { content: "Datos del Cliente:", styles: { fontSize: 8, fontStyle: 'bold', textColor: [0, 0, 0] } },
+                { content: `Nombre: ${clientData.nombre || 'N/A'}`, styles: { fontSize: 7.5, fontStyle: 'bold', textColor: [0, 0, 0] } },
+                { content: `Celular: ${clientData.celular || 'N/A'}`, styles: { fontSize: 6.5, textColor: [0, 0, 0] } },
+                { content: `Ciudad: ${clientData.ciudad || 'N/A'}`, styles: { fontSize: 6.5, textColor: [0, 0, 0] } },
+                { content: `Correo: ${clientData.correo || 'N/A'}`, styles: { fontSize: 6.5, textColor: [0, 0, 0] } },
+                { content: "\n" }, // Pequeño espacio
+                { content: `Folio de Cotización: ${clientData.folio || 'N/A'}`, styles: { fontSize: 8, fontStyle: 'bold', textColor: [0, 0, 0] } }
+            ];
 
-            // --- Columna Izquierda de Datos (Datos de Contacto de Ventas) ---
-            let yCol1Data = startDataColY; 
-            doc.setFontSize(8); // Título de sección
-            doc.setTextColor(0, 0, 0);
-            doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas:", marginX + dataColWidth + colGap, yCol1Data); // Posicionado en la columna derecha
-            yCol1Data += 4;
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(6.5); // Detalles de contacto
-            doc.text(`Celular: 2381646718`, marginX + dataColWidth + colGap, yCol1Data);
-            yCol1Data += 3.5;
-            doc.text(`Correo: globalmedith@gmail.com`, marginX + dataColWidth + colGap, yCol1Data);
-            yCol1Data += 3.5;
-            doc.text(`Ubicación: Tehuacán, Puebla`, marginX + dataColWidth + colGap, yCol1Data);
-            yCol1Data += 3.5;
+            // Crear una fila para la autoTable de encabezado
+            dataTableRows.push([
+                { // Celda para Datos de Contacto de Ventas
+                    content: contactInfoText.map(item => item.content).join('\n'),
+                    styles: { 
+                        halign: 'left',
+                        cellPadding: 1,
+                        fontSize: 6.5, // Fuente base para esta celda
+                        textColor: [0,0,0],
+                        fontStyle: 'normal'
+                    }
+                },
+                { // Celda para Datos del Cliente
+                    content: clientInfoText.map(item => item.content).join('\n'),
+                    styles: { 
+                        halign: 'left',
+                        cellPadding: 1,
+                        fontSize: 6.5, // Fuente base para esta celda
+                        textColor: [0,0,0],
+                        fontStyle: 'normal'
+                    }
+                }
+            ]);
 
-            // --- Columna Derecha de Datos (Datos del Cliente y Folio) ---
-            let yCol2Data = yCol1Data + 4; // Comienza debajo de los datos de contacto, en la misma columna derecha
-            
-            doc.setFontSize(8); // Título "Datos del Cliente"
-            doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente:", marginX + dataColWidth + colGap, yCol2Data);
-            yCol2Data += 4;
+            doc.autoTable({
+                startY: currentY, // Inicia la tabla de datos debajo del mensaje persuasivo
+                body: dataTableRows,
+                theme: 'plain', // Sin bordes ni sombreado para esta tabla
+                styles: {
+                    cellPadding: 0, // Padding mínimo para esta tabla
+                    lineColor: [255, 255, 255],
+                    lineWidth: 0,
+                    overflow: 'linebreak'
+                },
+                columnStyles: {
+                    0: { cellWidth: dataColWidth }, // Columna Izquierda
+                    1: { cellWidth: dataColWidth }  // Columna Derecha
+                },
+                margin: { left: marginX, right: marginX },
+                // Esto es un truco para aplicar negritas y tamaños específicos dentro de la celda si autoTable lo soporta mejor en futuras versiones
+                // Por ahora, se confiará en white-space: pre-line y uniones de texto.
+                didParseCell: function(data) {
+                    if (data.section === 'body' && data.row.index === 0) { // Solo la primera fila del body (nuestros datos)
+                        // Para Datos de Contacto
+                        if (data.column.index === 0) {
+                            if (data.cell.raw.includes("Datos de Contacto de Ventas:")) {
+                                data.cell.styles.fontStyle = 'bold';
+                                data.cell.styles.fontSize = 8;
+                            }
+                        }
+                        // Para Datos del Cliente
+                        if (data.column.index === 1) {
+                            if (data.cell.raw.includes("Datos del Cliente:")) {
+                                data.cell.styles.fontStyle = 'bold';
+                                data.cell.styles.fontSize = 8;
+                            }
+                            if (data.cell.raw.includes(`Nombre: ${clientData.nombre || 'N/A'}`)) {
+                                data.cell.styles.fontStyle = 'bold';
+                                data.cell.styles.fontSize = 7.5;
+                            }
+                            if (data.cell.raw.includes(`Folio de Cotización: ${clientData.folio || 'N/A'}`)) {
+                                data.cell.styles.fontStyle = 'bold';
+                                data.cell.styles.fontSize = 8;
+                            }
+                        }
+                    }
+                }
+            });
 
-            doc.setFontSize(7.5); // Nombre del Cliente (un poco más grande y en negrita)
-            doc.setFont(undefined, 'bold');
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data);
-            yCol2Data += 4.5;
-
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(6.5); // Otros datos del cliente
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data);
-            yCol2Data += 3.5;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data);
-            yCol2Data += 3.5;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data);
-            yCol2Data += 3.5;
-
-            // Folio de Cotización (debajo de los datos del cliente, en la misma columna)
-            doc.setFontSize(8);
-            doc.setTextColor(0, 0, 0);
-            doc.setFont(undefined, 'bold');
-            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data + 2);
-            yCol2Data += 10;
-
-            // Determinar la posición Y para la tabla de productos
-            // Debe comenzar justo debajo del final del bloque de encabezado (el más bajo entre la izquierda y la derecha).
-            let startYForTable = Math.max(currentY + 5, yCol2Data) + 8; // currentY + 5 es un proxy para el final de la sección izquierda
+            let startYForTable = doc.autoTable.previous.finalY + 8; // Espacio después de la tabla de datos
 
             // Título "Productos Seleccionados"
             doc.setFontSize(9);
@@ -1631,10 +1670,10 @@
                 alternateFillColor: [255, 255, 255]
               },
               columnStyles: {
-                0: { cellWidth: 20 },
-                1: { cellWidth: 'auto' }, // Permite que la descripción ocupe el espacio
-                2: { cellWidth: 20 },
-                3: { cellWidth: 10, halign: 'center' }
+                0: { cellWidth: 20 }, // Ancho ajustado para Código de Barras
+                1: { cellWidth: 70 }, // CLAVE: Aumentado SIGNIFICATIVAMENTE para Descripción
+                2: { cellWidth: 25 }, // CLAVE: Aumentado para Laboratorio
+                3: { cellWidth: 10, halign: 'center' } // Cantidad
               },
               margin: { left: marginX, right: marginX },
               didDrawPage: function(data) {
@@ -1703,7 +1742,6 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            // Usar el modal personalizado en lugar de alert
             showCustomAlert(
                 '¡Cotización Lista! ✅',
                 "Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\n\n" +
@@ -1713,7 +1751,6 @@
                 "¡Gracias por tu paciencia! 😉"
             );
 
-            // Abrir WhatsApp de inmediato
             const whatsappMessage = generateWhatsAppMessage();
             const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
             window.open(whatsappUrl, '_blank');
