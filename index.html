@@ -996,7 +996,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlpaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -1509,23 +1509,20 @@
             const pageWidth = doc.internal.pageSize.getWidth();
             const marginX = 15; 
             
-            let currentY = 15; // Posición Y inicial
+            let currentY = 15; // Posición Y inicial para el encabezado
 
-            // --- Encabezado Superior (Logo y Texto de la Empresa, Centrado) ---
-            const logoWidth = 35; // Tamaño del logo
+            // --- Parte Superior: Logo y texto "Global MediTH" (Alineado a la izquierda) ---
+            const logoWidth = 25; // Tamaño del logo más pequeño, como en la imagen
             const logoHeight = (logoWidth * 420) / 1488; 
-            const logoXCentered = (pageWidth / 2) - (logoWidth / 2); // Centrar el logo
-
-            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', logoXCentered, currentY, logoWidth, logoHeight);
+            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', marginX, currentY, logoWidth, logoHeight);
             
-            doc.setFontSize(12); 
+            doc.setFontSize(9); 
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Global MediTH", pageWidth / 2, currentY + logoHeight + 6, { align: "center" });
+            doc.text("Global MediTH", marginX + logoWidth + 3, currentY + logoHeight / 2 + 1); // Posición a la derecha del logo
             
-            currentY = currentY + logoHeight + 15; // Mover Y debajo del logo y su texto
-
-            // --- Título "Cotización - GlobalMediTH" y Mensaje Persuasivo (Alineado a la Izquierda, como en la imagen) ---
+            // --- Título "Cotización - GlobalMediTH" y Mensaje Persuasivo (Alineado a la izquierda, como en la imagen) ---
+            currentY += logoHeight + 5; // Mover Y debajo del logo y su texto
             doc.setFontSize(16); 
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
@@ -1538,58 +1535,58 @@
             doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", marginX, currentY); // Alineado a la izquierda
             currentY += 12; 
 
-            // --- SECCIÓN DE DATOS (Dos Columnas Manualmente Posicionadas) ---
-            const col1X = marginX; // Columna izquierda de datos
-            const col2X = pageWidth / 2 + 5; // Columna derecha de datos, ajustada para alineación
-
-            let yLeftDataCol = currentY; // Y inicial para la columna izquierda de datos
-            let yRightDataCol = currentY; // Y inicial para la columna derecha de datos
+            // --- SECCIÓN DE DATOS (dos bloques posicionados manualmente para imitar la imagen) ---
+            const col1X = marginX; // Columna izquierda de datos (Datos de Contacto)
+            const col2X = pageWidth / 2 + 15; // Columna derecha de datos (Datos del Cliente + Folio), ajustada para que el texto de la izquierda no se superponga
+            
+            let yCol1 = currentY; // Y inicial para la columna izquierda de datos
+            let yCol2 = currentY; // Y inicial para la columna derecha de datos, alineada con la izquierda
 
             // Datos de Contacto de Ventas (Columna Izquierda)
             doc.setFontSize(8); 
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas:", col1X, yLeftDataCol);
-            yLeftDataCol += 4;
+            doc.text("Datos de Contacto de Ventas:", col1X, yCol1);
+            yCol1 += 4;
             doc.setFont(undefined, 'normal');
             doc.setFontSize(6.5);
-            doc.text(`Celular: 2381646718`, col1X, yLeftDataCol);
-            yLeftDataCol += 3.5;
-            doc.text(`Correo: globalmedith@gmail.com`, col1X, yLeftDataCol);
-            yLeftDataCol += 3.5;
-            doc.text(`Ubicación: Tehuacán, Puebla`, col1X, yLeftDataCol);
-            yLeftDataCol += 3.5; 
+            doc.text(`Celular: 2381646718`, col1X, yCol1);
+            yCol1 += 3.5;
+            doc.text(`Correo: globalmedith@gmail.com`, col1X, yCol1);
+            yCol1 += 3.5;
+            doc.text(`Ubicación: Tehuacán, Puebla`, col1X, yCol1);
+            yCol1 += 3.5; 
 
             // Datos del Cliente y Folio (Columna Derecha)
             doc.setFontSize(8);
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente:", col2X, yRightDataCol);
-            yRightDataCol += 4;
+            doc.text("Datos del Cliente:", col2X, yCol2);
+            yCol2 += 4;
 
             doc.setFontSize(7.5); // Nombre del Cliente más grande y en negrita
             doc.setFont(undefined, 'bold');
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, col2X, yRightDataCol);
-            yRightDataCol += 4.5;
+            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, col2X, yCol2);
+            yCol2 += 4.5;
 
             doc.setFont(undefined, 'normal');
             doc.setFontSize(6.5);
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, col2X, yRightDataCol);
-            yRightDataCol += 3.5;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, col2X, yRightDataCol);
-            yRightDataCol += 3.5;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, col2X, yRightDataCol);
-            yRightDataCol += 3.5;
+            doc.text(`Celular: ${clientData.celular || 'N/A'}`, col2X, yCol2);
+            yCol2 += 3.5;
+            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, col2X, yCol2);
+            yCol2 += 3.5;
+            doc.text(`Correo: ${clientData.correo || 'N/A'}`, col2X, yCol2);
+            yCol2 += 3.5;
 
             // Folio de Cotización (debajo de Datos del Cliente)
             doc.setFontSize(8);
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, 'bold');
-            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, col2X, yRightDataCol + 2); // Espacio después del correo
-            yRightDataCol += 10; // Final de la sección de datos del cliente
+            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, col2X, yCol2 + 2); // Espacio después del correo
+            yCol2 += 10; // Final de la sección de datos del cliente
 
             // Determinar la posición Y para la tabla de productos (debajo de la columna de datos más baja)
-            let startYForTable = Math.max(yLeftDataCol, yRightDataCol) + 8; 
+            let startYForTable = Math.max(yCol1, yCol2) + 8; 
 
             // Título "Productos Seleccionados"
             doc.setFontSize(9);
@@ -1627,10 +1624,11 @@
                 alternateFillColor: [255, 255, 255]
               },
               columnStyles: {
-                0: { cellWidth: 20 }, // Ancho para Código de Barras
-                1: { cellWidth: 80 }, // CLAVE: Aumentado SIGNIFICATIVAMENTE para Descripción (80mm)
-                2: { cellWidth: 25 }, // Ancho para Laboratorio (25mm)
-                3: { cellWidth: 10, halign: 'center' } // Cantidad (10mm)
+                // Ajustados según la imagen de referencia para evitar recortes y amontonamientos
+                0: { cellWidth: 20 }, // Código de Barras (ajustado para ser estrecho)
+                1: { cellWidth: 75 }, // CLAVE: Descripción (¡Más ancho!)
+                2: { cellWidth: 25 }, // Laboratorio (ancho medio)
+                3: { cellWidth: 10, halign: 'center' } // Cantidad (estrecho y centrado)
               },
               margin: { left: marginX, right: marginX },
               didDrawPage: function(data) {
