@@ -1,163 +1,1590 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cotización - GlobalMediTH</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlobalMediTH - Sistema de Cotización</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
   <style>
-    /* Estilos CSS responsivos */
-    body {
-      font-family: Arial, sans-serif;
+    /* Estilos Generales - Mobile First */
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
+
+    html, body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      min-height: 100vh;
+      overflow-x: hidden; /* Evita scroll horizontal */
+      position: relative; /* Necesario para la navegación fija */
+    }
+
     .container {
-      max-width: 800px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: 100%;
+      min-height: 100vh;
+      position: relative;
+      overflow-y: auto; /* Permite scroll vertical en el contenedor principal en móvil si el contenido es largo */
+      -webkit-overflow-scrolling: touch;
+      padding: 15px;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    /* Manejo de Pantallas */
+    .screen {
+      display: none;
+      width: 100%;
+      /* min-height: 100%; */ /* Removido para mejor control del contenido */
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow-y: auto; /* IMPORTANTE: Cada pantalla maneja su propio scroll si el contenido desborda */
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 20px; /* Espacio para scroll al final */
+      height: 100%; /* Asegura que la pantalla ocupe su altura para el centrado */
+    }
+    
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      height: 100%; /* Asegura que la pantalla ocupe su altura para el centrado */
+    }
+
+    /* PANTALLA 1 - REGISTRO */
+    .welcome-screen {
+      padding: 10px;
+      min-height: 100%; /* Para que el welcome-card se centre verticalmente */
+      justify-content: center; /* Centrar welcome-card */
+      align-items: center; /* Centrar welcome-card */
+      width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    }
+
+    .welcome-card {
+      background: white;
+      border-radius: 20px;
       padding: 20px;
-    }
-    .logo {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       text-align: center;
-      margin-bottom: 20px;
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      height: auto; /* Permite que la altura se ajuste al contenido */
+      flex-shrink: 0; /* Evitar que se encoja si el contenedor es más pequeño */
     }
+
     .logo img {
-      max-width: 200px;
+      height: 60px;
+      max-width: 100%;
+      border-radius: 10px;
+      object-fit: contain; /* Asegura que la imagen se ajuste sin distorsionarse */
     }
+
+    .welcome-title {
+      font-size: 1.8em;
+      color: #2c3e50;
+      font-weight: 700;
+      margin-bottom: 5px; /* Espacio debajo del título */
+    }
+
+    .welcome-subtitle {
+      font-size: 1em;
+      color: #7f8c8d;
+      margin-bottom: 10px; /* Espacio debajo del subtítulo */
+    }
+
+    .persuasive-message {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 10px;
+      border-radius: 15px;
+      font-size: 0.9em;
+      font-weight: 600;
+      line-height: 1.4;
+      flex-shrink: 0; /* Evita que el mensaje se encoja */
+    }
+    
+    .catalog-persuasive-message {
+      background: linear-gradient(135deg, #3498db, #8e44ad);
+      color: white;
+      padding: 10px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      font-size: 0.95em;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+
+    .category-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      font-size: 0.85em;
+      color: #555;
+      flex-shrink: 0;
+    }
+    .category-item {
+      padding: 6px 10px;
+      background: #e3f2fd;
+      border: 1px solid #90caf9;
+      border-radius: 10px;
+      font-weight: 600;
+      color: #1976d2;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .category-item:hover {
+        background: #bbdefb;
+        border-color: #64b5f6;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+    .category-item i {
+        font-size: 1em;
+        color: #1976d2;
+    }
+
+    .medicine-types {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+
+    .medicine-type {
+      text-align: center;
+      flex: 1 1 100px;
+      max-width: 150px;
+      padding: 5px;
+    }
+
+    .medicine-type i {
+      font-size: 1.5em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .medicine-type.patente i { color: #e74c3c; }
+    .medicine-type.genericos i { color: #3498db; }
+    .medicine-type.curacion i { color: #f39c12; }
+
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+      text-align: left;
     }
+
     .form-group label {
       display: block;
-      font-weight: bold;
       margin-bottom: 5px;
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 0.85em;
     }
+
     .form-group input {
       width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 0.85em;
+      transition: border-color 0.3s;
     }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
     .btn {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background-color: #4CAF50;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
+      padding: 10px 20px;
       border: none;
-      border-radius: 4px;
+      border-radius: 50px;
+      font-size: 0.95em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* PANTALLA 2 - CATÁLOGO */
+    .catalog-screen {
+      display: flex; /* Cambiado a flex para control vertical */
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      height: 100%; /* Ocupa la altura de su padre (.screen) */
+      align-items: center; /* Centrar horizontalmente los elementos */
+      padding: 10px;
+    }
+
+    .catalog-main {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      flex-grow: 1; /* Permite que este elemento crezca */
+      width: 100%;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      /* height: auto; */ /* Removido, flex-grow lo manejará */
+      min-height: 50vh; /* Altura mínima para que no se colapse */
+    }
+
+    .fixed-header-content {
+      flex-shrink: 0;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .catalog-header {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .catalog-title {
+      font-size: 1.5em;
+      color: #2c3e50;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 40px 10px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
+      font-size: 0.85em;
+      text-transform: uppercase;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #7f8c8d;
+      font-size: 0.9em;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+      overflow-y: auto;
+      flex-grow: 1; /* Permite que la rejilla crezca y ocupe el espacio */
+      padding-right: 0;
+      min-height: 150px; /* Asegura que la rejilla tenga una altura visible */
+      align-content: start;
+    }
+
+    .products-grid.empty-message {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #6c757d;
+        font-style: italic;
+        min-height: 150px; /* Asegura que el mensaje se vea */
+        padding: 0 20px;
+    }
+
+    .product-card {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 15px;
+      padding: 12px;
+      transition: all 0.1s ease-out;
       cursor: pointer;
     }
-    .btn:hover {
-      background-color: #45a049;
+
+    .product-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
     }
-    @media (max-width: 600px) {
+
+    .product-card.selected {
+      border-color: #28a745;
+      background: #d4edda;
+    }
+
+    .product-title {
+      font-size: 0.95em;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 6px;
+      line-height: 1.3;
+      overflow-wrap: break-word;
+    }
+
+    .product-info {
+      font-size: 0.8em;
+      color: #6c757d;
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .quantity-input {
+      width: 45px;
+      padding: 4px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 0.8em;
+    }
+
+    /* CARRITO LATERAL */
+    .cart-sidebar {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      height: auto; /* Se ajusta al contenido en móvil */
+      position: relative; /* No sticky en móvil, fluye con el contenido */
+      top: auto;
+      width: 100%; /* Ocupa todo el ancho en móvil */
+      max-height: unset; /* Deshabilita el max-height fijo para móvil */
+      overflow-y: auto;
+      margin-top: 20px; /* Espacio entre catálogo y carrito en móvil */
+      flex-shrink: 0; /* Asegura que el carrito no se encoja para dar espacio a la grilla */
+    }
+
+    .cart-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      font-size: 1.1em;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    .cart-items {
+      max-height: 200px; /* Altura máxima del carrito en móvil */
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+
+    .cart-item {
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .cart-item-title {
+      font-weight: 600;
+      font-size: 0.85em;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .cart-item-info {
+      font-size: 0.75em;
+      color: #6c757d;
+    }
+
+    .cart-item-quantity {
+      position: absolute; /* Ajustado para que no ocupe espacio en el flujo */
+      top: 8px;
+      right: 30px;
+      width: 22px;
+      height: 22px;
+      line-height: 22px; /* Centra verticalmente el texto */
+      font-size: 0.75em;
+      text-align: center;
+      background-color: #e9ecef;
+      border-radius: 50%;
+    }
+
+    .remove-item {
+      position: absolute; /* Ajustado para que no ocupe espacio en el flujo */
+      top: 8px;
+      right: 8px;
+      width: 18px;
+      height: 18px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6em;
+      padding: 0;
+    }
+
+    .cart-summary {
+      border-top: 2px solid #e9ecef;
+      padding-top: 15px;
+      text-align: center;
+    }
+
+    .cart-total {
+      font-size: 1.1em;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    /* PANTALLA 3 - RESUMEN */
+    .summary-screen {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      max-width: 100%;
+      margin: 0 auto;
+      max-height: calc(100vh - 20px);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto; /* Permite scroll si el contenido es largo */
+    }
+
+    .summary-fixed-header {
+      flex-shrink: 0;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .summary-fixed-header .summary-header {
+        grid-column: auto;
+        margin-bottom: 0;
+    }
+
+    .summary-fixed-header .contact-info,
+    .summary-fixed-header .client-info {
+        grid-column: auto;
+        padding: 8px;
+        margin-bottom: 0;
+    }
+
+    .summary-logo img {
+      height: 40px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .summary-title {
+      font-size: 1.2em;
+      color: #2c3e50;
+      margin-bottom: 3px;
+      font-weight: 700;
+    }
+
+    .summary-screen .persuasive-message {
+        font-size: 0.75em;
+        padding: 5px 8px;
+        margin-bottom: 8px;
+    }
+
+    .contact-info, .client-info {
+      background: #f8f9fa;
+      padding: 8px;
+      border-radius: 6px;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .client-info {
+        background: #e3f2fd;
+    }
+
+    .contact-info h3, .client-info h3 {
+      color: #2c3e50;
+      margin-bottom: 3px;
+      font-size: 0.75em;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-bottom: 2px;
+      color: #495057;
+      font-size: 0.6em;
+    }
+    .contact-item i {
+        font-size: 0.75em;
+    }
+
+    .products-summary {
+      background: #f1f8e9;
+      padding: 10px;
+      border-radius: 10px;
+      flex-grow: 1;
+      overflow-y: auto; /* Permite scroll de la tabla de productos */
+      margin-top: 10px;
+    }
+
+    .products-summary h3 {
+        font-size: 1em;
+        margin-bottom: 8px;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+
+    .summary-table th,
+    .summary-table td {
+      padding: 4px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: 0.65em;
+    }
+
+    .summary-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .summary-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+      flex-shrink: 0;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+    }
+
+    .btn-success {
+      background: #28a745;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+    }
+
+    /* Navegación */
+    .navigation {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1em;
+      color: #2c3e50;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+
+    .nav-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* ------------------------------------------- */
+    /* Media Query para Tablets (min-width: 768px) */
+    /* ------------------------------------------- */
+    @media (min-width: 768px) {
       .container {
-        padding: 10px;
+        padding: 20px;
+      }
+      .screen {
+          padding-bottom: 0;
+      }
+
+      /* PANTALLA 1 - REGISTRO */
+      .welcome-screen {
+        padding: 20px;
+      }
+      .welcome-card {
+        padding: 30px;
+        max-width: 600px;
+        gap: 20px;
       }
       .logo img {
-        max-width: 150px;
+        height: 80px;
+      }
+      .welcome-title {
+        font-size: 2.2em;
+      }
+      .welcome-subtitle {
+        font-size: 1.1em;
+      }
+      .persuasive-message {
+        font-size: 1em;
+      }
+      .medicine-types {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 15px;
+      }
+      .medicine-type i {
+        font-size: 1.8em;
+      }
+      .form-group input {
+        padding: 12px;
+        font-size: 0.9em;
+      }
+      .btn {
+        padding: 12px 30px;
+        font-size: 1em;
+        width: auto;
+      }
+
+      /* PANTALLA 2 - CATÁLOGO */
+      .catalog-screen {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 25px;
+        padding: 20px;
+        height: 100%;
+        align-items: flex-start;
+      }
+      .catalog-main {
+        padding: 25px;
+        height: 100%;
+        max-height: calc(100vh - 80px); /* Ajustado para pantallas de tablet */
+      }
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        padding-right: 10px;
+      }
+      .cart-sidebar {
+        position: sticky;
+        top: 20px;
+        max-height: calc(100vh - 40px); /* Ajustado para pantallas de tablet */
+        padding: 25px;
+        margin-top: 0;
+      }
+      .catalog-title {
+        font-size: 1.8em;
+      }
+      .search-box input {
+        font-size: 0.9em;
+      }
+      .product-card {
+        padding: 15px;
+      }
+      .product-title {
+        font-size: 1em;
+      }
+      .product-info {
+        font-size: 0.85em;
+      }
+      .quantity-selector {
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .quantity-input {
+        width: 50px;
+        padding: 6px;
+        font-size: 0.9em;
+      }
+
+      /* PANTALLA 3 - RESUMEN */
+      .summary-screen {
+        max-width: 800px;
+        padding: 25px;
+      }
+      .summary-fixed-header {
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+      }
+      .summary-logo img {
+        height: 50px;
+      }
+      .summary-title {
+        font-size: 1.4em;
+      }
+      .summary-screen .persuasive-message {
+        font-size: 0.8em;
+      }
+      .contact-info h3, .client-info h3 {
+        font-size: 0.85em;
+      }
+      .contact-item {
+        font-size: 0.7em;
+      }
+      .products-summary h3 {
+          font-size: 1.1em;
+      }
+      .summary-table th, .summary-table td {
+        font-size: 0.75em;
+        padding: 6px;
+      }
+      .summary-actions {
+        flex-direction: row;
+        justify-content: center;
+      }
+      .nav-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2em;
+      }
+    }
+
+    /* ------------------------------------------- */
+    /* Media Query para Escritorios (min-width: 1024px) */
+    /* ------------------------------------------- */
+    @media (min-width: 1024px) {
+      body {
+        overflow: hidden; /* Oculta el scroll global del body, el .container lo manejará */
+      }
+      .container {
+        max-width: 1200px;
+        height: calc(100vh - 60px); /* Altura de la "ventana de aplicación" en desktop */
+        min-height: calc(100vh - 60px);
+        margin: 30px auto;
+        background: white;
+        box-shadow: 0 0 40px rgba(0,0,0,0.3);
+        border-radius: 25px;
+        padding: 30px;
+        overflow-y: hidden; /* El contenedor principal en desktop NO SCROLLEA */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Asegurarse que las pantallas internas se adapten bien al .container */
+      .screen {
+          position: relative;
+          top: unset;
+          left: unset;
+          width: 100%;
+          height: 100%; /* Ocupa toda la altura de su padre (.container) */
+          min-height: 100%;
+          padding-bottom: 0;
+          overflow-y: auto; /* IMPORTANTE: Las pantallas SÍ manejan su propio scroll en desktop */
+          flex-shrink: 0;
+          flex-grow: 1;
+      }
+      .screen.active {
+          flex-direction: column;
+          justify-content: flex-start;
+      }
+
+      /* PANTALLA 1 - REGISTRO */
+      .welcome-screen {
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding: 0;
+      }
+      .welcome-card {
+        padding: 40px;
+        max-width: 600px;
+        gap: 30px;
+      }
+      .logo img {
+        height: 120px;
+      }
+      .welcome-title {
+        font-size: 2.8em;
+      }
+      .welcome-subtitle {
+        font-size: 1.3em;
+      }
+      .persuasive-message {
+        padding: 20px;
+        font-size: 1.1em;
+      }
+      .form-group label {
+        font-size: 1em;
+      }
+      .form-group input {
+        padding: 15px;
+        font-size: 1em;
+      }
+      .btn {
+        padding: 15px 35px;
+        font-size: 1.1em;
+      }
+
+      /* PANTALLA 2 - CATÁLOGO */
+      .catalog-screen {
+        grid-template-columns: 1fr 350px;
+        gap: 30px;
+        padding: 0;
+        height: 100%;
+      }
+
+      .catalog-main {
+        padding: 30px;
+        height: 100%; /* Mantener la altura para que el flex-grow funcione */
+        max-height: unset; /* Quitar limitación de altura */
+      }
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ajuste de tamaño de columnas */
+        gap: 25px;
+        padding-right: 15px;
+      }
+      .cart-sidebar {
+        top: 30px;
+        padding: 30px;
+        height: fit-content; /* Se ajusta al contenido */
+        max-height: calc(100vh - 60px); /* Ajustado para desktop */
+      }
+
+      /* PANTALLA 3 - RESUMEN */
+      .summary-screen {
+        max-width: 900px;
+        padding: 30px;
+        height: 100%;
+      }
+      .summary-logo img {
+        height: 60px;
+      }
+      .summary-title {
+        font-size: 1.8em;
+      }
+      .summary-screen .persuasive-message {
+        font-size: 0.9em;
+        padding: 10px 15px;
+      }
+      .contact-info h3, .client-info h3 {
+        font-size: 1em;
+      }
+      .contact-item {
+        font-size: 0.8em;
+      }
+      .products-summary h3 {
+          font-size: 1.2em;
+      }
+      .summary-table th, .summary-table td {
+        font-size: 0.85em;
+        padding: 8px;
       }
     }
   </style>
 </head>
 <body>
+  <div class="navigation">
+    <button class="nav-btn" onclick="goBack()" id="backBtn" style="display: none;">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+  </div>
+
   <div class="container">
-    <div class="logo">
-      <img src="https://via.placeholder.com/150x50" alt="Global MediTH">
+    <div id="screen1" class="screen active">
+      <div class="welcome-screen">
+        <div class="welcome-card">
+          <div class="logo">
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+          </div>
+
+          <h1 class="welcome-title">Bienvenido</h1>
+          <p class="welcome-subtitle">Sistema de Cotización Profesional</p>
+
+          <div class="persuasive-message">
+            <i class="fas fa-star"></i>
+            ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están listos para ti.
+          </div>
+
+          <div class="medicine-types">
+            <div class="medicine-type patente">
+              <i class="fas fa-certificate"></i>
+              <strong>Patente</strong>
+            </div>
+            <div class="medicine-type genericos">
+              <i class="fas fa-pills"></i>
+              <strong>Genéricos</strong>
+            </div>
+            <div class="medicine-type curacion">
+              <i class="fas fa-first-aid"></i>
+              <strong>Material de Curación</strong>
+            </div>
+          </div>
+
+          <form id="clientForm">
+            <div class="form-group">
+              <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
+              <input type="text" id="nombre" required />
+            </div>
+            <div class="form-group">
+              <label for="celular"><i class="fas fa-phone"></i> Número de Celular</label>
+              <input type="tel" id="celular" required />
+            </div>
+            <div class="form-group">
+              <label for="ciudad"><i class="fas fa-map-marker-alt"></i> Ciudad</label>
+              <input type="text" id="ciudad" required />
+            </div>
+            <div class="form-group">
+              <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+              <input type="email" id="correo" required />
+            </div>
+
+            <button type="submit" class="btn">
+              <i class="fas fa-arrow-right"></i>
+              Continuar al Catálogo
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-    <form>
-      <div class="form-group">
-        <label for="name">Nombre Completo:</label>
-        <input type="text" id="name" name="name" required>
+
+    <div id="screen2" class="screen">
+      <div class="catalog-screen">
+        <div class="catalog-main">
+          <div class="fixed-header-content">
+            <div class="catalog-persuasive-message">
+              <i class="fas fa-tag"></i>
+              Descubre nuestra amplia gama de productos. ¡Calidad y precio justo en cada selección!
+            </div>
+            <div class="category-list">
+              <span class="category-item"><i class="fas fa-certificate"></i> Patente</span>
+              <span class="category-item"><i class="fas fa-pills"></i> Genericos</span>
+              <span class="category-item"><i class="fas fa-first-aid"></i> Material de Curación</span>
+              <span class="category-item"><i class="fas fa-wheelchair"></i> Aparatos para movilidad asistida</span>
+              <span class="category-item"><i class="fas fa-spray-can"></i> Perfumeria</span>
+            </div>
+            <div class="catalog-header">
+              <h2 class="catalog-title">
+                <i class="fas fa-pills"></i>
+                Catálogo de Medicamentos
+              </h2>
+              <div class="search-box">
+                <input type="text" id="busqueda" placeholder="Buscar por descripción, fórmula o laboratorio..." />
+                <i class="fas fa-search"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="products-grid" id="productsGrid">
+            <p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>
+          </div>
+        </div>
+
+        <div class="cart-sidebar">
+          <div class="cart-header">
+            <i class="fas fa-shopping-cart"></i>
+            Cotización
+          </div>
+
+          <div class="cart-items" id="cartItems">
+            <p style="text-align: center; color: #6c757d; font-style: italic;">
+              No hay productos seleccionados
+            </p>
+          </div>
+
+          <div class="cart-summary">
+            <div class="cart-total" id="cartTotal">
+              Total: 0 producto(s)
+            </div>
+            <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
+              <i class="fas fa-file-invoice"></i>
+              Generar Cotización
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="phone">Número de Celular:</label>
-        <input type="tel" id="phone" name="phone" required>
+    </div>
+
+    <div id="screen3" class="screen">
+      <div class="summary-screen">
+        <div class="summary-fixed-header">
+          <div class="summary-header">
+            <div class="summary-logo">
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+            </div>
+            <h1 class="summary-title">Cotización - GlobalMediTH</h1>
+            <div class="persuasive-message">
+              <i class="fas fa-star"></i>
+              ¡Medicamentos de calidad con atención personalizada para tu tranquilidad!
+            </div>
+          </div>
+
+          <div class="summary-data-columns">
+              <div class="contact-info">
+                <h3><i class="fas fa-info-circle"></i> Datos de Contacto de Ventas</h3>
+                <div class="contact-item">
+                  <i class="fas fa-phone"></i>
+                  <span>Celular: 2381646718</span>
+                </div>
+                <div class="contact-item">
+                  <i class="fas fa-envelope"></i>
+                  <span>Correo: globalmedith@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>Ubicación: Tehuacán, Puebla</span>
+                </div>
+              </div>
+
+              <div class="client-info">
+                <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
+                <div id="clientSummary">
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="products-summary">
+          <h3><i class="fas fa-pills"></i> Productos Seleccionados</h3>
+          <table class="summary-table" id="summaryTable">
+            <thead>
+              <tr>
+                <th>Código de Barras</th>
+                <th>Descripción</th>
+                <th>Laboratorio</th>
+                <th>Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              </tbody>
+          </table>
+        </div>
+
+        <div class="summary-actions">
+          <button class="btn btn-whatsapp" onclick="generarPDFyEnviarWhatsApp()">
+            <i class="fab fa-whatsapp"></i>
+            Enviar por WhatsApp
+          </button>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="city">Ciudad:</label>
-        <input type="text" id="city" name="city" required>
-      </div>
-      <button type="button" class="btn" onclick="generateQuotation()">Generar Cotización</button>
-    </form>
+    </div>
   </div>
 
   <script>
-    function generateQuotation() {
-      // Obtener los valores de los campos del formulario
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const city = document.getElementById('city').value;
+    // Variables globales
+    let medicamentos = [];
+    let selectedProducts = new Map();
+    let currentScreen = 1;
+    let clientData = {};
 
-      // Generar el PDF de la cotización
-      generatePDF(name, phone, city)
-        .then(() => {
-          // Enviar la cotización por WhatsApp
-          generateWhatsAppMessage(name, phone, city);
-        })
-        .catch((error) => {
-          console.error('Error al generar la cotización:', error);
-          alert('Ocurrió un error al generar la cotización. Por favor, inténtalo de nuevo más tarde.');
-        });
+    function generateTrackingId() {
+        const date = new Date();
+        const year = date.getFullYear().toString().slice(-2);
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
     }
 
-    function generatePDF(name, phone, city) {
-      return new Promise((resolve, reject) => {
-        // Lógica para generar el PDF de la cotización
-        try {
-          // Cargar el logotipo de la empresa
-          const logoImage = new Image();
-          logoImage.src = 'https://via.placeholder.com/150x50';
-          logoImage.onload = () => {
-            // Generar el contenido del PDF
-            const pdfContent = `
-              <html>
-                <head>
-                  <style>
-                    /* Estilos CSS para el PDF */
-                  </style>
-                </head>
-                <body>
-                  <div style="text-align: center;">
-                    <img src="${logoImage.src}" alt="Global MediTH" style="max-width: 200px;">
-                    <h1>Cotización</h1>
-                    <p>Nombre: ${name}</p>
-                    <p>Teléfono: ${phone}</p>
-                    <p>Ciudad: ${city}</p>
-                    <!-- Agregar más detalles de la cotización aquí -->
-                  </div>
-                </body>
-              </html>
-            `;
+    function getBase64Image(imgUrl, callback) {
+        var img = new Image();
+        img.src = imgUrl;
+        img.onload = function () {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL("image/png");
+            callback(dataURL);
+        };
+        img.onerror = function() {
+            console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBm b250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg==';
+            callback(fallbackSvg);
+        };
+    }
 
-            // Crear y descargar el PDF
-            const pdf = new jsPDF();
-            pdf.fromHTML(pdfContent, 15, 15, {
-              'width': 170,
-              'elementHandlers': {}
-            });
-            pdf.save('cotizacion.pdf');
-            resolve();
-          };
-        } catch (error) {
-          reject(error);
+    function goToScreen(screenNumber) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(`screen${screenNumber}`).classList.add('active');
+      currentScreen = screenNumber;
+      const backBtn = document.getElementById('backBtn');
+      backBtn.style.display = (screenNumber > 1) ? 'block' : 'none';
+      
+      // Asegurar que la pantalla activa se desplace al principio si tiene overflow
+      const activeScreen = document.getElementById(`screen${screenNumber}`);
+      if (activeScreen) {
+        activeScreen.scrollTop = 0;
+      }
+    }
+
+    function goBack() {
+      if (currentScreen > 1) {
+        if (currentScreen === 3) {
+            goToScreen(2);
+        } else {
+            goToScreen(currentScreen - 1);
         }
+      }
+    }
+
+    document.getElementById('clientForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      clientData = {
+        nombre: document.getElementById('nombre').value,
+        celular: document.getElementById('celular').value,
+        ciudad: document.getElementById('ciudad').value,
+        correo: document.getElementById('correo').value,
+        folio: generateTrackingId()
+      };
+      goToScreen(2);
+    });
+
+    window.onload = async () => {
+      try {
+        const res = await fetch('medicamentos.json');
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        medicamentos = await res.json();
+        if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
+          medicamentos.shift();
+        }
+      } catch (error) {
+        console.error("Error al cargar los medicamentos:", error);
+        document.getElementById('productsGrid').innerHTML =
+          "<p style='text-align: center; color: #dc3545;'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
+      }
+    };
+
+    function renderProducts(productsToRender) {
+      const productsGrid = document.getElementById('productsGrid');
+      productsGrid.innerHTML = '';
+      productsGrid.classList.remove('empty-message');
+
+      if (productsToRender.length === 0) {
+        productsGrid.innerHTML = "<p class='empty-message'>No se encontraron resultados para tu búsqueda.</p>";
+        productsGrid.classList.add('empty-message');
+        return;
+      }
+
+      productsToRender.forEach((product) => {
+        const isSelected = selectedProducts.has(product.codigoBarras);
+        // Cantidad inicial 0 si no está seleccionado, sino la cantidad actual
+        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0;
+        
+        const card = document.createElement('div');
+        card.className = `product-card ${isSelected ? 'selected' : ''}`;
+        card.onclick = () => toggleProduct(product);
+        
+        const displayCodigoBarras = product.codigoBarras || 'No disponible';
+
+        card.innerHTML = `
+          <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
+          <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
+          <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
+          <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
+          <div class="quantity-selector" onclick="event.stopPropagation()">
+            <label>Cantidad:</label>
+            <input type="number" class="quantity-input" min="0" value="${quantity}" 
+                   onchange="updateQuantity('${product.codigoBarras}', this.value)" />
+          </div>
+        `;
+        productsGrid.appendChild(card);
+      });
+      updateCart();
+    }
+
+    function toggleProduct(product) {
+      if (selectedProducts.has(product.codigoBarras)) {
+        selectedProducts.delete(product.codigoBarras);
+      } else {
+        const inputElement = document.querySelector(`.product-card[onclick*="${product.codigoBarras}"] .quantity-input`);
+        const currentInputValue = parseInt(inputElement ? inputElement.value : '0');
+        const quantityToAdd = currentInputValue > 0 ? currentInputValue : 1;
+        selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
+      }
+      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
+      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
+      renderProducts(filtered);
+      updateCart();
+    }
+
+
+    function updateQuantity(codigo, cantidad) {
+      const qty = parseInt(cantidad) || 0;
+      
+      if (selectedProducts.has(codigo)) {
+        if (qty > 0) {
+          const product = selectedProducts.get(codigo);
+          product.cantidad = qty;
+          selectedProducts.set(codigo, product);
+        } else {
+          selectedProducts.delete(codigo);
+        }
+      } else if (qty > 0) {
+        const product = medicamentos.find(p => p.codigoBarras === codigo);
+        if (product) {
+          selectedProducts.set(codigo, { ...product, cantidad: qty });
+        }
+      }
+      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
+      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
+      renderProducts(filtered);
+      updateCart();
+    }
+
+    function removeItemFromCart(codigo) {
+      selectedProducts.delete(codigo);
+      const inputElement = document.querySelector(`.product-card[onclick*="${codigo}"] .quantity-input`);
+      if (inputElement) {
+        inputElement.value = 0;
+      }
+      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
+      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
+      renderProducts(filtered);
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      const quoteBtn = document.getElementById('quoteBtnMain');
+      
+      if (selectedProducts.size === 0) {
+        cartItems.innerHTML = "<p style='text-align: center; color: #6c757d; font-style: italic;'>No hay productos seleccionados</p>";
+        cartTotal.textContent = "Total: 0 producto(s)";
+        quoteBtn.disabled = true;
+        return;
+      }
+
+      let html = '';
+      let totalItems = 0;
+      
+      selectedProducts.forEach((product) => {
+        totalItems += product.cantidad;
+        html += `
+          <div class="cart-item">
+            <div class="cart-item-title">${product.descripcion || 'Producto sin descripción'}</div>
+            <div class="cart-item-info">Código: ${product.codigoBarras || 'N/A'}</div>
+            <div class="cart-item-quantity">${product.cantidad}</div>
+            <button class="remove-item" onclick="removeItemFromCart('${product.codigoBarras}')">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+      });
+      
+      cartItems.innerHTML = html;
+      cartTotal.textContent = `Total: ${totalItems} producto(s)`;
+      quoteBtn.disabled = false;
+    }
+
+    document.getElementById('busqueda').addEventListener('keyup', function() {
+      const searchTerm = this.value.toLowerCase().trim();
+      if (searchTerm.length > 0) {
+        const filteredProducts = medicamentos.filter(product => {
+          return filterProduct(product, searchTerm);
+        });
+        renderProducts(filteredProducts);
+      } else {
+        const productsGrid = document.getElementById('productsGrid');
+        productsGrid.innerHTML = '<p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>';
+        productsGrid.classList.add('empty-message');
+      }
+    });
+
+    function filterProduct(product, searchTerm) {
+      const desc = (product.descripcion || '').toLowerCase();
+      const formula = (product.formula || '').toLowerCase();
+      const laboratorio = (product.laboratorio || '').toLowerCase();
+      const codigoBarras = (product.codigoBarras || '').toLowerCase();
+
+      return desc.includes(searchTerm) ||
+             formula.includes(searchTerm) ||
+             laboratorio.includes(searchTerm) ||
+             codigoBarras.includes(searchTerm);
+    }
+
+    function goToSummary() {
+      if (selectedProducts.size === 0) {
+        alert("Por favor, selecciona al menos un producto para generar la cotización.");
+        return;
+      }
+      populateSummary();
+      goToScreen(3);
+    }
+
+    function populateSummary() {
+      const clientSummaryDiv = document.getElementById('clientSummary');
+      clientSummaryDiv.innerHTML = `
+        <div class="contact-item">
+          <i class="fas fa-user"></i>
+          <span>Nombre: ${clientData.nombre || 'N/A'}</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-phone"></i>
+          <span>Celular: ${clientData.celular || 'N/A'}</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Ciudad: ${clientData.ciudad || 'N/A'}</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>Correo: ${clientData.correo || 'N/A'}</span>
+        </div>
+      `;
+
+      const summaryTableBody = document.querySelector('#summaryTable tbody');
+      summaryTableBody.innerHTML = '';
+      if (selectedProducts.size === 0) {
+        summaryTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; font-style: italic;">No hay productos seleccionados para la cotización.</td></tr>`;
+      } else {
+        selectedProducts.forEach(product => {
+          const row = summaryTableBody.insertRow();
+          row.insertCell().textContent = product.codigoBarras || 'N/A';
+          row.insertCell().textContent = product.descripcion || 'Sin descripción';
+          row.insertCell().textContent = product.laboratorio || 'No especificado';
+          row.insertCell().textContent = product.cantidad;
+        });
+      }
+    }
+
+    async function generarPDF() {
+      return new Promise((resolve) => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        getBase64Image('logo.png', function(logoBase64) {
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const imgWidth = 50;
+            const imgHeight = (imgWidth * 420) / 1488;
+            const imgX = (pageWidth - imgWidth) / 2;
+
+            if (logoBase64) {
+                doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
+            } else {
+                // Fallback a un SVG base64 si la imagen no carga, para evitar errores
+                const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg==';
+                doc.addImage(fallbackSvg, 'PNG', imgX, 10, imgWidth, imgHeight);
+            }
+
+            let y = 10 + imgHeight + 10;
+
+            doc.setFontSize(22);
+            doc.setTextColor(44, 62, 80);
+            doc.text("Cotización GlobalMediTH", pageWidth / 2, y, { align: "center" });
+            y += 10;
+            doc.setFontSize(10);
+            doc.setTextColor(50, 150, 70);
+            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, y, { align: "center" });
+            y += 20;
+
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+
+            doc.setFont(undefined, 'bold');
+            doc.text("Datos de Contacto de Ventas:", 10, y);
+            y += 7;
+            doc.setFont(undefined, 'normal');
+            doc.text(`Celular: 2381646718`, 10, y);
+            y += 7;
+            doc.text(`Correo: globalmedith@gmail.com`, 10, y);
+            y += 7;
+            doc.text(`Ubicación: Tehuacán, Puebla`, 10, y);
+            y += 15;
+
+            doc.setFont(undefined, 'bold');
+            doc.text("Datos del Cliente:", 10, y);
+            y += 7;
+            doc.setFont(undefined, 'normal');
+            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, 10, y);
+            y += 7;
+            doc.text(`Celular: ${clientData.celular || 'N/A'}`, 10, y);
+            y += 7;
+            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, 10, y);
+            y += 7;
+            doc.text(`Correo: ${clientData.correo || 'N/A'}`, 10, y);
+            y += 15;
+
+            doc.setFont(undefined, 'bold');
+            doc.text("Productos Seleccionados:", 10, y);
+            y += 10;
+            doc.setFont(undefined, 'normal');
+
+            const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
+            const data = Array.from(selectedProducts.values()).map(p => [
+              p.codigoBarras || 'N/A',
+              p.descripcion || 'Sin descripción',
+              p.laboratorio || 'No especificado',
+              p.cantidad
+            ]);
+
+            doc.autoTable({
+              startY: y,
+              head: headers,
+              body: data,
+              theme: 'striped',
+              styles: {
+                fontSize: 8,
+                cellPadding: 2,
+                overflow: 'linebreak',
+                textColor: [51, 51, 51]
+              },
+              headStyles: {
+                fillColor: [248, 249, 250],
+                textColor: [44, 62, 80],
+                fontStyle: 'bold',
+                halign: 'left'
+              },
+              bodyStyles: {
+                fillColor: [241, 248, 233],
+                alternateFillColor: [255, 255, 255]
+              },
+              columnStyles: {
+                0: { cellWidth: 30 },
+                1: { cellWidth: 'auto' },
+                2: { cellWidth: 30 },
+                3: { cellWidth: 15, halign: 'center' }
+              },
+              margin: { left: 10, right: 10 },
+              didDrawPage: function(data) {
+                doc.setFontSize(8);
+                const pageCount = doc.internal.getNumberOfPages();
+                doc.text(`Página ${data.pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+              }
+            });
+
+            resolve(doc.output('blob'));
+        });
       });
     }
 
-    function generateWhatsAppMessage(name, phone, city) {
-      // Generar el mensaje de WhatsApp con la cotización
-      const message = `¡Hola! Aquí está tu cotización de GlobalMediTH:
-      
-      Nombre: ${name}
-      Teléfono: ${phone}
-      Ciudad: ${city}
-      
-      ¡Gracias por tu interés!`;
+    function generateWhatsAppMessage() {
+        const folio = clientData.folio || 'N/A';
+        const nombre = clientData.nombre || 'N/A';
+        const celular = clientData.celular || 'N/A';
+        const ciudad = clientData.ciudad || 'N/A';
+        const correo = clientData.correo || 'N/A';
 
-      // Abrir WhatsApp con el mensaje
-      const whatsAppUrl = `https://api.whatsapp.com/send?phone=+52${phone}&text=${encodeURIComponent(message)}`;
-      window.open(whatsAppUrl, '_blank');
+        let message = `*Solicitud de Cotización - Global MediTH*\n\n`;
+
+        message += `\u{1F4C3} *Folio:* ${folio}\n`;
+        message += `  🧑‍💻 *Nombre:* ${nombre}\n`;
+        message += `  📱 *Celular:* ${celular}\n`;
+        message += `  🏙️ *Ciudad:* ${ciudad}\n`;
+        message += `  📧 *Correo:* ${correo}\n\n`;
+
+        message += `*Productos Solicitados:*\n`;
+        if (selectedProducts.size === 0) {
+            message += `  • No se seleccionaron productos.\n`;
+        } else {
+            selectedProducts.forEach(product => {
+                const codigo = product.codigoBarras || 'N/A';
+                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
+                message += `    Cantidad: ${product.cantidad}\n\n`;
+            });
+        }
+        message += `Gracias por su preferencia.`;
+
+        return message;
+    }
+
+
+    async function generarPDFyEnviarWhatsApp() {
+        if (selectedProducts.size === 0) {
+            alert("Por favor, selecciona al menos un producto para generar la cotización.");
+            return;
+        }
+
+        try {
+            const whatsappBtn = document.querySelector('.btn-whatsapp');
+            whatsappBtn.disabled = true;
+            whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
+
+            const pdfBlob = await generarPDF();
+            const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
+
+            const url = URL.createObjectURL(pdfBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
+            whatsappBtn.disabled = false;
+
+            setTimeout(() => {
+                alert(
+                    "¡Listo! ✅ Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\n\n" +
+                    "Ahora, se abrirá WhatsApp. Por favor, realiza estos 2 pasos:\n" +
+                    "1️⃣ Busca y adjunta el archivo PDF que acabas de descargar.\n" +
+                    "2️⃣ Envía el mensaje (el texto de la cotización ya está listo).\n\n" +
+                    "¡Gracias por tu paciencia! 😉"
+                );
+
+                const whatsappMessage = generateWhatsAppMessage();
+                const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
+                window.open(whatsappUrl, '_blank');
+            }, 700);
+
+        } catch (error) {
+            console.error("Error al generar PDF o enviar WhatsApp:", error);
+            alert("Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.");
+            const whatsappBtn = document.querySelector('.btn-whatsapp');
+            whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
+            whatsappBtn.disabled = false;
+        }
     }
   </script>
 </body>
