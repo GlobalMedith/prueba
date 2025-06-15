@@ -8,7 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
   <style>
-    /* Estilos Generales - Mobile First */
+    /* Estilos Generales - Mobile First (para pantallas pequeñas por defecto) */
     * {
       margin: 0;
       padding: 0;
@@ -19,37 +19,37 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
-      min-height: 100vh;
+      min-height: 100vh; /* Asegura que el body siempre tenga al menos la altura de la vista */
       overflow-x: hidden; /* Evita scroll horizontal */
-      position: relative;
+      position: relative; /* Necesario para la navegación fija */
     }
 
     /* Contenedor principal de la aplicación */
+    /* En móvil, el container es transparente y ocupa todo el viewport */
     .container {
       width: 100%;
-      min-height: 100vh; /* Ocupa al menos toda la altura del viewport en móvil */
-      position: relative;
-      overflow-y: auto; /* Permite scroll del contenedor principal si es necesario en móvil */
-      -webkit-overflow-scrolling: touch;
+      min-height: 100vh; /* Ocupa el 100% de la altura del viewport */
+      position: relative; /* Para que las .screen se posicionen absolutamente dentro */
+      overflow-y: hidden; /* El scroll lo manejarán las pantallas internas */
       padding: 15px; /* Padding general para móvil */
       background: transparent;
       box-shadow: none;
-      display: flex; /* Añadido para que las pantallas internas puedan centrarse o distribuirse */
+      display: flex; /* Añadido para que las pantallas internas puedan centrarse */
       justify-content: center; /* Centra las pantallas horizontalmente */
-      align-items: center; /* Centra las pantallas verticalmente */
+      align-items: flex-start; /* Alinea las pantallas arriba por defecto */
     }
 
     /* Manejo de Pantallas Individuales */
     .screen {
-      display: none;
+      display: none; /* Oculta todas las pantallas por defecto */
       width: 100%;
-      height: 100vh; /* Cada pantalla intenta ocupar toda la altura del viewport */
+      height: 100%; /* Ocupa el 100% de la altura de su padre (.container) */
       position: absolute; /* Posicionamiento absoluto para que se superpongan */
       top: 0;
       left: 0;
       overflow-y: auto; /* IMPORTANTE: Cada pantalla maneja su propio scroll si el contenido desborda */
-      -webkit-overflow-scrolling: touch;
-      padding: 15px; /* Padding para cada pantalla */
+      -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iOS */
+      padding-bottom: 20px; /* Espacio para scroll al final en móvil */
       flex-direction: column; /* Contenido apilado verticalmente */
       align-items: center; /* Centrar horizontalmente el contenido de la pantalla */
       justify-content: flex-start; /* Alinear arriba, el scroll manejará el resto */
@@ -67,33 +67,34 @@
       justify-content: center; /* Centrar welcome-card horizontalmente */
       align-items: center; /* Centrar welcome-card verticalmente */
       padding: 10px; /* Un poco de padding interior */
+      flex-grow: 1; /* Permite que el welcome-screen se expanda si es necesario */
     }
 
     .welcome-card {
       background: white;
       border-radius: 20px;
-      padding: 20px;
+      padding: 20px; /* Padding inicial para móvil */
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       text-align: center;
-      width: 100%; /* Ocupa 100% del ancho del padre */
-      max-width: 400px; /* TAMAÑO CLAVE: Limita el ancho máximo para que no sea demasiado grande */
+      width: 90%; /* Ocupa 90% del ancho del padre */
+      max-width: 380px; /* CLAVE: Limita el ancho máximo para móvil */
       display: flex;
       flex-direction: column;
-      gap: 12px; /* Reducido un poco el espacio entre elementos */
+      gap: 12px; /* Espacio entre elementos */
       height: auto; /* Permite que la altura se ajuste al contenido */
       flex-shrink: 0; /* Evitar que se encoja */
-      margin: auto; /* Centrar la tarjeta si el espacio lo permite */
+      margin: auto; /* Asegura el centrado si el `max-width` es menor que el `width` del padre */
     }
 
     .logo img {
-      height: 50px; /* Tamaño más compacto para móvil */
+      height: 55px; /* Tamaño más compacto para móvil */
       max-width: 100%;
       border-radius: 10px;
-      object-fit: contain;
+      object-fit: contain; /* Asegura que la imagen se ajuste sin distorsionarse */
     }
 
     .welcome-title {
-      font-size: 1.6em; /* Reducido para móvil */
+      font-size: 1.5em; /* Reducido para móvil */
       color: #2c3e50;
       font-weight: 700;
       margin-bottom: 5px;
@@ -112,7 +113,7 @@
       border-radius: 12px; /* Reducido */
       font-size: 0.85em; /* Reducido */
       font-weight: 600;
-      line-height: 1.3; /* Ajustado */
+      line-height: 1.3;
       flex-shrink: 0;
     }
     
@@ -141,6 +142,8 @@
     }
     .category-item {
       padding: 5px 8px; /* Reducido */
+      background: #e3f2fd;
+      border: 1px solid #90caf9;
       border-radius: 8px; /* Reducido */
       font-weight: 600;
       color: #1976d2;
@@ -172,16 +175,20 @@
 
     .medicine-type {
       text-align: center;
-      flex: 1 1 90px; /* Base más pequeña */
+      flex: 1 1 90px; /* Base más pequeña para que quepan 3 en fila en móvil */
       max-width: 120px; /* Máximo más pequeño */
       padding: 3px; /* Reducido */
     }
 
     .medicine-type i {
       font-size: 1.3em; /* Reducido */
-      margin-bottom: 6px; /* Reducido */
+      margin-bottom: 6px;
       display: block;
     }
+
+    .medicine-type.patente i { color: #e74c3c; }
+    .medicine-type.genericos i { color: #3498db; }
+    .medicine-type.curacion i { color: #f39c12; }
 
     .form-group {
       margin-bottom: 8px; /* Reducido */
@@ -189,27 +196,54 @@
     }
 
     .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #2c3e50;
       font-size: 0.8em; /* Reducido */
     }
 
     .form-group input {
+      width: 100%;
       padding: 8px; /* Reducido */
+      border: 2px solid #e0e0e0;
       border-radius: 8px; /* Reducido */
       font-size: 0.8em; /* Reducido */
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
     }
 
     .btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
       padding: 9px 18px; /* Reducido */
+      border: none;
       border-radius: 40px; /* Ajustado */
       font-size: 0.9em; /* Reducido */
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: inline-flex;
+      align-items: center;
       gap: 8px; /* Reducido */
       margin-top: 8px; /* Reducido */
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     /* PANTALLA 2 - CATÁLOGO */
     .catalog-screen {
       display: flex;
-      flex-direction: column; /* Apila los elementos verticalmente */
+      flex-direction: column; /* Apila los elementos verticalmente en móvil */
       gap: 15px;
       width: 100%;
       height: 100%; /* Ocupa la altura de su padre (.screen) */
@@ -227,11 +261,11 @@
       max-width: 100%;
       display: flex;
       flex-direction: column;
-      min-height: 45vh; /* Altura mínima para asegurar visibilidad */
+      min-height: 45vh; /* Altura mínima para asegurar visibilidad del grid */
     }
 
     .fixed-header-content {
-      flex-shrink: 0;
+      flex-shrink: 0; /* Asegura que esta sección no se encoja */
       margin-bottom: 15px;
       text-align: center;
     }
@@ -246,56 +280,98 @@
 
     .catalog-title {
       font-size: 1.4em; /* Ajustado para móvil */
+      color: #2c3e50;
+      font-weight: 700;
       margin-bottom: 8px;
     }
 
     .search-box {
-      max-width: 400px; /* Reducido el ancho máximo del buscador */
+      position: relative;
+      max-width: 400px; /* Reducido el ancho máximo del buscador para móvil */
       width: 100%;
+      margin: 0 auto;
     }
 
     .search-box input {
+      width: 100%;
       padding: 9px 35px 9px 12px; /* Ajustado el padding */
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
       font-size: 0.8em; /* Reducido */
+      text-transform: uppercase;
     }
 
     .search-box i {
+      position: absolute;
+      right: 12px; /* Ajustado */
+      top: 50%;
+      transform: translateY(-50%);
+      color: #7f8c8d;
       font-size: 0.8em; /* Reducido */
     }
 
     .products-grid {
       display: grid;
-      /* CLAVE: Auto-fit permite que las columnas se ajusten y se creen nuevas si hay espacio */
-      /* Min-max asegura que cada tarjeta tenga un tamaño mínimo y se estire si hay espacio */
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Ajustado min-max para mejor adaptabilidad */
+      /* CLAVE: auto-fit para ajustar columnas, minmax para el tamaño de las tarjetas */
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Min-width ajustado para móviles */
       gap: 12px; /* Reducido el espacio entre tarjetas */
-      overflow-y: auto;
-      flex-grow: 1;
-      min-height: 150px;
-      align-content: start;
+      overflow-y: auto; /* Permite scroll solo en la cuadrícula de productos */
+      flex-grow: 1; /* Permite que la rejilla crezca y ocupe el espacio */
       padding-right: 5px; /* Para evitar que la barra de scroll se superponga al contenido */
+      min-height: 150px; /* Altura mínima para asegurar que el grid sea visible */
+      align-content: start; /* Alinea el contenido del grid al inicio */
     }
 
     .products-grid.empty-message {
-        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #6c757d;
+        font-style: italic;
+        min-height: 150px; /* Mantiene la altura mínima para el mensaje */
+        padding: 0 20px;
     }
 
     .product-card {
-      padding: 10px; /* Reducido */
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
       border-radius: 12px; /* Reducido */
+      padding: 10px; /* Reducido */
+      transition: all 0.1s ease-out;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+    }
+
+    .product-card.selected {
+      border-color: #28a745;
+      background: #d4edda;
     }
 
     .product-title {
       font-size: 0.9em; /* Reducido */
+      font-weight: 600;
+      color: #2c3e50;
       margin-bottom: 4px;
+      line-height: 1.3;
+      overflow-wrap: break-word; /* Asegura que el texto largo se rompa */
     }
 
     .product-info {
       font-size: 0.75em; /* Reducido */
+      color: #6c757d;
       margin-bottom: 4px;
+      line-height: 1.3;
     }
 
     .quantity-selector {
+      display: flex;
+      align-items: center;
       gap: 4px; /* Reducido */
       margin-top: 6px;
     }
@@ -303,6 +379,9 @@
     .quantity-input {
       width: 40px; /* Reducido */
       padding: 3px; /* Reducido */
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
       font-size: 0.75em; /* Reducido */
     }
 
@@ -315,56 +394,89 @@
       height: auto; /* Se ajusta al contenido en móvil */
       width: 100%; /* Ocupa todo el ancho en móvil */
       max-height: 40vh; /* Altura máxima para el carrito en móvil */
-      overflow-y: auto;
+      overflow-y: auto; /* Permite scroll interno del carrito */
       margin-top: 15px; /* Espacio entre catálogo y carrito en móvil */
-      flex-shrink: 0;
+      flex-shrink: 0; /* Asegura que el carrito no se encoja para dar espacio a la grilla */
     }
 
     .cart-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px; /* Reducido */
       font-size: 1em; /* Ajustado */
-      margin-bottom: 12px;
+      font-weight: 700;
+      color: #2c3e50;
     }
 
     .cart-items {
       max-height: 150px; /* Altura máxima del carrito en móvil */
       overflow-y: auto;
-      margin-bottom: 12px;
+      margin-bottom: 12px; /* Reducido */
     }
 
     .cart-item {
+      background: #f8f9fa;
       padding: 10px; /* Reducido */
       border-radius: 8px; /* Reducido */
       margin-bottom: 6px;
+      position: relative;
     }
 
     .cart-item-title {
+      font-weight: 600;
       font-size: 0.8em; /* Reducido */
+      margin-bottom: 4px;
+      line-height: 1.2;
     }
 
     .cart-item-info {
       font-size: 0.7em; /* Reducido */
+      color: #6c757d;
     }
 
     .cart-item-quantity {
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      font-size: 0.7em;
+      position: absolute;
+      top: 8px;
+      right: 30px;
+      width: 20px; /* Reducido */
+      height: 20px; /* Reducido */
+      line-height: 20px; /* Centra verticalmente el texto */
+      font-size: 0.7em; /* Reducido */
+      text-align: center;
+      background-color: #e9ecef;
+      border-radius: 50%;
     }
 
     .remove-item {
-      width: 16px;
-      height: 16px;
-      font-size: 0.55em;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 16px; /* Reducido */
+      height: 16px; /* Reducido */
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55em; /* Reducido */
+      padding: 0;
     }
 
     .cart-summary {
-      padding-top: 12px;
+      border-top: 2px solid #e9ecef;
+      padding-top: 12px; /* Reducido */
+      text-align: center;
     }
 
     .cart-total {
       font-size: 1em; /* Ajustado */
-      margin-bottom: 12px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 12px; /* Reducido */
     }
 
     /* PANTALLA 3 - RESUMEN */
@@ -375,28 +487,35 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       max-width: 100%;
       margin: auto; /* Centrar en móvil */
-      height: 100%; /* Ocupa toda la altura disponible */
+      height: 100%; /* Ocupa toda la altura disponible de su padre (.screen) */
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
+      overflow-y: auto; /* Permite scroll si el contenido es largo */
     }
 
     .summary-fixed-header {
       flex-shrink: 0;
-      margin-bottom: 8px;
-      padding-bottom: 8px;
+      margin-bottom: 8px; /* Reducido */
+      padding-bottom: 8px; /* Reducido */
       border-bottom: 1px solid #eee;
-      grid-template-columns: 1fr;
-      gap: 8px;
+      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr; /* Una columna en móvil */
+      gap: 8px; /* Reducido */
     }
 
     .summary-logo img {
-      height: 35px; /* Reducido */
+      height: 35px; /* Reducido para móvil */
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
     }
 
     .summary-title {
-      font-size: 1.1em; /* Reducido */
+      font-size: 1.1em; /* Reducido para móvil */
+      color: #2c3e50;
       margin-bottom: 2px;
+      font-weight: 700;
     }
 
     .summary-screen .persuasive-message {
@@ -406,18 +525,30 @@
     }
 
     .contact-info, .client-info {
+      background: #f8f9fa;
       padding: 7px; /* Reducido */
       border-radius: 5px;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .client-info {
+        background: #e3f2fd;
     }
 
     .contact-info h3, .client-info h3 {
-      font-size: 0.7em; /* Reducido */
+      color: #2c3e50;
       margin-bottom: 2px;
+      font-size: 0.7em; /* Reducido */
     }
 
     .contact-item {
-      gap: 1px;
+      display: flex;
+      align-items: center;
+      gap: 1px; /* Reducido */
       margin-bottom: 1px;
+      color: #495057;
       font-size: 0.55em; /* Reducido */
     }
     .contact-item i {
@@ -425,9 +556,12 @@
     }
 
     .products-summary {
+      background: #f1f8e9;
       padding: 8px; /* Reducido */
       border-radius: 8px;
-      margin-top: 8px;
+      flex-grow: 1;
+      overflow-y: auto; /* Permite scroll de la tabla de productos */
+      margin-top: 8px; /* Reducido */
     }
 
     .products-summary h3 {
@@ -435,15 +569,44 @@
         margin-bottom: 6px;
     }
 
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+
     .summary-table th,
     .summary-table td {
       padding: 3px; /* Reducido */
+      text-align: left;
+      border-bottom: 1px solid #ddd;
       font-size: 0.6em; /* Reducido */
     }
 
+    .summary-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
     .summary-actions {
-      gap: 8px;
-      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px; /* Reducido */
+      margin-top: 12px; /* Reducido */
+      flex-shrink: 0;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+    }
+
+    .btn-success {
+      background: #28a745;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
     }
 
     /* Navegación */
@@ -455,9 +618,23 @@
     }
 
     .nav-btn {
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
       width: 38px; /* Reducido */
       height: 38px;
-      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9em; /* Reducido */
+      color: #2c3e50;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+
+    .nav-btn:hover {
+      transform: scale(1.1);
     }
 
     /* ------------------------------------------- */
@@ -468,8 +645,8 @@
         padding: 20px;
       }
       .screen {
-          padding-bottom: 0;
-          height: 100%; /* Ajuste para que ocupe la altura del container */
+          padding-bottom: 0; /* No es necesario en tablet/desktop */
+          justify-content: flex-start; /* Mantener alineación superior */
       }
 
       /* PANTALLA 1 - REGISTRO */
@@ -478,7 +655,7 @@
       }
       .welcome-card {
         padding: 30px;
-        max-width: 500px; /* Restaurado a un tamaño más común para tablets */
+        max-width: 500px; /* Tamaño más común para tablets */
         gap: 15px;
       }
       .logo img {
@@ -495,6 +672,8 @@
         font-size: 0.95em;
       }
       .medicine-types {
+        flex-direction: row; /* Vuelve a layout de fila */
+        justify-content: space-around;
         gap: 10px;
       }
       .medicine-type i {
@@ -512,17 +691,18 @@
 
       /* PANTALLA 2 - CATÁLOGO */
       .catalog-screen {
+        display: grid; /* Vuelve a layout de grid para catálogo y carrito */
         grid-template-columns: 1fr 280px; /* Ajuste del ancho del carrito */
         gap: 20px;
         padding: 20px;
         height: 100%;
-        align-items: flex-start;
-        flex-direction: row; /* Vuelve a layout de columnas para tablet/desktop */
+        align-items: flex-start; /* Alinea los items grid al inicio */
       }
       .catalog-main {
         padding: 20px;
-        height: 100%;
+        height: 100%; /* Ocupa la altura disponible en el grid */
         max-height: calc(100vh - 80px); /* Asegura que el catálogo no desborde */
+        overflow-y: hidden; /* El scroll lo maneja products-grid */
       }
       .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Ajuste para tablets */
@@ -530,11 +710,11 @@
         padding-right: 10px;
       }
       .cart-sidebar {
-        position: sticky;
-        top: 20px;
-        max-height: calc(100vh - 40px);
+        position: sticky; /* Se vuelve sticky en tablet */
+        top: 20px; /* Distancia desde arriba */
+        max-height: calc(100vh - 40px); /* Altura máxima para el sticky */
         padding: 20px;
-        margin-top: 0;
+        margin-top: 0; /* Elimina el margen superior en tablet */
       }
       .catalog-title {
         font-size: 1.6em;
@@ -575,7 +755,7 @@
         padding: 20px;
       }
       .summary-fixed-header {
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr; /* Dos columnas en tablet */
           gap: 15px;
       }
       .summary-logo img {
@@ -601,7 +781,7 @@
         padding: 5px;
       }
       .summary-actions {
-        flex-direction: row;
+        flex-direction: row; /* Botones en fila */
         justify-content: center;
       }
       .nav-btn {
@@ -622,20 +802,18 @@
         max-width: 1000px; /* Ancho más controlado para contenido principal */
         height: calc(100vh - 60px); /* Altura de la "ventana de aplicación" en desktop */
         min-height: calc(100vh - 60px);
-        margin: 30px auto;
-        background: white;
-        box-shadow: 0 0 40px rgba(0,0,0,0.3);
-        border-radius: 25px;
-        padding: 30px;
+        margin: 30px auto; /* Centra y da espacio alrededor */
+        background: white; /* Fondo blanco visible para el contenedor principal */
+        box-shadow: 0 0 40px rgba(0,0,0,0.3); /* Sombra más pronunciada */
+        border-radius: 25px; /* Bordes más redondeados */
+        padding: 30px; /* Padding general más amplio para desktop */
         overflow-y: hidden; /* El contenedor principal en desktop NO SCROLLEA */
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        align-items: center; /* Centra las pantallas dentro del container verticalmente */
       }
 
       /* Asegurarse que las pantallas internas se adapten bien al .container */
       .screen {
-          position: relative;
+          position: relative; /* Ya no absoluto al body, sino relativo al .container */
           top: unset;
           left: unset;
           width: 100%;
@@ -660,7 +838,7 @@
       }
       .welcome-card {
         padding: 35px; /* Ajustado */
-        max-width: 450px; /* Tamaño óptimo para desktop */
+        max-width: 450px; /* Tamaño óptimo para desktop, para que se vea como una "tarjeta" centrada */
         gap: 20px;
       }
       .logo img {
@@ -707,33 +885,10 @@
         padding-right: 15px;
       }
       .cart-sidebar {
-        top: 30px;
+        top: 30px; /* Distancia desde arriba */
         padding: 25px;
-        height: fit-content;
-        max-height: calc(100vh - 60px);
-      }
-      .catalog-title {
-        font-size: 1.8em;
-      }
-      .search-box {
-        max-width: 500px;
-      }
-      .search-box input {
-        font-size: 0.9em;
-      }
-      .product-card {
-        padding: 15px;
-      }
-      .product-title {
-        font-size: 1em;
-      }
-      .product-info {
-        font-size: 0.85em;
-      }
-      .quantity-input {
-        width: 50px;
-        padding: 6px;
-        font-size: 0.9em;
+        height: fit-content; /* Se ajusta al contenido */
+        max-height: calc(100vh - 60px - 60px); /* Ajustado para desktop (container height - margin total) */
       }
 
       /* PANTALLA 3 - RESUMEN */
@@ -780,7 +935,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -895,7 +1050,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -971,7 +1126,7 @@
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const seconds = date.getSeconds().toString().padStart(2, '0');
         const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
+        return `COT-<span class="math-inline">\{year\}</span>{month}<span class="math-inline">\{day\}\-</span>{hours}<span class="math-inline">\{minutes\}\-</span>{random}`;
     }
 
     function getBase64Image(imgUrl, callback) {
@@ -988,7 +1143,7 @@
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
             callback(fallbackSvg);
         };
     }
@@ -1001,12 +1156,6 @@
       currentScreen = screenNumber;
       const backBtn = document.getElementById('backBtn');
       backBtn.style.display = (screenNumber > 1) ? 'block' : 'none';
-      
-      // Asegurar que la pantalla activa se desplace al principio si tiene overflow
-      const activeScreen = document.getElementById(`screen${screenNumber}`);
-      if (activeScreen) {
-        activeScreen.scrollTop = 0;
-      }
     }
 
     function goBack() {
@@ -1061,22 +1210,24 @@
 
       productsToRender.forEach((product) => {
         const isSelected = selectedProducts.has(product.codigoBarras);
-        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0;
+        // Cantidad inicial 0 si no está seleccionado, sino la cantidad actual
+        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0; // Cambiado a 0
         
         const card = document.createElement('div');
         card.className = `product-card ${isSelected ? 'selected' : ''}`;
-        card.onclick = () => toggleProduct(product);
+        card.onclick = () => toggleProduct(product); // El click en la tarjeta lo selecciona
         
+        // CORRECCIÓN: Asegurar que product.codigoBarras se lea correctamente.
         const displayCodigoBarras = product.codigoBarras || 'No disponible';
 
         card.innerHTML = `
           <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
           <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
           <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
-          <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
-          <div class="quantity-selector" onclick="event.stopPropagation()">
-            <label>Cantidad:</label>
-            <input type="number" class="quantity-input" min="0" value="${quantity}" 
+          <div class="product-info"><strong>Código:</strong> <span class="math-inline">\{displayCodigoBarras\}</div\>
+<div class\="quantity\-selector" onclick\="event\.stopPropagation\(\)"\>
+<label\>Cantidad\:</label\>
+<input type\="number" class\="quantity\-input" min\="0" value\="</span>{quantity}" 
                    onchange="updateQuantity('${product.codigoBarras}', this.value)" />
           </div>
         `;
@@ -1085,13 +1236,17 @@
       updateCart();
     }
 
+    // Modificado para cambiar cantidad a 1 al seleccionar, o eliminar si ya estaba y cantidad es 0
     function toggleProduct(product) {
       if (selectedProducts.has(product.codigoBarras)) {
+        // Si ya está seleccionado y se hace clic, lo deselecciona/elimina
         selectedProducts.delete(product.codigoBarras);
       } else {
+        // Si no está seleccionado, lo agrega con cantidad 1 (o la cantidad que el input ya tenga, si no está en 0)
+        // Ojo: Si el input está en 0 y se selecciona, lo agregará con 1 para que tenga sentido.
         const inputElement = document.querySelector(`.product-card[onclick*="${product.codigoBarras}"] .quantity-input`);
         const currentInputValue = parseInt(inputElement ? inputElement.value : '0');
-        const quantityToAdd = currentInputValue > 0 ? currentInputValue : 1;
+        const quantityToAdd = currentInputValue > 0 ? currentInputValue : 1; // Si el usuario ya puso algo, se mantiene. Si no, 1.
         selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
       }
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
@@ -1102,7 +1257,7 @@
 
 
     function updateQuantity(codigo, cantidad) {
-      const qty = parseInt(cantidad) || 0;
+      const qty = parseInt(cantidad) || 0; // Cantidad puede ser 0
       
       if (selectedProducts.has(codigo)) {
         if (qty > 0) {
@@ -1110,14 +1265,17 @@
           product.cantidad = qty;
           selectedProducts.set(codigo, product);
         } else {
+          // Si la cantidad es 0, lo eliminamos de la selección
           selectedProducts.delete(codigo);
         }
       } else if (qty > 0) {
+        // Si no estaba seleccionado y el usuario pone > 0, lo agrega
         const product = medicamentos.find(p => p.codigoBarras === codigo);
         if (product) {
           selectedProducts.set(codigo, { ...product, cantidad: qty });
         }
       }
+      // Re-renderiza para actualizar el estado visual de la tarjeta (selected/not selected)
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
       const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
       renderProducts(filtered);
@@ -1126,6 +1284,7 @@
 
     function removeItemFromCart(codigo) {
       selectedProducts.delete(codigo);
+      // Actualiza el input de cantidad en la tarjeta del catálogo a 0 si existe
       const inputElement = document.querySelector(`.product-card[onclick*="${codigo}"] .quantity-input`);
       if (inputElement) {
         inputElement.value = 0;
@@ -1156,8 +1315,8 @@
         html += `
           <div class="cart-item">
             <div class="cart-item-title">${product.descripcion || 'Producto sin descripción'}</div>
-            <div class="cart-item-info">Código: ${product.codigoBarras || 'N/A'}</div>
-            <div class="cart-item-quantity">${product.cantidad}</div>
+            <div class="cart-item-info">Código: <span class="math-inline">\{product\.codigoBarras \|\| 'N/A'\}</div\>
+<div class\="cart\-item\-quantity"\></span>{product.cantidad}</div>
             <button class="remove-item" onclick="removeItemFromCart('${product.codigoBarras}')">
               <i class="fas fa-times"></i>
             </button>
@@ -1241,6 +1400,7 @@
       }
     }
 
+    // Generar PDF (misma función, ahora envuelve en una promesa para esperar su resolución)
     async function generarPDF() {
       return new Promise((resolve) => {
         const { jsPDF } = window.jspdf;
@@ -1255,8 +1415,7 @@
             if (logoBase64) {
                 doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
             } else {
-                const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
-                doc.addImage(fallbackSvg, 'PNG', imgX, 10, imgWidth, imgHeight);
+                doc.addImage(document.querySelector('.summary-logo img').src, 'JPEG', imgX, 10, imgWidth, imgHeight);
             }
 
             let y = 10 + imgHeight + 10;
@@ -1302,6 +1461,7 @@
             y += 10;
             doc.setFont(undefined, 'normal');
 
+            // Preparar datos para autoTable
             const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
             const data = Array.from(selectedProducts.values()).map(p => [
               p.codigoBarras || 'N/A',
@@ -1310,32 +1470,33 @@
               p.cantidad
             ]);
 
+            // ESTILOS DE LA TABLA PDF para coincidir con la pantalla de resumen
             doc.autoTable({
               startY: y,
               head: headers,
               body: data,
-              theme: 'striped',
+              theme: 'striped', // Un tema rayado similar al de tu pantalla
               styles: {
                 fontSize: 8,
                 cellPadding: 2,
                 overflow: 'linebreak',
-                textColor: [51, 51, 51]
+                textColor: [51, 51, 51] // Color de texto general
               },
               headStyles: {
-                fillColor: [248, 249, 250],
-                textColor: [44, 62, 80],
+                fillColor: [248, 249, 250], // Fondo blanco grisáceo para encabezado
+                textColor: [44, 62, 80], // Color de texto oscuro
                 fontStyle: 'bold',
-                halign: 'left'
+                halign: 'left' // Alineación de texto en encabezados
               },
               bodyStyles: {
-                fillColor: [241, 248, 233],
-                alternateFillColor: [255, 255, 255]
+                fillColor: [241, 248, 233], // Color de fondo para filas impares (similar al #f1f8e9)
+                alternateFillColor: [255, 255, 255] // Color de fondo para filas pares (blanco)
               },
               columnStyles: {
-                0: { cellWidth: 30 },
-                1: { cellWidth: 'auto' },
-                2: { cellWidth: 30 },
-                3: { cellWidth: 15, halign: 'center' }
+                0: { cellWidth: 30 }, // Código de Barras
+                1: { cellWidth: 'auto' }, // Descripción
+                2: { cellWidth: 30 }, // Laboratorio
+                3: { cellWidth: 15, halign: 'center' } // Cantidad
               },
               margin: { left: 10, right: 10 },
               didDrawPage: function(data) {
@@ -1371,7 +1532,7 @@
         } else {
             selectedProducts.forEach(product => {
                 const codigo = product.codigoBarras || 'N/A';
-                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
+                message += `  • <span class="math-inline">\{product\.descripcion \|\| 'Sin descripción'\} \(</span>{codigo})\n`;
                 message += `    Cantidad: ${product.cantidad}\n\n`;
             });
         }
@@ -1432,3 +1593,5 @@
   </script>
 </body>
 </html>
+}
+Hola, muchas gracias, me agrada mucho el tamaño de la tarjeta de bienvenida y el caralogo se aprecia mucho mejor, ahora solo tengo un pequeno problema, la navegacion de las flechas para regresar o avanzar, se mueve con el scroll, de favor verifica para que se quede fija en la parte superior, gracias por tu ayuda confio en ti.
