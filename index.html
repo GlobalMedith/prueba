@@ -1,284 +1,164 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GlobalMediTH - Sistema de Cotización</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotización - GlobalMediTH</title>
   <style>
-    /* Estilos Generales - Mobile First */
-    * {
+    /* Estilos CSS responsivos */
+    body {
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
-
-    html, body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #333;
-      height: 100%;
-      width: 100%;
-      overflow-y: auto; /* Permitir desplazamiento vertical */
-      position: relative;
-    }
-
     .container {
-      max-width: 1200px; /* Ancho máximo para pantallas grandes */
-      margin: 0 auto; /* Centra el contenedor */
-      padding: 0 15px; /* Espaciado lateral */
-      min-height: 100vh; /* Asegura que ocupe la altura del viewport */
-      position: relative;
-      overflow-y: auto; /* Permite scroll vertical en el contenedor principal */
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .screen {
-      display: none;
-      width: 100%;
-      min-height: 100%; 
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow-y: auto; 
-      padding-bottom: 20px; 
-    }
-    
-    .screen.active {
-      display: flex;
-      flex-direction: column; 
-      justify-content: flex-start; 
-      align-items: center; 
-      height: 100%; 
-    }
-
-    /* PANTALLA 1 - REGISTRO */
-    .welcome-screen {
-      padding: 10px; 
-      min-height: 100%; 
-      justify-content: center; 
-      align-items: center; 
-    }
-
-    .welcome-card {
-      background: white;
-      border-radius: 20px;
+      max-width: 800px;
+      margin: 0 auto;
       padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .logo {
       text-align: center;
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      height: auto; 
-      flex-shrink: 0; 
+      margin-bottom: 20px;
     }
-
     .logo img {
-      height: 60px; 
-      max-width: 100%;
-      border-radius: 10px;
+      max-width: 200px;
     }
-
-    .welcome-title {
-      font-size: 1.8em;
-      color: #2c3e50;
-      font-weight: 700;
+    .form-group {
+      margin-bottom: 20px;
     }
-
-    .welcome-subtitle {
-      font-size: 1em;
-      color: #7f8c8d;
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
     }
-
-    .persuasive-message {
-      background: linear-gradient(135deg, #28a745, #20c997);
-      color: white;
+    .form-group input {
+      width: 100%;
       padding: 10px;
-      border-radius: 15px;
-      font-size: 0.9em;
-      font-weight: 600;
-      line-height: 1.4;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
-
-    .category-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 15px;
-      font-size: 0.85em;
-      color: #555;
-      flex-shrink: 0;
-    }
-
-    .category-item {
-      padding: 6px 10px;
-      background: #e3f2fd;
-      border: 1px solid #90caf9;
-      border-radius: 10px;
-      font-weight: 600;
-      color: #1976d2;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    .category-item:hover {
-      background: #bbdefb;
-      border-color: #64b5f6;
-      transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-    }
-
-    /* Ajustes para pantallas más grandes */
-    @media (min-width: 768px) {
-      .welcome-card {
-        padding: 30px;
-        max-width: 600px;
-        gap: 20px;
-      }
-      
-      .welcome-title {
-        font-size: 2.2em;
-      }
-      
-      .welcome-subtitle {
-        font-size: 1.1em;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .welcome-title {
-        font-size: 2.8em;
-      }
-    }
-
-    /* Navegación */
-    .navigation {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-    }
-
-    .nav-btn {
-      background: rgba(255,255,255,0.9);
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
       border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 1em;
-      color: #2c3e50;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      transition: all 0.3s;
     }
-
-    .nav-btn:hover {
-      transform: scale(1.1);
+    .btn:hover {
+      background-color: #45a049;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+      .logo img {
+        max-width: 150px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="navigation">
-    <button class="nav-btn" onclick="goBack()" id="backBtn" style="display: none;">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-  </div>
-
   <div class="container">
-    <div id="screen1" class="screen active">
-      <div class="welcome-screen">
-        <div class="welcome-card">
-          <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHGOwoPC9zdmc+'; this.src='logo.png'" />
-          </div>
-
-          <h1 class="welcome-title">Bienvenido</h1>
-          <p class="welcome-subtitle">Sistema de Cotización Profesional</p>
-
-          <div class="persuasive-message">
-            <i class="fas fa-star"></i>
-            ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están listos para ti.
-          </div>
-
-          <form id="clientForm">
-            <div class="form-group">
-              <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
-              <input type="text" id="nombre" required />
-            </div>
-            <div class="form-group">
-              <label for="celular"><i class="fas fa-phone"></i> Número de Celular</label>
-              <input type="tel" id="celular" required />
-            </div>
-            <div class="form-group">
-              <label for="ciudad"><i class="fas fa-map-marker-alt"></i> Ciudad</label>
-              <input type="text" id="ciudad" required />
-            </div>
-            <div class="form-group">
-              <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
-              <input type="email" id="correo" required />
-            </div>
-
-            <button type="submit" class="btn">
-              <i class="fas fa-arrow-right"></i>
-              Continuar al Catálogo
-            </button>
-          </form>
-        </div>
-      </div>
+    <div class="logo">
+      <img src="https://via.placeholder.com/150x50" alt="Global MediTH">
     </div>
-
-    <!-- Aquí irían las demás pantallas como screen2 y screen3 -->
-
+    <form>
+      <div class="form-group">
+        <label for="name">Nombre Completo:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Número de Celular:</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+      <div class="form-group">
+        <label for="city">Ciudad:</label>
+        <input type="text" id="city" name="city" required>
+      </div>
+      <button type="button" class="btn" onclick="generateQuotation()">Generar Cotización</button>
+    </form>
   </div>
 
   <script>
-    // Variables globales
-    let medicamentos = [];
-    let selectedProducts = new Map();
-    let currentScreen = 1;
-    let clientData = {};
+    function generateQuotation() {
+      // Obtener los valores de los campos del formulario
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const city = document.getElementById('city').value;
 
-    function goToScreen(screenNumber) {
-      document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
+      // Generar el PDF de la cotización
+      generatePDF(name, phone, city)
+        .then(() => {
+          // Enviar la cotización por WhatsApp
+          generateWhatsAppMessage(name, phone, city);
+        })
+        .catch((error) => {
+          console.error('Error al generar la cotización:', error);
+          alert('Ocurrió un error al generar la cotización. Por favor, inténtalo de nuevo más tarde.');
+        });
+    }
+
+    function generatePDF(name, phone, city) {
+      return new Promise((resolve, reject) => {
+        // Lógica para generar el PDF de la cotización
+        try {
+          // Cargar el logotipo de la empresa
+          const logoImage = new Image();
+          logoImage.src = 'https://via.placeholder.com/150x50';
+          logoImage.onload = () => {
+            // Generar el contenido del PDF
+            const pdfContent = `
+              <html>
+                <head>
+                  <style>
+                    /* Estilos CSS para el PDF */
+                  </style>
+                </head>
+                <body>
+                  <div style="text-align: center;">
+                    <img src="${logoImage.src}" alt="Global MediTH" style="max-width: 200px;">
+                    <h1>Cotización</h1>
+                    <p>Nombre: ${name}</p>
+                    <p>Teléfono: ${phone}</p>
+                    <p>Ciudad: ${city}</p>
+                    <!-- Agregar más detalles de la cotización aquí -->
+                  </div>
+                </body>
+              </html>
+            `;
+
+            // Crear y descargar el PDF
+            const pdf = new jsPDF();
+            pdf.fromHTML(pdfContent, 15, 15, {
+              'width': 170,
+              'elementHandlers': {}
+            });
+            pdf.save('cotizacion.pdf');
+            resolve();
+          };
+        } catch (error) {
+          reject(error);
+        }
       });
-      document.getElementById(`screen${screenNumber}`).classList.add('active');
-      currentScreen = screenNumber;
-      const backBtn = document.getElementById('backBtn');
-      backBtn.style.display = (screenNumber > 1) ? 'block' : 'none';
     }
 
-    function goBack() {
-      if (currentScreen > 1) {
-        goToScreen(currentScreen - 1);
-      }
+    function generateWhatsAppMessage(name, phone, city) {
+      // Generar el mensaje de WhatsApp con la cotización
+      const message = `¡Hola! Aquí está tu cotización de GlobalMediTH:
+      
+      Nombre: ${name}
+      Teléfono: ${phone}
+      Ciudad: ${city}
+      
+      ¡Gracias por tu interés!`;
+
+      // Abrir WhatsApp con el mensaje
+      const whatsAppUrl = `https://api.whatsapp.com/send?phone=+52${phone}&text=${encodeURIComponent(message)}`;
+      window.open(whatsAppUrl, '_blank');
     }
-
-    document.getElementById('clientForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      clientData = {
-        nombre: document.getElementById('nombre').value,
-        celular: document.getElementById('celular').value,
-        ciudad: document.getElementById('ciudad').value,
-        correo: document.getElementById('correo').value,
-      };
-      goToScreen(2);
-    });
-
-    // Aquí iría el resto del JavaScript para manejar las pantallas, productos, etc.
   </script>
 </body>
 </html>
-
