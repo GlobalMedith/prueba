@@ -1097,7 +1097,7 @@
             </div>
             <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
               <i class="fas fa-file-invoice"></i>
-              Generar Cotización
+              Enviar Cotización por WhatsApp
             </button>
           </div>
         </div>
@@ -1160,7 +1160,7 @@
         </div>
 
         <div class="summary-actions">
-          <button class="btn btn-success" onclick="enviarCotizacionPorWhatsApp()" id="quoteBtnMain">
+          <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
             <i class="fab fa-whatsapp"></i>
             Enviar Cotización por WhatsApp
           </button>
@@ -1198,9 +1198,6 @@
         const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
         return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
     }
-
-    // Ya no se necesita getBase64Image ni las librerías jsPDF para esta funcionalidad
-    // Se elimina la función generarPDF()
     
     function goToScreen(screenNumber) {
       document.querySelectorAll('.screen').forEach(screen => {
@@ -1442,18 +1439,50 @@
         showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
         return;
       }
-      //populateSummary(); // Ya no es necesario poblar el resumen si no se muestra
-      //goToScreen(3); // Ya no se va a la pantalla de resumen
-      enviarCotizacionPorWhatsApp(); // Llama directamente a la función de envío de WhatsApp
+      enviarCotizacionPorWhatsApp();
     }
 
-    function populateSummary() {
-      // Esta función ya no es necesaria si no se muestra la pantalla de resumen
-      // o si solo se usa para el mensaje de WhatsApp.
-      // Se mantiene aquí por si alguna lógica posterior la requiere, pero no impacta el flujo actual.
+    // Función "simulada" de generarPDF, siempre resuelve inmediatamente.
+    // Mantenemos su esqueleto porque la función enviarCotizacionPorWhatsApp la "await"a.
+    async function generarPDF() {
+      return Promise.resolve(true); 
     }
 
-    // Renombrada a enviarCotizacionPorWhatsApp
+    function generateWhatsAppMessage() {
+        const folio = clientData.folio || 'N/A';
+        const nombre = clientData.nombre || 'N/A';
+        const celular = clientData.celular || 'N/A';
+        const ciudad = clientData.ciudad || 'N/A';
+        const correo = clientData.correo || 'N/A';
+
+        let message = `*Cotización de Medicamentos - Global MediTH*\n\n`;
+
+        message += `\u{1F4C3} *Folio de Cotización:* ${folio}\n\n`;
+
+        message += `*Datos del Cliente:*\n`;
+        message += `  🧑‍💻 *Nombre:* ${nombre}\n`;
+        message += `  📱 *Celular:* ${celular}\n`;
+        message += `  🏙️ *Ciudad:* ${ciudad}\n`;
+        message += `  📧 *Correo:* ${correo}\n\n`;
+
+        message += `*Productos Solicitados:*\n`;
+        if (selectedProducts.size === 0) {
+            message += `  • No se seleccionaron productos.\n`;
+        } else {
+            selectedProducts.forEach(product => {
+                const codigo = product.codigoBarras || 'N/A';
+                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
+                message += `    Laboratorio: ${product.laboratorio || 'N/A'}\n`;
+                message += `    Cantidad: ${product.cantidad}\n\n`;
+            });
+        }
+        message += `¡Gracias por tu preferencia y por confiar en Global MediTH!`;
+
+        return message;
+    }
+
+
+    // Función principal para enviar por WhatsApp
     async function enviarCotizacionPorWhatsApp() {
         if (selectedProducts.size === 0) {
             showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
@@ -1467,13 +1496,16 @@
         }
 
         try {
+            // Se llama a generarPDF, pero como ahora es una función simulada, resuelve inmediatamente.
+            await generarPDF(); 
+
             const whatsappMessage = generateWhatsAppMessage();
             const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
             
             // Abrir WhatsApp directamente
             window.open(whatsappUrl, '_blank');
 
-            // Mensaje de éxito en el modal
+            // Mensaje de éxito en el modal, sin mencionar PDF
             showCustomAlert(
                 'Cotización Lista para Enviar',
                 "Tu cotización está lista. ¡Revisa tu WhatsApp para completar el envío!\n\n" +
