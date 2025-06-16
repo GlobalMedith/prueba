@@ -1160,9 +1160,9 @@
         </div>
 
         <div class="summary-actions">
-          <button class="btn btn-whatsapp" onclick="generarPDFyEnviarWhatsApp()">
+          <button class="btn btn-success" onclick="enviarCotizacionPorWhatsApp()" id="quoteBtnMain">
             <i class="fab fa-whatsapp"></i>
-            Enviar por WhatsApp
+            Enviar Cotización por WhatsApp
           </button>
         </div>
       </div>
@@ -1199,25 +1199,9 @@
         return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
     }
 
-    function getBase64Image(imgUrl, callback) {
-        var img = new Image();
-        img.src = imgUrl;
-        img.onload = function () {
-            var canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0);
-            var dataURL = canvas.toDataURL("image/png");
-            callback(dataURL);
-        };
-        img.onerror = function() {
-            console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlpaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
-            callback(fallbackSvg);
-        };
-    }
-
+    // Ya no se necesita getBase64Image ni las librerías jsPDF para esta funcionalidad
+    // Se elimina la función generarPDF()
+    
     function goToScreen(screenNumber) {
       document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
@@ -1452,130 +1436,56 @@
              codigoBarras.includes(searchTerm);
     }
 
+    // Modificada para llamar a enviarCotizacionPorWhatsApp directamente
     function goToSummary() {
       if (selectedProducts.size === 0) {
-        showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para generar la cotización.');
+        showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
         return;
       }
-      populateSummary();
-      goToScreen(3);
+      //populateSummary(); // Ya no es necesario poblar el resumen si no se muestra
+      //goToScreen(3); // Ya no se va a la pantalla de resumen
+      enviarCotizacionPorWhatsApp(); // Llama directamente a la función de envío de WhatsApp
     }
 
     function populateSummary() {
-      const clientSummaryDiv = document.getElementById('clientSummary');
-      clientSummaryDiv.innerHTML = `
-        <div class="contact-item">
-          <i class="fas fa-user"></i>
-          <span>Nombre: ${clientData.nombre || 'N/A'}</span>
-        </div>
-        <div class="contact-item">
-          <i class="fas fa-phone"></i>
-          <span>Celular: ${clientData.celular || 'N/A'}</span>
-        </div>
-        <div class="contact-item">
-          <i class="fas fa-map-marker-alt"></i>
-          <span>Ciudad: ${clientData.ciudad || 'N/A'}</span>
-        </div>
-        <div class="contact-item">
-          <i class="fas fa-envelope"></i>
-          <span>Correo: ${clientData.correo || 'N/A'}</span>
-        </div>
-      `;
-
-      const summaryTableBody = document.querySelector('#summaryTable tbody');
-      summaryTableBody.innerHTML = '';
-      if (selectedProducts.size === 0) {
-        summaryTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; font-style: italic;">No hay productos seleccionados para la cotización.</td></tr>`;
-      } else {
-        selectedProducts.forEach(product => {
-          const row = summaryTableBody.insertRow();
-          row.insertCell().textContent = product.codigoBarras || 'N/A';
-          row.insertCell().textContent = product.descripcion || 'Sin descripción';
-          row.insertCell().textContent = product.laboratorio || 'No especificado';
-          row.insertCell().textContent = product.cantidad;
-        });
-      }
+      // Esta función ya no es necesaria si no se muestra la pantalla de resumen
+      // o si solo se usa para el mensaje de WhatsApp.
+      // Se mantiene aquí por si alguna lógica posterior la requiere, pero no impacta el flujo actual.
     }
 
-    async function generarPDF() {
-      // Esta función ahora será eliminada o adaptada para no generar PDF.
-      // El contenido de esta función no se ejecutará si se elimina la llamada en generarPDFyEnviarWhatsApp.
-      // Mantengo un esqueleto aquí por si el proceso de revisión lo requiere, pero se eliminará en la versión final.
-      return Promise.resolve(null); // Retorna una promesa resuelta a null, ya no genera blob
-    }
-
-    function generateWhatsAppMessage() {
-        const folio = clientData.folio || 'N/A';
-        const nombre = clientData.nombre || 'N/A';
-        const celular = clientData.celular || 'N/A';
-        const ciudad = clientData.ciudad || 'N/A';
-        const correo = clientData.correo || 'N/A';
-
-        let message = `*Cotización de Medicamentos - Global MediTH*\n\n`; // Mensaje persuasivo
-
-        message += `\u{1F4C3} *Folio de Cotización:* ${folio}\n\n`; // Nuevo folio
-
-        message += `*Datos del Cliente:*\n`;
-        message += `  🧑‍💻 *Nombre:* ${nombre}\n`;
-        message += `  📱 *Celular:* ${celular}\n`;
-        message += `  🏙️ *Ciudad:* ${ciudad}\n`;
-        message += `  📧 *Correo:* ${correo}\n\n`;
-
-        message += `*Productos Solicitados:*\n`;
-        if (selectedProducts.size === 0) {
-            message += `  • No se seleccionaron productos.\n`;
-        } else {
-            selectedProducts.forEach(product => {
-                const codigo = product.codigoBarras || 'N/A';
-                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
-                message += `    Laboratorio: ${product.laboratorio || 'N/A'}\n`; // Añadido laboratorio para más detalle
-                message += `    Cantidad: ${product.cantidad}\n\n`;
-            });
-        }
-        message += `¡Gracias por tu preferencia! Estamos listos para atenderte.`; // Mensaje de agradecimiento
-
-        return message;
-    }
-
-
-    // Renombrada a enviarCotizacionPorWhatsApp para mayor claridad
+    // Renombrada a enviarCotizacionPorWhatsApp
     async function enviarCotizacionPorWhatsApp() {
         if (selectedProducts.size === 0) {
             showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
             return;
         }
 
-        const whatsappBtn = document.querySelector('.btn-success'); // Ojo: si el ID del botón es 'quoteBtnMain'
-        if (whatsappBtn) { // Asegurarse de que el botón existe
+        const whatsappBtn = document.querySelector('.btn-success');
+        if (whatsappBtn) {
             whatsappBtn.disabled = true;
             whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
         }
 
         try {
-            // Ya no se genera PDF. Se elimina toda la lógica de jsPDF.
-            // const pdfBlob = await generarPDF(); // Esta línea se elimina
-            // ... y todo el código relacionado con la descarga del PDF
-
-            // Nuevo mensaje para el modal, más directo
-            showCustomAlert(
-                'Cotización Enviada',
-                "Tu cotización está lista para ser enviada por WhatsApp.\n\n" +
-                "¡Revisa tu WhatsApp para completar el envío!\n\n" +
-                "¡Gracias por tu preferencia y por confiar en Global MediTH! 😉"
-            );
-
-            // Abrir WhatsApp de inmediato
             const whatsappMessage = generateWhatsAppMessage();
             const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
+            
+            // Abrir WhatsApp directamente
             window.open(whatsappUrl, '_blank');
+
+            // Mensaje de éxito en el modal
+            showCustomAlert(
+                'Cotización Lista para Enviar',
+                "Tu cotización está lista. ¡Revisa tu WhatsApp para completar el envío!\n\n" +
+                "¡Gracias por tu preferencia y por confiar en Global MediTH! 😉"
+            );
             
         } catch (error) {
-            console.error("Error al enviar WhatsApp:", error);
-            showCustomAlert('Error', 'Hubo un error al intentar abrir WhatsApp. Por favor, inténtalo de nuevo.');
+            console.error("Error al intentar abrir WhatsApp:", error);
+            showCustomAlert('Error', 'Hubo un error al intentar abrir WhatsApp. Por favor, asegúrate de tener la aplicación instalada o inténtalo de nuevo.');
         } finally {
-            // Asegurar que el botón siempre se habilite y el spinner se quite
-            if (whatsappBtn) { // Asegurarse de que el botón existe
-                whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp'; // Cambiar texto del botón
+            if (whatsappBtn) {
+                whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar Cotización por WhatsApp'; // Restaurar texto del botón
                 whatsappBtn.disabled = false;
             }
         }
