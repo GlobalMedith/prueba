@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GlobalMediTH - Sistema de Cotización</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
   <style>
     /* Estilos Generales - Mobile First (para pantallas pequeñas por defecto) */
     * {
@@ -996,7 +994,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlpaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -1500,151 +1498,10 @@
     }
 
     async function generarPDF() {
-      return new Promise((resolve) => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        // Obtener logo en Base64
-        getBase64Image('logo.png', function(logoBase64) {
-            const pageWidth = doc.internal.pageSize.getWidth();
-            const marginX = 15; 
-            
-            let currentY = 15; // Posición Y inicial
-
-            // --- Parte Superior Izquierda: Logo y texto "Global MediTH" ---
-            const logoWidth = 25; // Tamaño del logo, como en la imagen
-            const logoHeight = (logoWidth * 420) / 1488; 
-            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlpaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', marginX, currentY, logoWidth, logoHeight);
-            
-            doc.setFontSize(9); // Tamaño del texto "Global MediTH"
-            doc.setTextColor(44, 62, 80);
-            doc.setFont(undefined, 'bold');
-            doc.text("Global MediTH", marginX + logoWidth + 3, currentY + logoHeight / 2 + 1); 
-            
-            // --- "Datos de Contacto de Ventas" (Columna Superior Derecha) ---
-            const rightColStartX = pageWidth / 2 + 15; // Inicio de la columna derecha, ajustado para no superponerse
-            let yRightColData = currentY; // Inicia a la altura del logo
-
-            doc.setFontSize(8); 
-            doc.setTextColor(0, 0, 0);
-            doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas", rightColStartX, yRightColData);
-            yRightColData += 4;
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(6.5);
-            doc.text(`Celular: 2381646718`, rightColStartX, yRightColData);
-            yRightColData += 3.5;
-            doc.text(`Correo: globalmedith@gmail.com`, rightColStartX, yRightColData);
-            yRightColData += 3.5;
-            doc.text(`Ubicación: Tehuacán, Puebla`, rightColStartX, yRightColData);
-            yRightColData += 3.5; // Final de este bloque, para determinar el Y de la siguiente sección.
-
-
-            // --- Título "Cotización - GlobalMediTH" y Mensaje Persuasivo (Alineado a la izquierda, debajo del logo) ---
-            currentY = Math.max(currentY + logoHeight + 5, yRightColData - 20); // Asegurar que inicie debajo del logo, pero no muy abajo si la columna derecha es corta
-            // Ajustar el Y para que el título de cotización no se junte mucho con el bloque de datos de la derecha
-            // if (yRightColData - currentY < 10) currentY = yRightColData + 5; // Ajuste si se traslapan
-
-            doc.setFontSize(16); 
-            doc.setTextColor(44, 62, 80);
-            doc.setFont(undefined, 'bold');
-            doc.text("Cotización - GlobalMediTH", marginX, currentY); 
-            currentY += 8; 
-
-            doc.setFontSize(7.5);
-            doc.setTextColor(50, 150, 70);
-            doc.setFont(undefined, 'normal');
-            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", marginX, currentY); 
-            currentY += 12; 
-
-            // --- "Datos del Cliente" y "Folio de Cotización" (Columna Derecha, debajo de Datos de Contacto) ---
-            // Calcular el Y para que empiece justo debajo del final de "Datos de Contacto de Ventas"
-            // y alinear al inicio de la columna derecha (rightColStartX)
-            let yClientDataCol = yRightColData; 
-
-            doc.setFontSize(8);
-            doc.setTextColor(0, 0, 0);
-            doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente:", rightColStartX, yClientDataCol);
-            yClientDataCol += 4;
-
-            doc.setFontSize(7.5); 
-            doc.setFont(undefined, 'bold');
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, rightColStartX, yClientDataCol);
-            yClientDataCol += 4.5;
-
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(6.5);
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, rightColStartX, yClientDataCol);
-            yClientDataCol += 3.5;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, rightColStartX, yClientDataCol);
-            yClientDataCol += 3.5;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, rightColStartX, yClientDataCol);
-            yClientDataCol += 3.5;
-
-            // Folio de Cotización (debajo de Datos del Cliente)
-            doc.setFontSize(8);
-            doc.setTextColor(0, 0, 0);
-            doc.setFont(undefined, 'bold');
-            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, rightColStartX, yClientDataCol + 2); 
-            yClientDataCol += 10; // Final de la sección de datos del cliente
-
-            // Determinar la posición Y para la tabla de productos (debajo del más bajo de las secciones de texto)
-            let startYForTable = Math.max(currentY, yClientDataCol) + 8; 
-
-            // Título "Productos Seleccionados"
-            doc.setFontSize(9);
-            doc.setFont(undefined, 'bold');
-            doc.text("Productos Seleccionados:", marginX, startYForTable);
-            startYForTable += 5;
-
-            const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
-            const data = Array.from(selectedProducts.values()).map(p => [
-              p.codigoBarras || 'N/A',
-              p.descripcion || 'Sin descripción',
-              p.laboratorio || 'No especificado',
-              p.cantidad
-            ]);
-
-            doc.autoTable({
-              startY: startYForTable,
-              head: headers,
-              body: data,
-              theme: 'striped',
-              styles: {
-                fontSize: 6.5,
-                cellPadding: 1.2,
-                overflow: 'linebreak', // Permitir que el texto se ajuste a múltiples líneas
-                textColor: [51, 51, 51]
-              },
-              headStyles: {
-                fillColor: [248, 249, 250],
-                textColor: [44, 62, 80],
-                fontStyle: 'bold',
-                halign: 'left'
-              },
-              bodyStyles: {
-                fillColor: [241, 248, 233],
-                alternateFillColor: [255, 255, 255]
-              },
-              columnStyles: {
-                // Ajustados según la imagen de referencia para evitar recortes y amontonamientos
-                0: { cellWidth: 20 }, // Código de Barras
-                1: { cellWidth: 75 }, // CLAVE: Descripción (¡Más ancho!)
-                2: { cellWidth: 25 }, // Laboratorio
-                3: { cellWidth: 10, halign: 'center' } // Cantidad
-              },
-              margin: { left: marginX, right: marginX },
-              didDrawPage: function(data) {
-                doc.setFontSize(8);
-                const pageCount = doc.internal.getNumberOfPages();
-                doc.text(`Página ${data.pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
-              }
-            });
-
-            resolve(doc.output('blob'));
-        });
-      });
+      // Esta función ahora será eliminada o adaptada para no generar PDF.
+      // El contenido de esta función no se ejecutará si se elimina la llamada en generarPDFyEnviarWhatsApp.
+      // Mantengo un esqueleto aquí por si el proceso de revisión lo requiere, pero se eliminará en la versión final.
+      return Promise.resolve(null); // Retorna una promesa resuelta a null, ya no genera blob
     }
 
     function generateWhatsAppMessage() {
@@ -1654,9 +1511,11 @@
         const ciudad = clientData.ciudad || 'N/A';
         const correo = clientData.correo || 'N/A';
 
-        let message = `*Solicitud de Cotización - Global MediTH*\n\n`;
+        let message = `*Cotización de Medicamentos - Global MediTH*\n\n`; // Mensaje persuasivo
 
-        message += `\u{1F4C3} *Folio:* ${folio}\n`;
+        message += `\u{1F4C3} *Folio de Cotización:* ${folio}\n\n`; // Nuevo folio
+
+        message += `*Datos del Cliente:*\n`;
         message += `  🧑‍💻 *Nombre:* ${nombre}\n`;
         message += `  📱 *Celular:* ${celular}\n`;
         message += `  🏙️ *Ciudad:* ${ciudad}\n`;
@@ -1669,57 +1528,56 @@
             selectedProducts.forEach(product => {
                 const codigo = product.codigoBarras || 'N/A';
                 message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
+                message += `    Laboratorio: ${product.laboratorio || 'N/A'}\n`; // Añadido laboratorio para más detalle
                 message += `    Cantidad: ${product.cantidad}\n\n`;
             });
         }
-        message += `Gracias por su preferencia.`;
+        message += `¡Gracias por tu preferencia! Estamos listos para atenderte.`; // Mensaje de agradecimiento
 
         return message;
     }
 
 
-    async function generarPDFyEnviarWhatsApp() {
+    // Renombrada a enviarCotizacionPorWhatsApp para mayor claridad
+    async function enviarCotizacionPorWhatsApp() {
         if (selectedProducts.size === 0) {
-            showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para generar la cotización.');
+            showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
             return;
         }
 
-        const whatsappBtn = document.querySelector('.btn-whatsapp');
-        whatsappBtn.disabled = true;
-        whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
+        const whatsappBtn = document.querySelector('.btn-success'); // Ojo: si el ID del botón es 'quoteBtnMain'
+        if (whatsappBtn) { // Asegurarse de que el botón existe
+            whatsappBtn.disabled = true;
+            whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+        }
 
         try {
-            const pdfBlob = await generarPDF();
-            const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
+            // Ya no se genera PDF. Se elimina toda la lógica de jsPDF.
+            // const pdfBlob = await generarPDF(); // Esta línea se elimina
+            // ... y todo el código relacionado con la descarga del PDF
 
-            const url = URL.createObjectURL(pdfBlob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
+            // Nuevo mensaje para el modal, más directo
             showCustomAlert(
-                '¡Cotización Lista! ✅',
-                "Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\n\n" +
-                "Ahora, se abrirá WhatsApp. Por favor, realiza estos 2 pasos:\n" +
-                "1️⃣ Busca y adjunta el archivo PDF que acabas de descargar.\n" +
-                "2️⃣ Envía el mensaje (el texto de la cotización ya está listo).\n\n" +
-                "¡Gracias por tu paciencia! 😉"
+                'Cotización Enviada',
+                "Tu cotización está lista para ser enviada por WhatsApp.\n\n" +
+                "¡Revisa tu WhatsApp para completar el envío!\n\n" +
+                "¡Gracias por tu preferencia y por confiar en Global MediTH! 😉"
             );
 
+            // Abrir WhatsApp de inmediato
             const whatsappMessage = generateWhatsAppMessage();
             const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
             window.open(whatsappUrl, '_blank');
             
         } catch (error) {
-            console.error("Error al generar PDF o enviar WhatsApp:", error);
-            showCustomAlert('Error', 'Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.');
+            console.error("Error al enviar WhatsApp:", error);
+            showCustomAlert('Error', 'Hubo un error al intentar abrir WhatsApp. Por favor, inténtalo de nuevo.');
         } finally {
-            whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
-            whatsappBtn.disabled = false;
+            // Asegurar que el botón siempre se habilite y el spinner se quite
+            if (whatsappBtn) { // Asegurarse de que el botón existe
+                whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp'; // Cambiar texto del botón
+                whatsappBtn.disabled = false;
+            }
         }
     }
 
