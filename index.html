@@ -765,7 +765,673 @@
         overflow-y: hidden; /* El scroll lo maneja products-grid */
       }
       .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Ajuste para tablets */
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+        padding-right: 15px;
+      }
+      .cart-sidebar {
+        top: 30px;
+        padding: 25px;
+        height: fit-content;
+        max-height: calc(100vh - 60px - 60px);
+      }
+
+      /* PANTALLA 3 - RESUMEN */
+      .summary-screen {
+        max-width: 800px;
+        padding: 25px;
+        height: 100%;
+      }
+      .summary-logo img {
+        height: 50px;
+      }
+      .summary-title {
+        font-size: 1.6em;
+      }
+      .summary-screen .persuasive-message {
+        font-size: 0.85em;
+        padding: 8px 12px;
+      }
+      .contact-info h3, .client-info h3 {
+        font-size: 0.95em;
+      }
+      .contact-item {
+        font-size: 0.75em;
+      }
+      .products-summary h3 {
+          font-size: 1.1em;
+      }
+      .summary-table th, .summary-table td {
+        font-size: 0.8em;
+        padding: 7px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navigation">
+    <button class="nav-btn" onclick="goBack()" id="backBtn" style="display: none;">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+  </div>
+
+  <div class="container">
+    <div id="screen1" class="screen active">
+      <div class="welcome-screen">
+        <div class="welcome-card">
+          <div class="logo">
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+          </div>
+
+          <h1 class="welcome-title">Bienvenido</h1>
+          <p class="welcome-subtitle">Sistema de Cotización Profesional</p>
+
+          <div class="persuasive-message">
+            <i class="fas fa-star"></i>
+            ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están listos para ti.
+          </div>
+
+          <div class="medicine-types">
+            <div class="medicine-type patente">
+              <i class="fas fa-certificate"></i>
+              <strong>Patente</strong>
+            </div>
+            <div class="medicine-type genericos">
+              <i class="fas fa-pills"></i>
+              <strong>Genéricos</strong>
+            </div>
+            <div class="medicine-type curacion">
+              <i class="fas fa-first-aid"></i>
+              <strong>Material de Curación</strong>
+            </div>
+          </div>
+
+          <form id="clientForm">
+            <div class="form-group">
+              <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
+              <input type="text" id="nombre" required />
+            </div>
+            <div class="form-group">
+              <label for="celular"><i class="fas fa-phone"></i> Número de Celular</label>
+              <input type="tel" id="celular" required />
+            </div>
+            <div class="form-group">
+              <label for="ciudad"><i class="fas fa-map-marker-alt"></i> Ciudad</label>
+              <input type="text" id="ciudad" required />
+            </div>
+            <div class="form-group">
+              <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+              <input type="email" id="correo" required />
+            </div>
+
+            <button type="submit" class="btn">
+              <i class="fas fa-arrow-right"></i>
+              Continuar al Catálogo
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen2" class="screen">
+      <div class="catalog-screen">
+        <div class="catalog-main">
+          <div class="fixed-header-content">
+            <div class="catalog-persuasive-message">
+              <i class="fas fa-tag"></i>
+              Descubre nuestra amplia gama de productos. ¡Calidad y precio justo en cada selección!
+            </div>
+            <div class="category-list">
+              <span class="category-item"><i class="fas fa-certificate"></i> Patente</span>
+              <span class="category-item"><i class="fas fa-pills"></i> Genericos</span>
+              <span class="category-item"><i class="fas fa-first-aid"></i> Material de Curación</span>
+              <span class="category-item"><i class="fas fa-wheelchair"></i> Aparatos para movilidad asistida</span>
+              <span class="category-item"><i class="fas fa-spray-can"></i> Perfumeria</span>
+            </div>
+            <div class="catalog-header">
+              <h2 class="catalog-title">
+                <i class="fas fa-pills"></i>
+                Catálogo de Medicamentos
+              </h2>
+              <div class="search-box">
+                <input type="text" id="busqueda" placeholder="Buscar por descripción, fórmula o laboratorio..." />
+                <i class="fas fa-search"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="products-grid" id="productsGrid">
+            <p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>
+          </div>
+        </div>
+
+        <div class="cart-sidebar">
+          <div class="cart-header">
+            <i class="fas fa-shopping-cart"></i>
+            Cotización
+          </div>
+
+          <div class="cart-items" id="cartItems">
+            <p style="text-align: center; color: #6c757d; font-style: italic;">
+              No hay productos seleccionados
+            </p>
+          </div>
+
+          <div class="cart-summary">
+            <div class="cart-total" id="cartTotal">
+              Total: 0 producto(s)
+            </div>
+            <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
+              <i class="fas fa-file-invoice"></i>
+              Enviar Cotización por WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen3" class="screen">
+      <div class="summary-screen">
+        <div class="summary-fixed-header">
+          <div class="summary-header">
+            <div class="summary-logo">
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+            </div>
+            <h1 class="summary-title">Cotización - GlobalMediTH</h1>
+            <div class="persuasive-message">
+              <i class="fas fa-star"></i>
+              ¡Medicamentos de calidad con atención personalizada para tu tranquilidad!
+            </div>
+          </div>
+
+          <div class="summary-data-columns">
+              <div class="contact-info">
+                <h3><i class="fas fa-info-circle"></i> Datos de Contacto de Ventas</h3>
+                <div class="contact-item">
+                  <i class="fas fa-phone"></i>
+                  <span>Celular: 2381646718</span>
+                </div>
+                <div class="contact-item">
+                  <i class="fas fa-envelope"></i>
+                  <span>Correo: globalmedith@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>Ubicación: Tehuacán, Puebla</span>
+                </div>
+              </div>
+
+              <div class="client-info">
+                <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
+                <div id="clientSummary">
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="products-summary">
+          <h3><i class="fas fa-pills"></i> Productos Seleccionados</h3>
+          <table class="summary-table" id="summaryTable">
+            <thead>
+              <tr>
+                <th>Código de Barras</th>
+                <th>Descripción</th>
+                <th>Laboratorio</th>
+                <th>Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              </tbody>
+          </table>
+        </div>
+
+        <div class="summary-actions">
+          <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
+            <i class="fab fa-whatsapp"></i>
+            Enviar Cotización por WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="customAlertModal" class="custom-modal-overlay">
+    <div class="custom-modal-content">
+      <div class="custom-modal-header" id="customAlertTitle"></div>
+      <div class="custom-modal-body" id="customAlertMessage"></div>
+      <div class="custom-modal-footer">
+        <button class="btn" onclick="closeCustomAlert()">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Variables globales
+    let medicamentos = [];
+    let selectedProducts = new Map();
+    let currentScreen = 1;
+    let clientData = {};
+    let searchTimeout;
+
+    // Datos de medicamentos integrados directamente en el código
+    const medicamentosData = [
+      {
+        "codigoBarras": "7590425624676",
+        "descripcion": "3 PACK HUGS MANZANILLA",
+        "formula": "",
+        "laboratorio": ""
+      },
+      {
+        "codigoBarras": "7596843130804",
+        "descripcion": "360 ANTISÉPTICO SOLUCIÓN Fco. Atomizador 100 ML. 60 PPM.",
+        "formula": "Antiséptico a base de Agua de superoxidación (Solución Tópica).",
+        "laboratorio": "JALOMA"
+      },
+      {
+        "codigoBarras": "7596843130897",
+        "descripcion": "360 ANTISÉPTICO SOLUCIÓN Fco. Atomizador 150 ML. 60 PPM.",
+        "formula": "Antiséptico a base de Agua de superoxidación (Solución Tópica).",
+        "laboratorio": "JALOMA"
+      },
+      {
+        "codigoBarras": "7596843130866",
+        "descripcion": "360 ANTISÉPTICO SOLUCIÓN Envase c/5 L. 60 PPM.",
+        "formula": "Antiséptico a base de Agua de superoxidación (Solución Tópica).",
+        "laboratorio": "JALOMA"
+      },
+      {
+        "codigoBarras": "7592299928417",
+        "descripcion": "5 HTP/L-TEANINA/MAGNESIO 750MG CAP C/60 *DRM*",
+        "formula": "5 HTP/L-TEANINA/MAGNESIO",
+        "laboratorio": "DR. MILL"
+      },
+      {
+        "codigoBarras": "7503056782405",
+        "descripcion": "A-Z MAGNESIOS (Malten) c/30 CAPS. 500 MG.",
+        "formula": "Magnesio (Bisglicinato, Carbonato, Citrato, Óxido e Hidróxido).",
+        "laboratorio": "MAKLEM"
+      },
+      {
+        "codigoBarras": "7503051939495",
+        "descripcion": "A.S MAGNESIOS 900MG CAP C/30 *MKL*",
+        "formula": "5 MAGNESIOS",
+        "laboratorio": "MAKLEM"
+      },
+      {
+        "codigoBarras": "130688185016",
+        "descripcion": "A F G PLUS C 30 CAPS MULTIVITAMÍNICO DMC MEDICAM",
+        "formula": "",
+        "laboratorio": ""
+      },
+      {
+        "codigoBarras": "7501070535596",
+        "descripcion": "A.S. COR SOL. Fco. Gotero 24 ML. 1 G/100 ML.",
+        "formula": "Morfenefrina (Morfeniletrina)",
+        "laboratorio": ""
+      },
+      {
+        "codigoBarras": "7501090532448",
+        "descripcion": "*ABANICO C/PROPÓLEO JARABE 0% Azúcar Fco. 240 ML.",
+        "formula": "Mezcla de plantas para Resfriado común y Tos con miel de abeja. (Diabéticos)",
+        "laboratorio": "THERBAL"
+      }
+    ];
+
+    function generateTrackingId() {
+        const date = new Date();
+        const year = date.getFullYear().toString().slice(-2);
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
+    }
+    
+    function goToScreen(screenNumber) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(`screen${screenNumber}`).classList.add('active');
+      currentScreen = screenNumber;
+      const backBtn = document.getElementById('backBtn');
+      backBtn.style.display = (screenNumber > 1) ? 'block' : 'none';
+      
+      const activeScreen = document.getElementById(`screen${screenNumber}`);
+      if (activeScreen) {
+        activeScreen.scrollTop = 0;
+      }
+    }
+
+    function goBack() {
+      if (currentScreen > 1) {
+        if (currentScreen === 3) {
+            goToScreen(2);
+        } else {
+            goToScreen(currentScreen - 1);
+        }
+      }
+    }
+
+    document.getElementById('clientForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      clientData = {
+        nombre: document.getElementById('nombre').value,
+        celular: document.getElementById('celular').value,
+        ciudad: document.getElementById('ciudad').value,
+        correo: document.getElementById('correo').value,
+        folio: generateTrackingId()
+      };
+      goToScreen(2);
+    });
+
+    window.onload = async () => {
+      try {
+        // Intentar cargar desde el archivo JSON primero
+        const res = await fetch('medicamentos.json');
+        if (res.ok) {
+          const jsonData = await res.json();
+          medicamentos = jsonData;
+          console.log("Medicamentos cargados desde JSON:", medicamentos.length);
+          
+          // Eliminar la primera fila si es el encabezado
+          if (medicamentos.length > 0 && 
+              (medicamentos[0].codigoBarras === "Codigo de Barras" || 
+               medicamentos[0].codigoBarras === "codigoBarras")) {
+            medicamentos.shift();
+          }
+        } else {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+      } catch (error) {
+        console.warn("No se pudo cargar medicamentos.json, usando datos de ejemplo:", error);
+        // Usar los datos integrados como fallback
+        medicamentos = medicamentosData;
+      }
+      
+      // Llamar a renderProducts sin filtro al cargar para mostrar mensaje inicial
+      renderProducts([]);
+
+      // Delegación de eventos para productsGrid
+      const productsGrid = document.getElementById('productsGrid');
+      productsGrid.addEventListener('click', function(event) {
+          const cardElement = event.target.closest('.product-card');
+          if (cardElement) {
+              const codigo = cardElement.dataset.codigo;
+              const product = medicamentos.find(p => String(p.codigoBarras) === codigo);
+              if (product) {
+                if (!event.target.classList.contains('quantity-input')) {
+                    toggleProduct(product);
+                }
+              }
+          }
+      });
+      
+      productsGrid.addEventListener('change', function(event) {
+          if (event.target.classList.contains('quantity-input')) {
+              const codigo = event.target.dataset.codigo;
+              updateQuantity(codigo, event.target.value);
+          }
+      });
+    };
+
+    function renderProducts(productsToRender) {
+      const productsGrid = document.getElementById('productsGrid');
+      let htmlContent = '';
+
+      if (productsToRender.length === 0) {
+        const searchTerm = document.getElementById('busqueda').value.toLowerCase().trim();
+        if (searchTerm.length === 0) {
+            htmlContent = "<p class='empty-message'>Por favor, usa el buscador para encontrar productos.</p>";
+        } else {
+            htmlContent = "<p class='empty-message'>No se encontraron resultados para tu búsqueda.</p>";
+        }
+        productsGrid.innerHTML = htmlContent;
+        productsGrid.classList.add('empty-message');
+        updateCart();
+        return;
+      }
+
+      productsGrid.classList.remove('empty-message');
+      
+      productsToRender.forEach((product) => {
+        const isSelected = selectedProducts.has(product.codigoBarras);
+        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0;
+        const displayCodigoBarras = String(product.codigoBarras || 'No disponible');
+
+        htmlContent += `
+          <div class="product-card ${isSelected ? 'selected' : ''}" data-codigo="${product.codigoBarras}">
+            <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
+            <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
+            <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
+            <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
+            <div class="quantity-selector">
+              <label>Cantidad:</label>
+              <input type="number" class="quantity-input" min="0" value="${quantity}" 
+                     data-codigo="${product.codigoBarras}" />
+            </div>
+          </div>
+        `;
+      });
+      productsGrid.innerHTML = htmlContent;
+
+      updateCart();
+    }
+
+    function toggleProduct(product) {
+        const cardElement = document.querySelector(`.product-card[data-codigo="${String(product.codigoBarras)}"]`);
+        const inputElement = cardElement ? cardElement.querySelector('.quantity-input') : null;
+        
+        if (selectedProducts.has(product.codigoBarras)) {
+            selectedProducts.delete(product.codigoBarras);
+            if (cardElement) cardElement.classList.remove('selected');
+            if (inputElement) inputElement.value = 0;
+        } else {
+            const quantityToAdd = (inputElement && parseInt(inputElement.value) > 0) ? parseInt(inputElement.value) : 1;
+            selectedProducts.set(String(product.codigoBarras), { ...product, cantidad: quantityToAdd });
+            if (cardElement) cardElement.classList.add('selected');
+            if (inputElement) inputElement.value = quantityToAdd;
+        }
+        updateCart();
+    }
+
+    function updateQuantity(codigo, cantidad) {
+        const qty = parseInt(cantidad) || 0;
+        const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
+        const productData = medicamentos.find(p => String(p.codigoBarras) === codigo);
+
+        if (!productData) return;
+
+        if (qty > 0) {
+            selectedProducts.set(codigo, { ...productData, cantidad: qty });
+            if (cardElement) cardElement.classList.add('selected');
+        } else {
+            selectedProducts.delete(codigo);
+            if (cardElement) cardElement.classList.remove('selected');
+        }
+        updateCart();
+    }
+
+    function removeItemFromCart(codigo) {
+      selectedProducts.delete(codigo);
+      const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
+      if (cardElement) {
+        cardElement.classList.remove('selected');
+        const inputElement = cardElement.querySelector('.quantity-input');
+        if (inputElement) {
+          inputElement.value = 0;
+        }
+      }
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      const quoteBtn = document.getElementById('quoteBtnMain');
+      
+      if (selectedProducts.size === 0) {
+        cartItems.innerHTML = "<p style='text-align: center; color: #6c757d; font-style: italic;'>No hay productos seleccionados</p>";
+        cartTotal.textContent = "Total: 0 producto(s)";
+        quoteBtn.disabled = true;
+        return;
+      }
+
+      let html = '';
+      let totalItems = 0;
+      
+      selectedProducts.forEach((product) => {
+        totalItems += product.cantidad;
+        html += `
+          <div class="cart-item">
+            <div class="cart-item-title">${product.descripcion || 'Producto sin descripción'}</div>
+            <div class="cart-item-info">Código: ${product.codigoBarras || 'N/A'}</div>
+            <div class="cart-item-quantity">${product.cantidad}</div>
+            <button class="remove-item" onclick="removeItemFromCart('${product.codigoBarras}')">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+      });
+      
+      cartItems.innerHTML = html;
+      cartTotal.textContent = `Total: ${totalItems} producto(s)`;
+      quoteBtn.disabled = false;
+    }
+
+    document.getElementById('busqueda').addEventListener('keyup', function() {
+        clearTimeout(searchTimeout);
+        const searchTerm = this.value.toLowerCase().trim();
+        searchTimeout = setTimeout(() => {
+            if (searchTerm.length > 0) {
+                const filteredProducts = medicamentos.filter(product => {
+                    return filterProduct(product, searchTerm);
+                });
+                renderProducts(filteredProducts);
+            } else {
+                renderProducts([]);
+            }
+        }, 300);
+    });
+
+    function filterProduct(product, searchTerm) {
+      const desc = String(product.descripcion || '').toLowerCase();
+      const formula = String(product.formula || '').toLowerCase();
+      const laboratorio = String(product.laboratorio || '').toLowerCase();
+      const codigoBarras = String(product.codigoBarras || '').toLowerCase();
+
+      return desc.includes(searchTerm) ||
+             formula.includes(searchTerm) ||
+             laboratorio.includes(searchTerm) ||
+             codigoBarras.includes(searchTerm);
+    }
+
+    function goToSummary() {
+      if (selectedProducts.size === 0) {
+        showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
+        return;
+      }
+      enviarCotizacionPorWhatsApp();
+    }
+
+    async function generarPDF() {
+      return Promise.resolve(true); 
+    }
+
+    function generateWhatsAppMessage() {
+        const folio = clientData.folio || 'N/A';
+        const nombre = clientData.nombre || 'N/A';
+        const celular = clientData.celular || 'N/A';
+        const ciudad = clientData.ciudad || 'N/A';
+        const correo = clientData.correo || 'N/A';
+
+        let message = `*Cotización de Medicamentos - Global MediTH*\n\n`;
+
+        message += `\u{1F4C3} *Folio de Cotización:* ${folio}\n\n`;
+
+        message += `*Datos del Cliente:*\n`;
+        message += `  🧑‍💻 *Nombre:* ${nombre}\n`;
+        message += `  📱 *Celular:* ${celular}\n`;
+        message += `  🏙️ *Ciudad:* ${ciudad}\n`;
+        message += `  📧 *Correo:* ${correo}\n\n`;
+
+        message += `*Productos Solicitados:*\n`;
+        if (selectedProducts.size === 0) {
+            message += `  • No se seleccionaron productos.\n`;
+        } else {
+            selectedProducts.forEach(product => {
+                const codigo = product.codigoBarras || 'N/A';
+                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
+                message += `    Laboratorio: ${product.laboratorio || 'N/A'}\n`;
+                message += `    Cantidad: ${product.cantidad}\n\n`;
+            });
+        }
+        message += `¡Gracias por tu preferencia y por confiar en Global MediTH!`;
+
+        return message;
+    }
+
+    async function enviarCotizacionPorWhatsApp() {
+        if (selectedProducts.size === 0) {
+            showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
+            return;
+        }
+
+        const whatsappBtn = document.querySelector('.btn-success');
+        if (whatsappBtn) {
+            whatsappBtn.disabled = true;
+            whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+        }
+
+        try {
+            await generarPDF(); 
+
+            const whatsappMessage = generateWhatsAppMessage();
+            const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
+            
+            window.open(whatsappUrl, '_blank');
+
+            showCustomAlert(
+                'Cotización Lista para Enviar',
+                "Tu cotización está lista. ¡Revisa tu WhatsApp para completar el envío!\n\n" +
+                "¡Gracias por tu preferencia y por confiar en Global MediTH! 😉"
+            );
+            
+        } catch (error) {
+            console.error("Error al intentar abrir WhatsApp:", error);
+            showCustomAlert('Error', 'Hubo un error al intentar abrir WhatsApp. Por favor, asegúrate de tener la aplicación instalada o inténtalo de nuevo.');
+        } finally {
+            if (whatsappBtn) {
+                whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar Cotización por WhatsApp';
+                whatsappBtn.disabled = false;
+            }
+        }
+    }
+
+    function showCustomAlert(title, message) {
+        document.getElementById('customAlertTitle').innerText = title;
+        document.getElementById('customAlertMessage').innerText = message;
+        document.getElementById('customAlertModal').classList.add('visible');
+    }
+
+    function closeCustomAlert() {
+        document.getElementById('customAlertModal').classList.remove('visible');
+        resetApplication();
+    }
+
+    function resetApplication() {
+        clientData = {};
+        document.getElementById('nombre').value = '';
+        document.getElementById('celular').value = '';
+        document.getElementById('ciudad').value = '';
+        document.getElementById('correo').value = '';
+        const clientForm = document.getElementById('clientForm');
+        if (clientForm) clientForm.reset();
+
+        selectedProducts.clear();
+
+        const busquedaInput = document.getElementById('busqu minmax(180px, 1fr)); /* Ajuste para tablets */
         gap: 15px;
         padding-right: 10px;
       }
@@ -939,629 +1605,4 @@
         max-height: unset;
       }
       .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 20px;
-        padding-right: 15px;
-      }
-      .cart-sidebar {
-        top: 30px;
-        padding: 25px;
-        height: fit-content;
-        max-height: calc(100vh - 60px - 60px);
-      }
-
-      /* PANTALLA 3 - RESUMEN */
-      .summary-screen {
-        max-width: 800px;
-        padding: 25px;
-        height: 100%;
-      }
-      .summary-logo img {
-        height: 50px;
-      }
-      .summary-title {
-        font-size: 1.6em;
-      }
-      .summary-screen .persuasive-message {
-        font-size: 0.85em;
-        padding: 8px 12px;
-      }
-      .contact-info h3, .client-info h3 {
-        font-size: 0.95em;
-      }
-      .contact-item {
-        font-size: 0.75em;
-      }
-      .products-summary h3 {
-          font-size: 1.1em;
-      }
-      .summary-table th, .summary-table td {
-        font-size: 0.8em;
-        padding: 7px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="navigation">
-    <button class="nav-btn" onclick="goBack()" id="backBtn" style="display: none;">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-  </div>
-
-  <div class="container">
-    <div id="screen1" class="screen active">
-      <div class="welcome-screen">
-        <div class="welcome-card">
-          <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlpaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
-          </div>
-
-          <h1 class="welcome-title">Bienvenido</h1>
-          <p class="welcome-subtitle">Sistema de Cotización Profesional</p>
-
-          <div class="persuasive-message">
-            <i class="fas fa-star"></i>
-            ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están listos para ti.
-          </div>
-
-          <div class="medicine-types">
-            <div class="medicine-type patente">
-              <i class="fas fa-certificate"></i>
-              <strong>Patente</strong>
-            </div>
-            <div class="medicine-type genericos">
-              <i class="fas fa-pills"></i>
-              <strong>Genéricos</strong>
-            </div>
-            <div class="medicine-type curacion">
-              <i class="fas fa-first-aid"></i>
-              <strong>Material de Curación</strong>
-            </div>
-          </div>
-
-          <form id="clientForm">
-            <div class="form-group">
-              <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
-              <input type="text" id="nombre" required />
-            </div>
-            <div class="form-group">
-              <label for="celular"><i class="fas fa-phone"></i> Número de Celular</label>
-              <input type="tel" id="celular" required />
-            </div>
-            <div class="form-group">
-              <label for="ciudad"><i class="fas fa-map-marker-alt"></i> Ciudad</label>
-              <input type="text" id="ciudad" required />
-            </div>
-            <div class="form-group">
-              <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
-              <input type="email" id="correo" required />
-            </div>
-
-            <button type="submit" class="btn">
-              <i class="fas fa-arrow-right"></i>
-              Continuar al Catálogo
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div id="screen2" class="screen">
-      <div class="catalog-screen">
-        <div class="catalog-main">
-          <div class="fixed-header-content">
-            <div class="catalog-persuasive-message">
-              <i class="fas fa-tag"></i>
-              Descubre nuestra amplia gama de productos. ¡Calidad y precio justo en cada selección!
-            </div>
-            <div class="category-list">
-              <span class="category-item"><i class="fas fa-certificate"></i> Patente</span>
-              <span class="category-item"><i class="fas fa-pills"></i> Genericos</span>
-              <span class="category-item"><i class="fas fa-first-aid"></i> Material de Curación</span>
-              <span class="category-item"><i class="fas fa-wheelchair"></i> Aparatos para movilidad asistida</span>
-              <span class="category-item"><i class="fas fa-spray-can"></i> Perfumeria</span>
-            </div>
-            <div class="catalog-header">
-              <h2 class="catalog-title">
-                <i class="fas fa-pills"></i>
-                Catálogo de Medicamentos
-              </h2>
-              <div class="search-box">
-                <input type="text" id="busqueda" placeholder="Buscar por descripción, fórmula o laboratorio..." />
-                <i class="fas fa-search"></i>
-              </div>
-            </div>
-          </div>
-
-          <div class="products-grid" id="productsGrid">
-            <p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>
-          </div>
-        </div>
-
-        <div class="cart-sidebar">
-          <div class="cart-header">
-            <i class="fas fa-shopping-cart"></i>
-            Cotización
-          </div>
-
-          <div class="cart-items" id="cartItems">
-            <p style="text-align: center; color: #6c757d; font-style: italic;">
-              No hay productos seleccionados
-            </p>
-          </div>
-
-          <div class="cart-summary">
-            <div class="cart-total" id="cartTotal">
-              Total: 0 producto(s)
-            </div>
-            <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
-              <i class="fas fa-file-invoice"></i>
-              Enviar Cotización por WhatsApp
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="screen3" class="screen">
-      <div class="summary-screen">
-        <div class="summary-fixed-header">
-          <div class="summary-header">
-            <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlpaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
-            </div>
-            <h1 class="summary-title">Cotización - GlobalMediTH</h1>
-            <div class="persuasive-message">
-              <i class="fas fa-star"></i>
-              ¡Medicamentos de calidad con atención personalizada para tu tranquilidad!
-            </div>
-          </div>
-
-          <div class="summary-data-columns">
-              <div class="contact-info">
-                <h3><i class="fas fa-info-circle"></i> Datos de Contacto de Ventas</h3>
-                <div class="contact-item">
-                  <i class="fas fa-phone"></i>
-                  <span>Celular: 2381646718</span>
-                </div>
-                <div class="contact-item">
-                  <i class="fas fa-envelope"></i>
-                  <span>Correo: globalmedith@gmail.com</span>
-                </div>
-                <div class="contact-item">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>Ubicación: Tehuacán, Puebla</span>
-                </div>
-              </div>
-
-              <div class="client-info">
-                <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
-                <div id="clientSummary">
-                  </div>
-              </div>
-          </div>
-        </div>
-
-        <div class="products-summary">
-          <h3><i class="fas fa-pills"></i> Productos Seleccionados</h3>
-          <table class="summary-table" id="summaryTable">
-            <thead>
-              <tr>
-                <th>Código de Barras</th>
-                <th>Descripción</th>
-                <th>Laboratorio</th>
-                <th>Cantidad</th>
-              </tr>
-            </thead>
-            <tbody>
-              </tbody>
-          </table>
-        </div>
-
-        <div class="summary-actions">
-          <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
-            <i class="fab fa-whatsapp"></i>
-            Enviar Cotización por WhatsApp
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="customAlertModal" class="custom-modal-overlay">
-    <div class="custom-modal-content">
-      <div class="custom-modal-header" id="customAlertTitle"></div>
-      <div class="custom-modal-body" id="customAlertMessage"></div>
-      <div class="custom-modal-footer">
-        <button class="btn" onclick="closeCustomAlert()">Aceptar</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Variables globales
-    let medicamentos = [];
-    let selectedProducts = new Map();
-    let currentScreen = 1;
-    let clientData = {};
-    let searchTimeout; // Variable para el debouncing
-
-    function generateTrackingId() {
-        const date = new Date();
-        const year = date.getFullYear().toString().slice(-2);
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const seconds = date.getSeconds().toString().padStart(2, '0');
-        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
-    }
-    
-    function goToScreen(screenNumber) {
-      document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-      });
-      document.getElementById(`screen${screenNumber}`).classList.add('active');
-      currentScreen = screenNumber;
-      const backBtn = document.getElementById('backBtn');
-      backBtn.style.display = (screenNumber > 1) ? 'block' : 'none';
-      
-      // Asegurar que la pantalla activa se desplace al principio si tiene overflow
-      const activeScreen = document.getElementById(`screen${screenNumber}`);
-      if (activeScreen) {
-        activeScreen.scrollTop = 0;
-      }
-    }
-
-    function goBack() {
-      if (currentScreen > 1) {
-        if (currentScreen === 3) {
-            goToScreen(2);
-        } else {
-            goToScreen(currentScreen - 1);
-        }
-      }
-    }
-
-    document.getElementById('clientForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      clientData = {
-        nombre: document.getElementById('nombre').value,
-        celular: document.getElementById('celular').value,
-        ciudad: document.getElementById('ciudad').value,
-        correo: document.getElementById('correo').value,
-        folio: generateTrackingId()
-      };
-      goToScreen(2);
-    });
-
-    window.onload = async () => {
-      try {
-        const res = await fetch('medicamentos.json');
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        medicamentos = await res.json();
-        // Eliminar la primera fila si es el encabezado
-        if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
-          medicamentos.shift();
-        }
-        // Llamar a renderProducts sin filtro al cargar para mostrar mensaje inicial
-        renderProducts([]); // Mostrar mensaje "usa el buscador" al inicio
-      } catch (error) {
-        console.error("Error al cargar los medicamentos:", error);
-        const productsGrid = document.getElementById('productsGrid');
-        productsGrid.innerHTML = "<p class='empty-message'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
-        productsGrid.classList.add('empty-message');
-      }
-
-      // Delegación de eventos para productsGrid
-      const productsGrid = document.getElementById('productsGrid');
-      productsGrid.addEventListener('click', function(event) {
-          const cardElement = event.target.closest('.product-card');
-          if (cardElement) {
-              const codigo = cardElement.dataset.codigo;
-              const product = medicamentos.find(p => p.codigoBarras === codigo);
-              if (product) {
-                // Si el clic no fue directamente en el input, o fue en la tarjeta, toggle product
-                if (!event.target.classList.contains('quantity-input')) {
-                    toggleProduct(product);
-                }
-              }
-          }
-      });
-      // Delegación de eventos para los inputs de cantidad
-      productsGrid.addEventListener('change', function(event) {
-          if (event.target.classList.contains('quantity-input')) {
-              const codigo = event.target.dataset.codigo;
-              updateQuantity(codigo, event.target.value);
-          }
-      });
-    };
-
-    function renderProducts(productsToRender) {
-      const productsGrid = document.getElementById('productsGrid');
-      let htmlContent = '';
-
-      if (productsToRender.length === 0) {
-        const searchTerm = document.getElementById('busqueda').value.toLowerCase().trim();
-        if (searchTerm.length === 0) {
-            htmlContent = "<p class='empty-message'>Por favor, usa el buscador para encontrar productos.</p>";
-        } else {
-            htmlContent = "<p class='empty-message'>No se encontraron resultados para tu búsqueda.</p>";
-        }
-        productsGrid.innerHTML = htmlContent;
-        productsGrid.classList.add('empty-message');
-        updateCart();
-        return;
-      }
-
-      productsGrid.classList.remove('empty-message');
-      
-      productsToRender.forEach((product) => {
-        const isSelected = selectedProducts.has(product.codigoBarras);
-        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0;
-        const displayCodigoBarras = product.codigoBarras || 'No disponible';
-
-        htmlContent += `
-          <div class="product-card ${isSelected ? 'selected' : ''}" data-codigo="${product.codigoBarras}">
-            <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
-            <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
-            <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
-            <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
-            <div class="quantity-selector">
-              <label>Cantidad:</label>
-              <input type="number" class="quantity-input" min="0" value="${quantity}" 
-                     data-codigo="${product.codigoBarras}" />
-            </div>
-          </div>
-        `;
-      });
-      productsGrid.innerHTML = htmlContent;
-
-      updateCart();
-    }
-
-    function toggleProduct(product) {
-        const cardElement = document.querySelector(`.product-card[data-codigo="${product.codigoBarras}"]`);
-        const inputElement = cardElement ? cardElement.querySelector('.quantity-input') : null;
-        
-        if (selectedProducts.has(product.codigoBarras)) {
-            selectedProducts.delete(product.codigoBarras);
-            if (cardElement) cardElement.classList.remove('selected');
-            if (inputElement) inputElement.value = 0;
-        } else {
-            const quantityToAdd = (inputElement && parseInt(inputElement.value) > 0) ? parseInt(inputElement.value) : 1;
-            selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
-            if (cardElement) cardElement.classList.add('selected');
-            if (inputElement) inputElement.value = quantityToAdd;
-        }
-        updateCart();
-    }
-
-    function updateQuantity(codigo, cantidad) {
-        const qty = parseInt(cantidad) || 0;
-        const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
-        const productData = medicamentos.find(p => p.codigoBarras === codigo);
-
-        if (!productData) return;
-
-        if (qty > 0) {
-            selectedProducts.set(codigo, { ...productData, cantidad: qty });
-            if (cardElement) cardElement.classList.add('selected');
-        } else {
-            selectedProducts.delete(codigo);
-            if (cardElement) cardElement.classList.remove('selected');
-        }
-        updateCart();
-    }
-
-    function removeItemFromCart(codigo) {
-      selectedProducts.delete(codigo);
-      const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
-      if (cardElement) {
-        cardElement.classList.remove('selected');
-        const inputElement = cardElement.querySelector('.quantity-input');
-        if (inputElement) {
-          inputElement.value = 0;
-        }
-      }
-      updateCart();
-    }
-
-    function updateCart() {
-      const cartItems = document.getElementById('cartItems');
-      const cartTotal = document.getElementById('cartTotal');
-      const quoteBtn = document.getElementById('quoteBtnMain');
-      
-      if (selectedProducts.size === 0) {
-        cartItems.innerHTML = "<p style='text-align: center; color: #6c757d; font-style: italic;'>No hay productos seleccionados</p>";
-        cartTotal.textContent = "Total: 0 producto(s)";
-        quoteBtn.disabled = true;
-        return;
-      }
-
-      let html = '';
-      let totalItems = 0;
-      
-      selectedProducts.forEach((product) => {
-        totalItems += product.cantidad;
-        html += `
-          <div class="cart-item">
-            <div class="cart-item-title">${product.descripcion || 'Producto sin descripción'}</div>
-            <div class="cart-item-info">Código: ${product.codigoBarras || 'N/A'}</div>
-            <div class="cart-item-quantity">${product.cantidad}</div>
-            <button class="remove-item" onclick="removeItemFromCart('${product.codigoBarras}')">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-        `;
-      });
-      
-      cartItems.innerHTML = html;
-      cartTotal.textContent = `Total: ${totalItems} producto(s)`;
-      quoteBtn.disabled = false;
-    }
-
-    document.getElementById('busqueda').addEventListener('keyup', function() {
-        clearTimeout(searchTimeout);
-        const searchTerm = this.value.toLowerCase().trim();
-        searchTimeout = setTimeout(() => {
-            if (searchTerm.length > 0) {
-                const filteredProducts = medicamentos.filter(product => {
-                    return filterProduct(product, searchTerm);
-                });
-                renderProducts(filteredProducts);
-            } else {
-                renderProducts([]);
-            }
-        }, 300);
-    });
-
-
-    function filterProduct(product, searchTerm) {
-      const desc = (product.descripcion || '').toLowerCase();
-      const formula = (product.formula || '').toLowerCase();
-      const laboratorio = (product.laboratorio || '').toLowerCase();
-      const codigoBarras = (product.codigoBarras || '').toLowerCase();
-
-      return desc.includes(searchTerm) ||
-             formula.includes(searchTerm) ||
-             laboratorio.includes(searchTerm) ||
-             codigoBarras.includes(searchTerm);
-    }
-
-    // Modificada para llamar a enviarCotizacionPorWhatsApp directamente
-    function goToSummary() {
-      if (selectedProducts.size === 0) {
-        showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
-        return;
-      }
-      enviarCotizacionPorWhatsApp();
-    }
-
-    // Función "simulada" de generarPDF, siempre resuelve inmediatamente.
-    // Mantenemos su esqueleto porque la función enviarCotizacionPorWhatsApp la "await"a.
-    async function generarPDF() {
-      return Promise.resolve(true); 
-    }
-
-    function generateWhatsAppMessage() {
-        const folio = clientData.folio || 'N/A';
-        const nombre = clientData.nombre || 'N/A';
-        const celular = clientData.celular || 'N/A';
-        const ciudad = clientData.ciudad || 'N/A';
-        const correo = clientData.correo || 'N/A';
-
-        let message = `*Cotización de Medicamentos - Global MediTH*\n\n`;
-
-        message += `\u{1F4C3} *Folio de Cotización:* ${folio}\n\n`;
-
-        message += `*Datos del Cliente:*\n`;
-        message += `  🧑‍💻 *Nombre:* ${nombre}\n`;
-        message += `  📱 *Celular:* ${celular}\n`;
-        message += `  🏙️ *Ciudad:* ${ciudad}\n`;
-        message += `  📧 *Correo:* ${correo}\n\n`;
-
-        message += `*Productos Solicitados:*\n`;
-        if (selectedProducts.size === 0) {
-            message += `  • No se seleccionaron productos.\n`;
-        } else {
-            selectedProducts.forEach(product => {
-                const codigo = product.codigoBarras || 'N/A';
-                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
-                message += `    Laboratorio: ${product.laboratorio || 'N/A'}\n`;
-                message += `    Cantidad: ${product.cantidad}\n\n`;
-            });
-        }
-        message += `¡Gracias por tu preferencia y por confiar en Global MediTH!`;
-
-        return message;
-    }
-
-
-    // Función principal para enviar por WhatsApp
-    async function enviarCotizacionPorWhatsApp() {
-        if (selectedProducts.size === 0) {
-            showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
-            return;
-        }
-
-        const whatsappBtn = document.querySelector('.btn-success');
-        if (whatsappBtn) {
-            whatsappBtn.disabled = true;
-            whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-        }
-
-        try {
-            // Se llama a generarPDF, pero como ahora es una función simulada, resuelve inmediatamente.
-            await generarPDF(); 
-
-            const whatsappMessage = generateWhatsAppMessage();
-            const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
-            
-            // Abrir WhatsApp directamente
-            window.open(whatsappUrl, '_blank');
-
-            // Mensaje de éxito en el modal, sin mencionar PDF
-            showCustomAlert(
-                'Cotización Lista para Enviar',
-                "Tu cotización está lista. ¡Revisa tu WhatsApp para completar el envío!\n\n" +
-                "¡Gracias por tu preferencia y por confiar en Global MediTH! 😉"
-            );
-            
-        } catch (error) {
-            console.error("Error al intentar abrir WhatsApp:", error);
-            showCustomAlert('Error', 'Hubo un error al intentar abrir WhatsApp. Por favor, asegúrate de tener la aplicación instalada o inténtalo de nuevo.');
-        } finally {
-            if (whatsappBtn) {
-                whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar Cotización por WhatsApp'; // Restaurar texto del botón
-                whatsappBtn.disabled = false;
-            }
-        }
-    }
-
-    // Funciones del Modal Personalizado
-    function showCustomAlert(title, message) {
-        document.getElementById('customAlertTitle').innerText = title;
-        document.getElementById('customAlertMessage').innerText = message;
-        document.getElementById('customAlertModal').classList.add('visible');
-    }
-
-    function closeCustomAlert() {
-        document.getElementById('customAlertModal').classList.remove('visible');
-        resetApplication(); // Llama a la función de reset al cerrar el modal
-    }
-
-    // Nueva función para resetear la aplicación
-    function resetApplication() {
-        // 1. Resetear datos del cliente y formulario
-        clientData = {};
-        document.getElementById('nombre').value = '';
-        document.getElementById('celular').value = '';
-        document.getElementById('ciudad').value = '';
-        document.getElementById('correo').value = '';
-        const clientForm = document.getElementById('clientForm');
-        if (clientForm) clientForm.reset();
-
-        // 2. Limpiar productos seleccionados
-        selectedProducts.clear();
-
-        // 3. Limpiar campo de búsqueda y renderizar estado inicial del catálogo
-        const busquedaInput = document.getElementById('busqueda');
-        if (busquedaInput) {
-            busquedaInput.value = '';
-            renderProducts([]); // Esto mostrará el mensaje "usa el buscador..."
-        }
-        
-        // 4. Actualizar el carrito
-        updateCart();
-        
-        // 5. Regresar a la pantalla de registro
-        goToScreen(1);
-    }
-  </script>
-</body>
-</html>
+        grid-template-columns: repeat(auto-fill,
